@@ -1,0 +1,9 @@
+{
+    "name": "--file",
+    "shortcut": "-f",
+    "accept_value": true,
+    "is_value_required": false,
+    "is_multiple": false,
+    "description": "File to process",
+    "default": "autoexec.bat"
+}

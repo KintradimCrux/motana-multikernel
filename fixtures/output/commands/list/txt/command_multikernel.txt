@@ -1,0 +1,66 @@
+Motana Multi-Kernel App Console - Symfony 3.2.9 (kernel: boot, env: test, debug: false)
+
+Usage:
+  bin/console
+    To display the list of kernels and commands available on all kernels
+
+  bin/console <kernel>
+    To display the list of commands available on a kernel
+
+  bin/console <command> [options] [--] [arguments]
+    To run a command for all kernels
+
+  bin/console <kernel> <command> [options] [--] [arguments]
+    To run a command on the on a kernel
+
+Kernels:
+  boot
+  app
+
+Options:
+  -h         --help            Display this help message
+  -q         --quiet           Do not output any message
+  -V         --version         Display this application version
+             --ansi            Force ANSI output
+             --no-ansi         Disable ANSI output
+  -n         --no-interaction  Do not ask any interactive question
+  -e         --env=ENV         The environment name [default: "test"]
+             --no-debug        Switches off debug mode
+  -v|vv|vvv  --verbose         Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+
+Commands:
+  help                         Displays help for a command
+  list                         Lists commands
+
+ assets
+  assets:install               Installs bundles web assets under a public web directory
+
+ cache
+  cache:clear                  Clears the cache
+  cache:pool:clear             Clears cache pools
+  cache:warmup                 Warms up an empty cache
+
+ config
+  config:dump-reference        Dumps the default configuration for an extension
+
+ debug
+  debug:config                 Dumps the current configuration for an extension
+  debug:container              Displays current services for an application
+  debug:event-dispatcher       Displays configured listeners for an application
+  debug:translation            Displays translation messages information
+
+ lint
+  lint:yaml                    Lints a file and outputs encountered errors
+
+ multi-kernel
+  multi-kernel:create-app      Create a new app
+
+ server
+  server:run                   Runs PHP built-in web server
+  server:start                 Starts PHP built-in web server in the background
+  server:status                Outputs the status of the built-in web server for the given address
+  server:stop                  Stops PHP's built-in web server that was started with the server:start command
+
+ translation
+  translation:update           Updates the translation file
+

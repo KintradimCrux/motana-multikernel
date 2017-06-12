@@ -1,0 +1,9 @@
+{
+    "name": "--all",
+    "shortcut": "-a",
+    "accept_value": false,
+    "is_value_required": false,
+    "is_multiple": false,
+    "description": "Run all tests",
+    "default": false
+}

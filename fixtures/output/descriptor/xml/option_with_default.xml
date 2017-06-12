@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<option name="--file" shortcut="-f" accept_value="1" is_value_required="0" is_multiple="0">
+  <description>File to process</description>
+  <defaults>
+    <default>autoexec.bat</default>
+  </defaults>
+</option>

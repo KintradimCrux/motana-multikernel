@@ -1,0 +1,40 @@
+{
+    "arguments": {
+        "method": {
+            "name": "method",
+            "is_required": false,
+            "is_array": false,
+            "description": "Test method",
+            "default": null
+        }
+    },
+    "options": {
+        "all": {
+            "name": "--all",
+            "shortcut": "-a",
+            "accept_value": false,
+            "is_value_required": false,
+            "is_multiple": false,
+            "description": "Run all tests",
+            "default": false
+        },
+        "file": {
+            "name": "--file",
+            "shortcut": "-f",
+            "accept_value": true,
+            "is_value_required": false,
+            "is_multiple": false,
+            "description": "File to process",
+            "default": null
+        },
+        "verbose": {
+            "name": "--verbose",
+            "shortcut": "-v|-vv|-vvv",
+            "accept_value": false,
+            "is_value_required": false,
+            "is_multiple": false,
+            "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+            "default": false
+        }
+    }
+}

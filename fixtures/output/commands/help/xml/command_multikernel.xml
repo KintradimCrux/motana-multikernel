@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command id="help" name="help">
+  <usages>
+    <usage>bin/console help [options] [--] [&lt;kernel&gt;] [&lt;command&gt;] [&lt;command_name&gt;]</usage>
+    <usage>bin/console &lt;kernel&gt; help [--format FORMAT] [--raw] [-h|--help] [-q|--quiet] [-v|vv|vvv|--verbose] [-V|--version] [--ansi] [--no-ansi] [-n|--no-interaction] [-e|--env ENV] [--no-debug] [--] [&lt;kernel&gt;] [&lt;command&gt;] [&lt;command_name&gt;]</usage>
+  </usages>
+  <description>Displays help for a command</description>
+  <help>The &lt;info&gt;help&lt;/info&gt; command displays help for a given command:
+ 
+   &lt;info&gt;bin/console help list&lt;/info&gt;
+ 
+ You can also output the help in other formats by using the &lt;comment&gt;--format&lt;/comment&gt; option:
+ 
+   &lt;info&gt;bin/console help --format=xml list&lt;/info&gt;
+ 
+ To display the list of available commands, please use the &lt;info&gt;list&lt;/info&gt; command.</help>
+  <arguments>
+    <argument name="kernel" is_required="0" is_array="0">
+      <description>The kernel to execute</description>
+      <defaults/>
+    </argument>
+    <argument name="command_name" is_required="0" is_array="0">
+      <description>The command name</description>
+      <defaults>
+        <default>help</default>
+      </defaults>
+    </argument>
+  </arguments>
+  <options>
+    <option name="--format" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
+      <description>The output format (txt, xml, json, or md)</description>
+      <defaults>
+        <default>txt</default>
+      </defaults>
+    </option>
+    <option name="--raw" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+      <description>To output raw command help</description>
+    </option>
+    <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+      <description>Display this help message</description>
+    </option>
+    <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+      <description>Do not output any message</description>
+    </option>
+    <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+      <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+    </option>
+    <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+      <description>Display this application version</description>
+    </option>
+    <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+      <description>Force ANSI output</description>
+    </option>
+    <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+      <description>Disable ANSI output</description>
+    </option>
+    <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+      <description>Do not ask any interactive question</description>
+    </option>
+    <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+      <description>The environment name</description>
+      <defaults>
+        <default>test</default>
+      </defaults>
+    </option>
+    <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+      <description>Switches off debug mode</description>
+    </option>
+  </options>
+</command>

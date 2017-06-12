@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+	<parameters>
+		<parameter key="motana_multi_kernel.class_cache.exclude" type="collection">
+			<parameter>Symfony\Component\Config\ConfigCache</parameter>
+			<parameter>Symfony\Component\Config\ConfigCacheInterface</parameter>
+			<parameter>Symfony\Component\Debug\ErrorHandler</parameter>
+			<parameter>Symfony\Component\DependencyInjection\Container</parameter>
+			<parameter>Symfony\Component\DependencyInjection\ContainerAwareInterface</parameter>
+			<parameter>Symfony\Component\DependencyInjection\ContainerAwareTrait</parameter>
+			<parameter>Symfony\Component\DependencyInjection\ContainerInterface</parameter>
+			<parameter>Symfony\Component\DependencyInjection\ResettableContainerInterface</parameter>
+			<parameter>Symfony\Component\HttpKernel\Bundle\Bundle</parameter>
+			<parameter>Symfony\Component\HttpKernel\Bundle\BundleInterface</parameter>
+		</parameter>
+	</parameters>
+    
+</container>

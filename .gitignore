@@ -1,0 +1,9 @@
+/.settings/
+/apps/
+/bin/
+/coverage/
+/var/
+/vendor/
+composer.lock
+.buildpath
+.project

@@ -1,0 +1,2090 @@
+{
+    "commands": [
+        {
+            "name": "help",
+            "usage": [
+                "bin\/console app help [--format FORMAT] [--raw] [--] [<command_name>]"
+            ],
+            "description": "Displays help for a command",
+            "help": "The <info>help<\/info> command displays help for a given command:\n\n  <info>bin\/console help list<\/info>\n\nYou can also output the help in other formats by using the <comment>--format<\/comment> option:\n\n  <info>bin\/console help --format=xml list<\/info>\n\nTo display the list of available commands, please use the <info>list<\/info> command.",
+            "definition": {
+                "arguments": {
+                    "command_name": {
+                        "name": "command_name",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "The command name",
+                        "default": "help"
+                    }
+                },
+                "options": {
+                    "format": {
+                        "name": "--format",
+                        "shortcut": "",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The output format (txt, xml, json, or md)",
+                        "default": "txt"
+                    },
+                    "raw": {
+                        "name": "--raw",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "To output raw command help",
+                        "default": false
+                    },
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "list",
+            "usage": [
+                "bin\/console app list [--raw] [--format FORMAT] [-h|--help] [-q|--quiet] [-v|vv|vvv|--verbose] [-V|--version] [--ansi] [--no-ansi] [-n|--no-interaction] [-e|--env ENV] [--no-debug] [--] <command> [<namespace>]"
+            ],
+            "description": "Lists commands",
+            "help": "The <info>list<\/info> command lists all commands:\n\n  <info>bin\/console list<\/info>\n\nYou can also display the commands for a specific namespace:\n\n  <info>bin\/console list test<\/info>\n\nYou can also output the information in other formats by using the <comment>--format<\/comment> option:\n\n  <info>bin\/console list --format=xml<\/info>\n\nIt's also possible to get raw list of commands (useful for embedding command runner):\n\n  <info>bin\/console list --raw<\/info>",
+            "definition": {
+                "arguments": {
+                    "namespace": {
+                        "name": "namespace",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "The namespace name",
+                        "default": null
+                    }
+                },
+                "options": {
+                    "raw": {
+                        "name": "--raw",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "To output raw command list",
+                        "default": false
+                    },
+                    "format": {
+                        "name": "--format",
+                        "shortcut": "",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The output format (txt, xml, json, or md)",
+                        "default": "txt"
+                    }
+                }
+            }
+        },
+        {
+            "name": "assets:install",
+            "usage": [
+                "bin\/console app assets:install [--symlink] [--relative] [--] [<target>]"
+            ],
+            "description": "Installs bundles web assets under a public web directory",
+            "help": "The <info>assets:install<\/info> command installs bundle assets into a given\ndirectory (e.g. the <comment>web<\/comment> directory).\n\n  <info>bin\/console assets:install web<\/info>\n\nA \"bundles\" directory will be created inside the target directory and the\n\"Resources\/public\" directory of each bundle will be copied into it.\n\nTo create a symlink to each bundle instead of copying its assets, use the\n<info>--symlink<\/info> option (will fall back to hard copies when symbolic links aren't possible:\n\n  <info>bin\/console assets:install web --symlink<\/info>\n\nTo make symlink relative, add the <info>--relative<\/info> option:\n\n  <info>bin\/console assets:install web --symlink --relative<\/info>",
+            "definition": {
+                "arguments": {
+                    "target": {
+                        "name": "target",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "The target directory",
+                        "default": "web"
+                    }
+                },
+                "options": {
+                    "symlink": {
+                        "name": "--symlink",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Symlinks the assets instead of copying it",
+                        "default": false
+                    },
+                    "relative": {
+                        "name": "--relative",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Make relative symlinks",
+                        "default": false
+                    },
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "cache:clear",
+            "usage": [
+                "bin\/console app cache:clear [--no-warmup] [--no-optional-warmers]"
+            ],
+            "description": "Clears the cache",
+            "help": "The <info>cache:clear<\/info> command clears the application cache for a given environment\nand debug mode:\n\n  <info>bin\/console cache:clear --env=dev<\/info>\n  <info>bin\/console cache:clear --env=prod --no-debug<\/info>",
+            "definition": {
+                "arguments": [],
+                "options": {
+                    "no-warmup": {
+                        "name": "--no-warmup",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not warm up the cache",
+                        "default": false
+                    },
+                    "no-optional-warmers": {
+                        "name": "--no-optional-warmers",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Skip optional cache warmers (faster)",
+                        "default": false
+                    },
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "cache:pool:clear",
+            "usage": [
+                "bin\/console app cache:pool:clear <pools> (<pools>)..."
+            ],
+            "description": "Clears cache pools",
+            "help": "The <info>cache:pool:clear<\/info> command clears the given cache pools or cache pool clearers.\n\n    bin\/console cache:pool:clear <cache pool or clearer 1> [...<cache pool or clearer N>]",
+            "definition": {
+                "arguments": {
+                    "pools": {
+                        "name": "pools",
+                        "is_required": true,
+                        "is_array": true,
+                        "description": "A list of cache pools or cache pool clearers",
+                        "default": []
+                    }
+                },
+                "options": {
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "cache:warmup",
+            "usage": [
+                "bin\/console app cache:warmup [--no-optional-warmers]"
+            ],
+            "description": "Warms up an empty cache",
+            "help": "The <info>cache:warmup<\/info> command warms up the cache.\n\nBefore running this command, the cache must be empty.\n\nThis command does not generate the classes cache (as when executing this\ncommand, too many classes that should be part of the cache are already loaded\nin memory). Use <comment>curl<\/comment> or any other similar tool to warm up\nthe classes cache if you want.",
+            "definition": {
+                "arguments": [],
+                "options": {
+                    "no-optional-warmers": {
+                        "name": "--no-optional-warmers",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Skip optional cache warmers (faster)",
+                        "default": false
+                    },
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "config:dump-reference",
+            "usage": [
+                "bin\/console app config:dump-reference [--format FORMAT] [--] [<name>]"
+            ],
+            "description": "Dumps the default configuration for an extension",
+            "help": "The <info>config:dump-reference<\/info> command dumps the default configuration for an\nextension\/bundle.\n\nEither the extension alias or bundle name can be used:\n\n  <info>bin\/console config:dump-reference framework<\/info>\n  <info>bin\/console config:dump-reference FrameworkBundle<\/info>\n\nWith the <info>--format<\/info> option specifies the format of the configuration,\nthis is either <comment>yaml<\/comment> or <comment>xml<\/comment>.\nWhen the option is not provided, <comment>yaml<\/comment> is used.\n\n  <info>bin\/console config:dump-reference FrameworkBundle --format=xml<\/info>",
+            "definition": {
+                "arguments": {
+                    "name": {
+                        "name": "name",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "The Bundle name or the extension alias",
+                        "default": null
+                    }
+                },
+                "options": {
+                    "format": {
+                        "name": "--format",
+                        "shortcut": "",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The output format (yaml or xml)",
+                        "default": "yaml"
+                    },
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "debug:config",
+            "usage": [
+                "bin\/console app debug:config [<name>] [<path>]"
+            ],
+            "description": "Dumps the current configuration for an extension",
+            "help": "The <info>debug:config<\/info> command dumps the current configuration for an\nextension\/bundle.\n\nEither the extension alias or bundle name can be used:\n\n  <info>bin\/console debug:config framework<\/info>\n  <info>bin\/console debug:config FrameworkBundle<\/info>\n\nFor dumping a specific option, add its path as second argument:\n\n  <info>bin\/console debug:config framework serializer.enabled<\/info>",
+            "definition": {
+                "arguments": {
+                    "name": {
+                        "name": "name",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "The bundle name or the extension alias",
+                        "default": null
+                    },
+                    "path": {
+                        "name": "path",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "The configuration option path",
+                        "default": null
+                    }
+                },
+                "options": {
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "debug:container",
+            "usage": [
+                "bin\/console app debug:container [--show-private] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--format FORMAT] [--raw] [--] [<name>]"
+            ],
+            "description": "Displays current services for an application",
+            "help": "The <info>debug:container<\/info> command displays all configured <comment>public<\/comment> services:\n\n  <info>bin\/console debug:container<\/info>\n\nTo get specific information about a service, specify its name:\n\n  <info>bin\/console debug:container validator<\/info>\n\nBy default, private services are hidden. You can display all services by\nusing the <info>--show-private<\/info> flag:\n\n  <info>bin\/console debug:container --show-private<\/info>\n\nUse the --tags option to display tagged <comment>public<\/comment> services grouped by tag:\n\n  <info>bin\/console debug:container --tags<\/info>\n\nFind all services with a specific tag by specifying the tag name with the <info>--tag<\/info> option:\n\n  <info>bin\/console debug:container --tag=form.type<\/info>\n\nUse the <info>--parameters<\/info> option to display all parameters:\n\n  <info>bin\/console debug:container --parameters<\/info>\n\nDisplay a specific parameter by specifying its name with the <info>--parameter<\/info> option:\n\n  <info>bin\/console debug:container --parameter=kernel.debug<\/info>",
+            "definition": {
+                "arguments": {
+                    "name": {
+                        "name": "name",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "A service name (foo)",
+                        "default": null
+                    }
+                },
+                "options": {
+                    "show-private": {
+                        "name": "--show-private",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Used to show public *and* private services",
+                        "default": false
+                    },
+                    "tag": {
+                        "name": "--tag",
+                        "shortcut": "",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "Shows all services with a specific tag",
+                        "default": null
+                    },
+                    "tags": {
+                        "name": "--tags",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Displays tagged services for an application",
+                        "default": false
+                    },
+                    "parameter": {
+                        "name": "--parameter",
+                        "shortcut": "",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "Displays a specific parameter for an application",
+                        "default": null
+                    },
+                    "parameters": {
+                        "name": "--parameters",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Displays parameters for an application",
+                        "default": false
+                    },
+                    "format": {
+                        "name": "--format",
+                        "shortcut": "",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The output format (txt, xml, json, or md)",
+                        "default": "txt"
+                    },
+                    "raw": {
+                        "name": "--raw",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "To output raw description",
+                        "default": false
+                    },
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "debug:event-dispatcher",
+            "usage": [
+                "bin\/console app debug:event-dispatcher [--format FORMAT] [--raw] [--] [<event>]"
+            ],
+            "description": "Displays configured listeners for an application",
+            "help": "The <info>debug:event-dispatcher<\/info> command displays all configured listeners:\n\n  <info>bin\/console debug:event-dispatcher<\/info>\n\nTo get specific listeners for an event, specify its name:\n\n  <info>bin\/console debug:event-dispatcher kernel.request<\/info>",
+            "definition": {
+                "arguments": {
+                    "event": {
+                        "name": "event",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "An event name",
+                        "default": null
+                    }
+                },
+                "options": {
+                    "format": {
+                        "name": "--format",
+                        "shortcut": "",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The output format  (txt, xml, json, or md)",
+                        "default": "txt"
+                    },
+                    "raw": {
+                        "name": "--raw",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "To output raw description",
+                        "default": false
+                    },
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "debug:translation",
+            "usage": [
+                "bin\/console app debug:translation [--domain [DOMAIN]] [--only-missing] [--only-unused] [--all] [--] <locale> [<bundle>]"
+            ],
+            "description": "Displays translation messages information",
+            "help": "The <info>debug:translation<\/info> command helps finding unused or missing translation\nmessages and comparing them with the fallback ones by inspecting the\ntemplates and translation files of a given bundle or the app folder.\n\nYou can display information about bundle translations in a specific locale:\n\n  <info>bin\/console debug:translation en AcmeDemoBundle<\/info>\n\nYou can also specify a translation domain for the search:\n\n  <info>bin\/console debug:translation --domain=messages en AcmeDemoBundle<\/info>\n\nYou can only display missing messages:\n\n  <info>bin\/console debug:translation --only-missing en AcmeDemoBundle<\/info>\n\nYou can only display unused messages:\n\n  <info>bin\/console debug:translation --only-unused en AcmeDemoBundle<\/info>\n\nYou can display information about app translations in a specific locale:\n\n  <info>bin\/console debug:translation en<\/info>\n\nYou can display information about translations in all registered bundles in a specific locale:\n\n  <info>bin\/console debug:translation --all en<\/info>",
+            "definition": {
+                "arguments": {
+                    "locale": {
+                        "name": "locale",
+                        "is_required": true,
+                        "is_array": false,
+                        "description": "The locale",
+                        "default": null
+                    },
+                    "bundle": {
+                        "name": "bundle",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "The bundle name or directory where to load the messages, defaults to app\/Resources folder",
+                        "default": null
+                    }
+                },
+                "options": {
+                    "domain": {
+                        "name": "--domain",
+                        "shortcut": "",
+                        "accept_value": true,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "The messages domain",
+                        "default": null
+                    },
+                    "only-missing": {
+                        "name": "--only-missing",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Displays only missing messages",
+                        "default": false
+                    },
+                    "only-unused": {
+                        "name": "--only-unused",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Displays only unused messages",
+                        "default": false
+                    },
+                    "all": {
+                        "name": "--all",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Load messages from all registered bundles",
+                        "default": false
+                    },
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "lint:yaml",
+            "usage": [
+                "bin\/console app lint:yaml [--format FORMAT] [--] [<filename>]"
+            ],
+            "description": "Lints a file and outputs encountered errors",
+            "help": "The <info>lint:yaml<\/info> command lints a YAML file and outputs to STDOUT\nthe first encountered syntax error.\n\nYou can validates YAML contents passed from STDIN:\n\n  <info>cat filename | bin\/console lint:yaml<\/info>\n\nYou can also validate the syntax of a file:\n\n  <info>bin\/console lint:yaml filename<\/info>\n\nOr of a whole directory:\n\n  <info>bin\/console lint:yaml dirname<\/info>\n  <info>bin\/console lint:yaml dirname --format=json<\/info>\n\nOr find all files in a bundle:\n\n  <info>bin\/console lint:yaml @AcmeDemoBundle<\/info>",
+            "definition": {
+                "arguments": {
+                    "filename": {
+                        "name": "filename",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "A file or a directory or STDIN",
+                        "default": null
+                    }
+                },
+                "options": {
+                    "format": {
+                        "name": "--format",
+                        "shortcut": "",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The output format",
+                        "default": "txt"
+                    },
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "server:run",
+            "usage": [
+                "bin\/console app server:run [-p|--port PORT] [-d|--docroot DOCROOT] [-r|--router ROUTER] [--] [<address>]"
+            ],
+            "description": "Runs PHP built-in web server",
+            "help": "The <info>server:run<\/info> runs PHP built-in web server:\n\n  <info>bin\/console server:run<\/info>\n\nTo change default bind address and port use the <info>address<\/info> argument:\n\n  <info>bin\/console server:run 127.0.0.1:8080<\/info>\n\nTo change default docroot directory use the <info>--docroot<\/info> option:\n\n  <info>bin\/console server:run --docroot=htdocs\/<\/info>\n\nIf you have custom docroot directory layout, you can specify your own\nrouter script using <info>--router<\/info> option:\n\n  <info>bin\/console server:run --router=app\/config\/router.php<\/info>\n\nSpecifing a router script is required when the used environment is not \"dev\",\n\"prod\", or \"test\".\n\nSee also: http:\/\/www.php.net\/manual\/en\/features.commandline.webserver.php",
+            "definition": {
+                "arguments": {
+                    "address": {
+                        "name": "address",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "Address:port",
+                        "default": "127.0.0.1"
+                    }
+                },
+                "options": {
+                    "port": {
+                        "name": "--port",
+                        "shortcut": "-p",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "Address port number",
+                        "default": "8000"
+                    },
+                    "docroot": {
+                        "name": "--docroot",
+                        "shortcut": "-d",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "Document root",
+                        "default": null
+                    },
+                    "router": {
+                        "name": "--router",
+                        "shortcut": "-r",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "Path to custom router script",
+                        "default": null
+                    },
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "server:start",
+            "usage": [
+                "bin\/console app server:start [-p|--port PORT] [-d|--docroot DOCROOT] [-r|--router ROUTER] [-f|--force] [--] [<address>]"
+            ],
+            "description": "Starts PHP built-in web server in the background",
+            "help": "The <info>server:start<\/info> runs PHP's built-in web server:\n\n  <info>bin\/console server:start<\/info>\n\nTo change the default bind address and the default port use the <info>address<\/info> argument:\n\n  <info>bin\/console server:start 127.0.0.1:8080<\/info>\n\nTo change the default document root directory use the <info>--docroot<\/info> option:\n\n  <info>bin\/console server:start --docroot=htdocs\/<\/info>\n\nIf you have a custom document root directory layout, you can specify your own\nrouter script using the <info>--router<\/info> option:\n\n  <info>bin\/console server:start --router=app\/config\/router.php<\/info>\n\nSpecifying a router script is required when the used environment is not <comment>\"dev\"<\/comment> or\n<comment>\"prod\"<\/comment>.\n\nSee also: http:\/\/www.php.net\/manual\/en\/features.commandline.webserver.php",
+            "definition": {
+                "arguments": {
+                    "address": {
+                        "name": "address",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "Address:port",
+                        "default": "127.0.0.1"
+                    }
+                },
+                "options": {
+                    "port": {
+                        "name": "--port",
+                        "shortcut": "-p",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "Address port number",
+                        "default": "8000"
+                    },
+                    "docroot": {
+                        "name": "--docroot",
+                        "shortcut": "-d",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "Document root",
+                        "default": null
+                    },
+                    "router": {
+                        "name": "--router",
+                        "shortcut": "-r",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "Path to custom router script",
+                        "default": null
+                    },
+                    "force": {
+                        "name": "--force",
+                        "shortcut": "-f",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force web server startup",
+                        "default": false
+                    },
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "server:status",
+            "usage": [
+                "bin\/console app server:status [-p|--port PORT] [--] [<address>]"
+            ],
+            "description": "Outputs the status of the built-in web server for the given address",
+            "help": "Outputs the status of the built-in web server for the given address",
+            "definition": {
+                "arguments": {
+                    "address": {
+                        "name": "address",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "Address:port",
+                        "default": "127.0.0.1"
+                    }
+                },
+                "options": {
+                    "port": {
+                        "name": "--port",
+                        "shortcut": "-p",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "Address port number",
+                        "default": "8000"
+                    },
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "server:stop",
+            "usage": [
+                "bin\/console app server:stop [-p|--port PORT] [--] [<address>]"
+            ],
+            "description": "Stops PHP's built-in web server that was started with the server:start command",
+            "help": "The <info>server:stop<\/info> stops PHP's built-in web server:\n\n  <info>bin\/console server:stop<\/info>\n\nTo change the default bind address and the default port use the <info>address<\/info> argument:\n\n  <info>bin\/console server:stop 127.0.0.1:8080<\/info>",
+            "definition": {
+                "arguments": {
+                    "address": {
+                        "name": "address",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "Address:port",
+                        "default": "127.0.0.1"
+                    }
+                },
+                "options": {
+                    "port": {
+                        "name": "--port",
+                        "shortcut": "-p",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "Address port number",
+                        "default": "8000"
+                    },
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "translation:update",
+            "usage": [
+                "bin\/console app translation:update [--prefix [PREFIX]] [--no-prefix] [--output-format [OUTPUT-FORMAT]] [--dump-messages] [--force] [--no-backup] [--clean] [--domain [DOMAIN]] [--] <locale> [<bundle>]"
+            ],
+            "description": "Updates the translation file",
+            "help": "The <info>translation:update<\/info> command extracts translation strings from templates\nof a given bundle or the app folder. It can display them or merge the new ones into the translation files.\n\nWhen new translation strings are found it can automatically add a prefix to the translation\nmessage.\n\nExample running against a Bundle (AcmeBundle)\n  <info>bin\/console translation:update --dump-messages en AcmeBundle<\/info>\n  <info>bin\/console translation:update --force --prefix=\"new_\" fr AcmeBundle<\/info>\n\nExample running against app messages (app\/Resources folder)\n  <info>bin\/console translation:update --dump-messages en<\/info>\n  <info>bin\/console translation:update --force --prefix=\"new_\" fr<\/info>",
+            "definition": {
+                "arguments": {
+                    "locale": {
+                        "name": "locale",
+                        "is_required": true,
+                        "is_array": false,
+                        "description": "The locale",
+                        "default": null
+                    },
+                    "bundle": {
+                        "name": "bundle",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "The bundle name or directory where to load the messages, defaults to app\/Resources folder",
+                        "default": null
+                    }
+                },
+                "options": {
+                    "prefix": {
+                        "name": "--prefix",
+                        "shortcut": "",
+                        "accept_value": true,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Override the default prefix",
+                        "default": "__"
+                    },
+                    "no-prefix": {
+                        "name": "--no-prefix",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "If set, no prefix is added to the translations",
+                        "default": false
+                    },
+                    "output-format": {
+                        "name": "--output-format",
+                        "shortcut": "",
+                        "accept_value": true,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Override the default output format",
+                        "default": "yml"
+                    },
+                    "dump-messages": {
+                        "name": "--dump-messages",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Should the messages be dumped in the console",
+                        "default": false
+                    },
+                    "force": {
+                        "name": "--force",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Should the update be done",
+                        "default": false
+                    },
+                    "no-backup": {
+                        "name": "--no-backup",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Should backup be disabled",
+                        "default": false
+                    },
+                    "clean": {
+                        "name": "--clean",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Should clean not found messages",
+                        "default": false
+                    },
+                    "domain": {
+                        "name": "--domain",
+                        "shortcut": "",
+                        "accept_value": true,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Specify the domain to update",
+                        "default": null
+                    },
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        }
+    ],
+    "namespaces": [
+        {
+            "id": "_global",
+            "commands": [
+                "help",
+                "list"
+            ]
+        },
+        {
+            "id": "assets",
+            "commands": [
+                "assets:install"
+            ]
+        },
+        {
+            "id": "cache",
+            "commands": [
+                "cache:clear",
+                "cache:pool:clear",
+                "cache:warmup"
+            ]
+        },
+        {
+            "id": "config",
+            "commands": [
+                "config:dump-reference"
+            ]
+        },
+        {
+            "id": "debug",
+            "commands": [
+                "debug:config",
+                "debug:container",
+                "debug:event-dispatcher",
+                "debug:translation"
+            ]
+        },
+        {
+            "id": "lint",
+            "commands": [
+                "lint:yaml"
+            ]
+        },
+        {
+            "id": "server",
+            "commands": [
+                "server:run",
+                "server:start",
+                "server:status",
+                "server:stop"
+            ]
+        },
+        {
+            "id": "translation",
+            "commands": [
+                "translation:update"
+            ]
+        }
+    ]
+}

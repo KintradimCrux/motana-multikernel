@@ -1,0 +1,1163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<symfony name="Motana Multi-Kernel App Console - Symfony" version="3.2.9" kernel="app">
+  <commands>
+    <command id="help" name="help">
+      <usages>
+        <usage>bin/console app help [--format FORMAT] [--raw] [--] [&lt;command_name&gt;]</usage>
+      </usages>
+      <description>Displays help for a command</description>
+      <help>The &lt;info&gt;help&lt;/info&gt; command displays help for a given command:
+ 
+   &lt;info&gt;bin/console help list&lt;/info&gt;
+ 
+ You can also output the help in other formats by using the &lt;comment&gt;--format&lt;/comment&gt; option:
+ 
+   &lt;info&gt;bin/console help --format=xml list&lt;/info&gt;
+ 
+ To display the list of available commands, please use the &lt;info&gt;list&lt;/info&gt; command.</help>
+      <arguments>
+        <argument name="command_name" is_required="0" is_array="0">
+          <description>The command name</description>
+          <defaults>
+            <default>help</default>
+          </defaults>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--format" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The output format (txt, xml, json, or md)</description>
+          <defaults>
+            <default>txt</default>
+          </defaults>
+        </option>
+        <option name="--raw" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>To output raw command help</description>
+        </option>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="list" name="list">
+      <usages>
+        <usage>bin/console app list [--raw] [--format FORMAT] [--] [&lt;namespace&gt;]</usage>
+      </usages>
+      <description>Lists commands</description>
+      <help>The &lt;info&gt;list&lt;/info&gt; command lists all commands:
+ 
+   &lt;info&gt;bin/console list&lt;/info&gt;
+ 
+ You can also display the commands for a specific namespace:
+ 
+   &lt;info&gt;bin/console list test&lt;/info&gt;
+ 
+ You can also output the information in other formats by using the &lt;comment&gt;--format&lt;/comment&gt; option:
+ 
+   &lt;info&gt;bin/console list --format=xml&lt;/info&gt;
+ 
+ It's also possible to get raw list of commands (useful for embedding command runner):
+ 
+   &lt;info&gt;bin/console list --raw&lt;/info&gt;</help>
+      <arguments>
+        <argument name="namespace" is_required="0" is_array="0">
+          <description>The namespace name</description>
+          <defaults/>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--raw" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>To output raw command list</description>
+        </option>
+        <option name="--format" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The output format (txt, xml, json, or md)</description>
+          <defaults>
+            <default>txt</default>
+          </defaults>
+        </option>
+      </options>
+    </command>
+    <command id="assets:install" name="assets:install">
+      <usages>
+        <usage>bin/console app assets:install [--symlink] [--relative] [--] [&lt;target&gt;]</usage>
+      </usages>
+      <description>Installs bundles web assets under a public web directory</description>
+      <help>The &lt;info&gt;assets:install&lt;/info&gt; command installs bundle assets into a given
+ directory (e.g. the &lt;comment&gt;web&lt;/comment&gt; directory).
+ 
+   &lt;info&gt;bin/console assets:install web&lt;/info&gt;
+ 
+ A "bundles" directory will be created inside the target directory and the
+ "Resources/public" directory of each bundle will be copied into it.
+ 
+ To create a symlink to each bundle instead of copying its assets, use the
+ &lt;info&gt;--symlink&lt;/info&gt; option (will fall back to hard copies when symbolic links aren't possible:
+ 
+   &lt;info&gt;bin/console assets:install web --symlink&lt;/info&gt;
+ 
+ To make symlink relative, add the &lt;info&gt;--relative&lt;/info&gt; option:
+ 
+   &lt;info&gt;bin/console assets:install web --symlink --relative&lt;/info&gt;</help>
+      <arguments>
+        <argument name="target" is_required="0" is_array="0">
+          <description>The target directory</description>
+          <defaults>
+            <default>web</default>
+          </defaults>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--symlink" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Symlinks the assets instead of copying it</description>
+        </option>
+        <option name="--relative" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Make relative symlinks</description>
+        </option>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="cache:clear" name="cache:clear">
+      <usages>
+        <usage>bin/console app cache:clear [--no-warmup] [--no-optional-warmers]</usage>
+      </usages>
+      <description>Clears the cache</description>
+      <help>The &lt;info&gt;cache:clear&lt;/info&gt; command clears the application cache for a given environment
+ and debug mode:
+ 
+   &lt;info&gt;bin/console cache:clear --env=dev&lt;/info&gt;
+   &lt;info&gt;bin/console cache:clear --env=prod --no-debug&lt;/info&gt;</help>
+      <arguments/>
+      <options>
+        <option name="--no-warmup" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not warm up the cache</description>
+        </option>
+        <option name="--no-optional-warmers" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Skip optional cache warmers (faster)</description>
+        </option>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="cache:pool:clear" name="cache:pool:clear">
+      <usages>
+        <usage>bin/console app cache:pool:clear &lt;pools&gt; (&lt;pools&gt;)...</usage>
+      </usages>
+      <description>Clears cache pools</description>
+      <help>The &lt;info&gt;cache:pool:clear&lt;/info&gt; command clears the given cache pools or cache pool clearers.
+ 
+     bin/console cache:pool:clear &lt;cache pool or clearer 1&gt; [...&lt;cache pool or clearer N&gt;]</help>
+      <arguments>
+        <argument name="pools" is_required="1" is_array="1">
+          <description>A list of cache pools or cache pool clearers</description>
+          <defaults/>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="cache:warmup" name="cache:warmup">
+      <usages>
+        <usage>bin/console app cache:warmup [--no-optional-warmers]</usage>
+      </usages>
+      <description>Warms up an empty cache</description>
+      <help>The &lt;info&gt;cache:warmup&lt;/info&gt; command warms up the cache.
+ 
+ Before running this command, the cache must be empty.
+ 
+ This command does not generate the classes cache (as when executing this
+ command, too many classes that should be part of the cache are already loaded
+ in memory). Use &lt;comment&gt;curl&lt;/comment&gt; or any other similar tool to warm up
+ the classes cache if you want.</help>
+      <arguments/>
+      <options>
+        <option name="--no-optional-warmers" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Skip optional cache warmers (faster)</description>
+        </option>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="config:dump-reference" name="config:dump-reference">
+      <usages>
+        <usage>bin/console app config:dump-reference [--format FORMAT] [--] [&lt;name&gt;]</usage>
+      </usages>
+      <description>Dumps the default configuration for an extension</description>
+      <help>The &lt;info&gt;config:dump-reference&lt;/info&gt; command dumps the default configuration for an
+ extension/bundle.
+ 
+ Either the extension alias or bundle name can be used:
+ 
+   &lt;info&gt;bin/console config:dump-reference framework&lt;/info&gt;
+   &lt;info&gt;bin/console config:dump-reference FrameworkBundle&lt;/info&gt;
+ 
+ With the &lt;info&gt;--format&lt;/info&gt; option specifies the format of the configuration,
+ this is either &lt;comment&gt;yaml&lt;/comment&gt; or &lt;comment&gt;xml&lt;/comment&gt;.
+ When the option is not provided, &lt;comment&gt;yaml&lt;/comment&gt; is used.
+ 
+   &lt;info&gt;bin/console config:dump-reference FrameworkBundle --format=xml&lt;/info&gt;</help>
+      <arguments>
+        <argument name="name" is_required="0" is_array="0">
+          <description>The Bundle name or the extension alias</description>
+          <defaults/>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--format" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The output format (yaml or xml)</description>
+          <defaults>
+            <default>yaml</default>
+          </defaults>
+        </option>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="debug:config" name="debug:config">
+      <usages>
+        <usage>bin/console app debug:config [&lt;name&gt;] [&lt;path&gt;]</usage>
+      </usages>
+      <description>Dumps the current configuration for an extension</description>
+      <help>The &lt;info&gt;debug:config&lt;/info&gt; command dumps the current configuration for an
+ extension/bundle.
+ 
+ Either the extension alias or bundle name can be used:
+ 
+   &lt;info&gt;bin/console debug:config framework&lt;/info&gt;
+   &lt;info&gt;bin/console debug:config FrameworkBundle&lt;/info&gt;
+ 
+ For dumping a specific option, add its path as second argument:
+ 
+   &lt;info&gt;bin/console debug:config framework serializer.enabled&lt;/info&gt;</help>
+      <arguments>
+        <argument name="name" is_required="0" is_array="0">
+          <description>The bundle name or the extension alias</description>
+          <defaults/>
+        </argument>
+        <argument name="path" is_required="0" is_array="0">
+          <description>The configuration option path</description>
+          <defaults/>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="debug:container" name="debug:container">
+      <usages>
+        <usage>bin/console app debug:container [--show-private] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--format FORMAT] [--raw] [--] [&lt;name&gt;]</usage>
+      </usages>
+      <description>Displays current services for an application</description>
+      <help>The &lt;info&gt;debug:container&lt;/info&gt; command displays all configured &lt;comment&gt;public&lt;/comment&gt; services:
+ 
+   &lt;info&gt;bin/console debug:container&lt;/info&gt;
+ 
+ To get specific information about a service, specify its name:
+ 
+   &lt;info&gt;bin/console debug:container validator&lt;/info&gt;
+ 
+ By default, private services are hidden. You can display all services by
+ using the &lt;info&gt;--show-private&lt;/info&gt; flag:
+ 
+   &lt;info&gt;bin/console debug:container --show-private&lt;/info&gt;
+ 
+ Use the --tags option to display tagged &lt;comment&gt;public&lt;/comment&gt; services grouped by tag:
+ 
+   &lt;info&gt;bin/console debug:container --tags&lt;/info&gt;
+ 
+ Find all services with a specific tag by specifying the tag name with the &lt;info&gt;--tag&lt;/info&gt; option:
+ 
+   &lt;info&gt;bin/console debug:container --tag=form.type&lt;/info&gt;
+ 
+ Use the &lt;info&gt;--parameters&lt;/info&gt; option to display all parameters:
+ 
+   &lt;info&gt;bin/console debug:container --parameters&lt;/info&gt;
+ 
+ Display a specific parameter by specifying its name with the &lt;info&gt;--parameter&lt;/info&gt; option:
+ 
+   &lt;info&gt;bin/console debug:container --parameter=kernel.debug&lt;/info&gt;</help>
+      <arguments>
+        <argument name="name" is_required="0" is_array="0">
+          <description>A service name (foo)</description>
+          <defaults/>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--show-private" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Used to show public *and* private services</description>
+        </option>
+        <option name="--tag" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>Shows all services with a specific tag</description>
+          <defaults/>
+        </option>
+        <option name="--tags" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Displays tagged services for an application</description>
+        </option>
+        <option name="--parameter" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>Displays a specific parameter for an application</description>
+          <defaults/>
+        </option>
+        <option name="--parameters" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Displays parameters for an application</description>
+        </option>
+        <option name="--format" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The output format (txt, xml, json, or md)</description>
+          <defaults>
+            <default>txt</default>
+          </defaults>
+        </option>
+        <option name="--raw" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>To output raw description</description>
+        </option>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="debug:event-dispatcher" name="debug:event-dispatcher">
+      <usages>
+        <usage>bin/console app debug:event-dispatcher [--format FORMAT] [--raw] [--] [&lt;event&gt;]</usage>
+      </usages>
+      <description>Displays configured listeners for an application</description>
+      <help>The &lt;info&gt;debug:event-dispatcher&lt;/info&gt; command displays all configured listeners:
+ 
+   &lt;info&gt;bin/console debug:event-dispatcher&lt;/info&gt;
+ 
+ To get specific listeners for an event, specify its name:
+ 
+   &lt;info&gt;bin/console debug:event-dispatcher kernel.request&lt;/info&gt;</help>
+      <arguments>
+        <argument name="event" is_required="0" is_array="0">
+          <description>An event name</description>
+          <defaults/>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--format" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The output format  (txt, xml, json, or md)</description>
+          <defaults>
+            <default>txt</default>
+          </defaults>
+        </option>
+        <option name="--raw" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>To output raw description</description>
+        </option>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="debug:translation" name="debug:translation">
+      <usages>
+        <usage>bin/console app debug:translation [--domain [DOMAIN]] [--only-missing] [--only-unused] [--all] [--] &lt;locale&gt; [&lt;bundle&gt;]</usage>
+      </usages>
+      <description>Displays translation messages information</description>
+      <help>The &lt;info&gt;debug:translation&lt;/info&gt; command helps finding unused or missing translation
+ messages and comparing them with the fallback ones by inspecting the
+ templates and translation files of a given bundle or the app folder.
+ 
+ You can display information about bundle translations in a specific locale:
+ 
+   &lt;info&gt;bin/console debug:translation en AcmeDemoBundle&lt;/info&gt;
+ 
+ You can also specify a translation domain for the search:
+ 
+   &lt;info&gt;bin/console debug:translation --domain=messages en AcmeDemoBundle&lt;/info&gt;
+ 
+ You can only display missing messages:
+ 
+   &lt;info&gt;bin/console debug:translation --only-missing en AcmeDemoBundle&lt;/info&gt;
+ 
+ You can only display unused messages:
+ 
+   &lt;info&gt;bin/console debug:translation --only-unused en AcmeDemoBundle&lt;/info&gt;
+ 
+ You can display information about app translations in a specific locale:
+ 
+   &lt;info&gt;bin/console debug:translation en&lt;/info&gt;
+ 
+ You can display information about translations in all registered bundles in a specific locale:
+ 
+   &lt;info&gt;bin/console debug:translation --all en&lt;/info&gt;</help>
+      <arguments>
+        <argument name="locale" is_required="1" is_array="0">
+          <description>The locale</description>
+          <defaults/>
+        </argument>
+        <argument name="bundle" is_required="0" is_array="0">
+          <description>The bundle name or directory where to load the messages, defaults to app/Resources folder</description>
+          <defaults/>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--domain" shortcut="" accept_value="1" is_value_required="0" is_multiple="0">
+          <description>The messages domain</description>
+          <defaults/>
+        </option>
+        <option name="--only-missing" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Displays only missing messages</description>
+        </option>
+        <option name="--only-unused" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Displays only unused messages</description>
+        </option>
+        <option name="--all" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Load messages from all registered bundles</description>
+        </option>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="lint:yaml" name="lint:yaml">
+      <usages>
+        <usage>bin/console app lint:yaml [--format FORMAT] [--] [&lt;filename&gt;]</usage>
+      </usages>
+      <description>Lints a file and outputs encountered errors</description>
+      <help>The &lt;info&gt;lint:yaml&lt;/info&gt; command lints a YAML file and outputs to STDOUT
+ the first encountered syntax error.
+ 
+ You can validates YAML contents passed from STDIN:
+ 
+   &lt;info&gt;cat filename | bin/console lint:yaml&lt;/info&gt;
+ 
+ You can also validate the syntax of a file:
+ 
+   &lt;info&gt;bin/console lint:yaml filename&lt;/info&gt;
+ 
+ Or of a whole directory:
+ 
+   &lt;info&gt;bin/console lint:yaml dirname&lt;/info&gt;
+   &lt;info&gt;bin/console lint:yaml dirname --format=json&lt;/info&gt;
+ 
+ Or find all files in a bundle:
+ 
+   &lt;info&gt;bin/console lint:yaml @AcmeDemoBundle&lt;/info&gt;</help>
+      <arguments>
+        <argument name="filename" is_required="0" is_array="0">
+          <description>A file or a directory or STDIN</description>
+          <defaults/>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--format" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The output format</description>
+          <defaults>
+            <default>txt</default>
+          </defaults>
+        </option>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="server:run" name="server:run">
+      <usages>
+        <usage>bin/console app server:run [-p|--port PORT] [-d|--docroot DOCROOT] [-r|--router ROUTER] [--] [&lt;address&gt;]</usage>
+      </usages>
+      <description>Runs PHP built-in web server</description>
+      <help>The &lt;info&gt;server:run&lt;/info&gt; runs PHP built-in web server:
+ 
+   &lt;info&gt;bin/console server:run&lt;/info&gt;
+ 
+ To change default bind address and port use the &lt;info&gt;address&lt;/info&gt; argument:
+ 
+   &lt;info&gt;bin/console server:run 127.0.0.1:8080&lt;/info&gt;
+ 
+ To change default docroot directory use the &lt;info&gt;--docroot&lt;/info&gt; option:
+ 
+   &lt;info&gt;bin/console server:run --docroot=htdocs/&lt;/info&gt;
+ 
+ If you have custom docroot directory layout, you can specify your own
+ router script using &lt;info&gt;--router&lt;/info&gt; option:
+ 
+   &lt;info&gt;bin/console server:run --router=app/config/router.php&lt;/info&gt;
+ 
+ Specifing a router script is required when the used environment is not "dev",
+ "prod", or "test".
+ 
+ See also: http://www.php.net/manual/en/features.commandline.webserver.php</help>
+      <arguments>
+        <argument name="address" is_required="0" is_array="0">
+          <description>Address:port</description>
+          <defaults>
+            <default>127.0.0.1</default>
+          </defaults>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--port" shortcut="-p" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>Address port number</description>
+          <defaults>
+            <default>8000</default>
+          </defaults>
+        </option>
+        <option name="--docroot" shortcut="-d" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>Document root</description>
+          <defaults/>
+        </option>
+        <option name="--router" shortcut="-r" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>Path to custom router script</description>
+          <defaults/>
+        </option>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="server:start" name="server:start">
+      <usages>
+        <usage>bin/console app server:start [-p|--port PORT] [-d|--docroot DOCROOT] [-r|--router ROUTER] [-f|--force] [--] [&lt;address&gt;]</usage>
+      </usages>
+      <description>Starts PHP built-in web server in the background</description>
+      <help>The &lt;info&gt;server:start&lt;/info&gt; runs PHP's built-in web server:
+ 
+   &lt;info&gt;bin/console server:start&lt;/info&gt;
+ 
+ To change the default bind address and the default port use the &lt;info&gt;address&lt;/info&gt; argument:
+ 
+   &lt;info&gt;bin/console server:start 127.0.0.1:8080&lt;/info&gt;
+ 
+ To change the default document root directory use the &lt;info&gt;--docroot&lt;/info&gt; option:
+ 
+   &lt;info&gt;bin/console server:start --docroot=htdocs/&lt;/info&gt;
+ 
+ If you have a custom document root directory layout, you can specify your own
+ router script using the &lt;info&gt;--router&lt;/info&gt; option:
+ 
+   &lt;info&gt;bin/console server:start --router=app/config/router.php&lt;/info&gt;
+ 
+ Specifying a router script is required when the used environment is not &lt;comment&gt;"dev"&lt;/comment&gt; or
+ &lt;comment&gt;"prod"&lt;/comment&gt;.
+ 
+ See also: http://www.php.net/manual/en/features.commandline.webserver.php</help>
+      <arguments>
+        <argument name="address" is_required="0" is_array="0">
+          <description>Address:port</description>
+          <defaults>
+            <default>127.0.0.1</default>
+          </defaults>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--port" shortcut="-p" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>Address port number</description>
+          <defaults>
+            <default>8000</default>
+          </defaults>
+        </option>
+        <option name="--docroot" shortcut="-d" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>Document root</description>
+          <defaults/>
+        </option>
+        <option name="--router" shortcut="-r" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>Path to custom router script</description>
+          <defaults/>
+        </option>
+        <option name="--force" shortcut="-f" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force web server startup</description>
+        </option>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="server:status" name="server:status">
+      <usages>
+        <usage>bin/console app server:status [-p|--port PORT] [--] [&lt;address&gt;]</usage>
+      </usages>
+      <description>Outputs the status of the built-in web server for the given address</description>
+      <help>Outputs the status of the built-in web server for the given address</help>
+      <arguments>
+        <argument name="address" is_required="0" is_array="0">
+          <description>Address:port</description>
+          <defaults>
+            <default>127.0.0.1</default>
+          </defaults>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--port" shortcut="-p" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>Address port number</description>
+          <defaults>
+            <default>8000</default>
+          </defaults>
+        </option>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="server:stop" name="server:stop">
+      <usages>
+        <usage>bin/console app server:stop [-p|--port PORT] [--] [&lt;address&gt;]</usage>
+      </usages>
+      <description>Stops PHP's built-in web server that was started with the server:start command</description>
+      <help>The &lt;info&gt;server:stop&lt;/info&gt; stops PHP's built-in web server:
+ 
+   &lt;info&gt;bin/console server:stop&lt;/info&gt;
+ 
+ To change the default bind address and the default port use the &lt;info&gt;address&lt;/info&gt; argument:
+ 
+   &lt;info&gt;bin/console server:stop 127.0.0.1:8080&lt;/info&gt;</help>
+      <arguments>
+        <argument name="address" is_required="0" is_array="0">
+          <description>Address:port</description>
+          <defaults>
+            <default>127.0.0.1</default>
+          </defaults>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--port" shortcut="-p" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>Address port number</description>
+          <defaults>
+            <default>8000</default>
+          </defaults>
+        </option>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="translation:update" name="translation:update">
+      <usages>
+        <usage>bin/console app translation:update [--prefix [PREFIX]] [--no-prefix] [--output-format [OUTPUT-FORMAT]] [--dump-messages] [--force] [--no-backup] [--clean] [--domain [DOMAIN]] [--] &lt;locale&gt; [&lt;bundle&gt;]</usage>
+      </usages>
+      <description>Updates the translation file</description>
+      <help>The &lt;info&gt;translation:update&lt;/info&gt; command extracts translation strings from templates
+ of a given bundle or the app folder. It can display them or merge the new ones into the translation files.
+ 
+ When new translation strings are found it can automatically add a prefix to the translation
+ message.
+ 
+ Example running against a Bundle (AcmeBundle)
+   &lt;info&gt;bin/console translation:update --dump-messages en AcmeBundle&lt;/info&gt;
+   &lt;info&gt;bin/console translation:update --force --prefix="new_" fr AcmeBundle&lt;/info&gt;
+ 
+ Example running against app messages (app/Resources folder)
+   &lt;info&gt;bin/console translation:update --dump-messages en&lt;/info&gt;
+   &lt;info&gt;bin/console translation:update --force --prefix="new_" fr&lt;/info&gt;</help>
+      <arguments>
+        <argument name="locale" is_required="1" is_array="0">
+          <description>The locale</description>
+          <defaults/>
+        </argument>
+        <argument name="bundle" is_required="0" is_array="0">
+          <description>The bundle name or directory where to load the messages, defaults to app/Resources folder</description>
+          <defaults/>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--prefix" shortcut="" accept_value="1" is_value_required="0" is_multiple="0">
+          <description>Override the default prefix</description>
+          <defaults>
+            <default>__</default>
+          </defaults>
+        </option>
+        <option name="--no-prefix" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>If set, no prefix is added to the translations</description>
+        </option>
+        <option name="--output-format" shortcut="" accept_value="1" is_value_required="0" is_multiple="0">
+          <description>Override the default output format</description>
+          <defaults>
+            <default>yml</default>
+          </defaults>
+        </option>
+        <option name="--dump-messages" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Should the messages be dumped in the console</description>
+        </option>
+        <option name="--force" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Should the update be done</description>
+        </option>
+        <option name="--no-backup" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Should backup be disabled</description>
+        </option>
+        <option name="--clean" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Should clean not found messages</description>
+        </option>
+        <option name="--domain" shortcut="" accept_value="1" is_value_required="0" is_multiple="0">
+          <description>Specify the domain to update</description>
+          <defaults/>
+        </option>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+  </commands>
+  <namespaces>
+    <namespace id="_global">
+      <command>help</command>
+      <command>list</command>
+    </namespace>
+    <namespace id="assets">
+      <command>assets:install</command>
+    </namespace>
+    <namespace id="cache">
+      <command>cache:clear</command>
+      <command>cache:pool:clear</command>
+      <command>cache:warmup</command>
+    </namespace>
+    <namespace id="config">
+      <command>config:dump-reference</command>
+    </namespace>
+    <namespace id="debug">
+      <command>debug:config</command>
+      <command>debug:container</command>
+      <command>debug:event-dispatcher</command>
+      <command>debug:translation</command>
+    </namespace>
+    <namespace id="lint">
+      <command>lint:yaml</command>
+    </namespace>
+    <namespace id="server">
+      <command>server:run</command>
+      <command>server:start</command>
+      <command>server:status</command>
+      <command>server:stop</command>
+    </namespace>
+    <namespace id="translation">
+      <command>translation:update</command>
+    </namespace>
+  </namespaces>
+</symfony>
