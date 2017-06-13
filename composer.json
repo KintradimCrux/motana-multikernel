@@ -3,12 +3,14 @@
 	"version": "1.0",
 	"type" : "library",
 	"description" : "Motana Multi-Kernel Bundle",
+	"keywords": ["kernel", "multi", "multi-kernel"],
 	"homepage" : "http://github.com/KintradimCrux/motana-multikernel/",
 	"license" : "MIT",
 	"authors" : [
 		{
 			"name" : "Wenzel Jonas",
-			"email" : "mail@ramihyn.sytes.net"
+			"email" : "mail@ramihyn.sytes.net",
+			"role": "Developer"
 		}
 	],
 	"require" : {
