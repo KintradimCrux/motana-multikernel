@@ -1,4 +1,4 @@
-Motana Multi-Kernel App Console - Symfony 3.2.9 (kernel: boot, env: test, debug: false)
+Motana Multi-Kernel App Console - Symfony [symfony-version] (kernel: boot, env: test, debug: false)
 
 Usage:
   bin/console
@@ -29,6 +29,7 @@ Options:
   -v|vv|vvv  --verbose         Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 
 Commands:
+  about                        Displays information about the current project
   help                         Displays help for a command
   list                         Lists commands
 
@@ -50,16 +51,18 @@ Commands:
   debug:translation            Displays translation messages information
 
  lint
+  lint:xliff                   Lints a XLIFF file and outputs encountered errors
   lint:yaml                    Lints a file and outputs encountered errors
 
  multi-kernel
   multi-kernel:create-app      Create a new app
 
  server
-  server:run                   Runs PHP built-in web server
-  server:start                 Starts PHP built-in web server in the background
-  server:status                Outputs the status of the built-in web server for the given address
-  server:stop                  Stops PHP's built-in web server that was started with the server:start command
+  server:log                   Starts a log server that displays logs in real time
+  server:run                   Runs a local web server
+  server:start                 Starts a local web server in the background
+  server:status                Outputs the status of the local web server for the given address
+  server:stop                  Stops the local web server that was started with the server:start command
 
  translation
   translation:update           Updates the translation file

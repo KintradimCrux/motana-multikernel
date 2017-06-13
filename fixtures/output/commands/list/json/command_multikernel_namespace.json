@@ -118,10 +118,10 @@
             "name": "debug:container",
             "usage": [
                 "bin\/console debug:container [options] [--] [<name>]",
-                "bin\/console <kernel> debug:container [--show-private] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--format FORMAT] [--raw] [--] [<name>]"
+                "bin\/console <kernel> debug:container [--show-private] [--show-arguments] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--types] [--format FORMAT] [--raw] [--] [<name>]"
             ],
             "description": "Displays current services for an application",
-            "help": "The <info>debug:container<\/info> command displays all configured <comment>public<\/comment> services:\n\n  <info>bin\/console debug:container<\/info>\n\nTo get specific information about a service, specify its name:\n\n  <info>bin\/console debug:container validator<\/info>\n\nBy default, private services are hidden. You can display all services by\nusing the <info>--show-private<\/info> flag:\n\n  <info>bin\/console debug:container --show-private<\/info>\n\nUse the --tags option to display tagged <comment>public<\/comment> services grouped by tag:\n\n  <info>bin\/console debug:container --tags<\/info>\n\nFind all services with a specific tag by specifying the tag name with the <info>--tag<\/info> option:\n\n  <info>bin\/console debug:container --tag=form.type<\/info>\n\nUse the <info>--parameters<\/info> option to display all parameters:\n\n  <info>bin\/console debug:container --parameters<\/info>\n\nDisplay a specific parameter by specifying its name with the <info>--parameter<\/info> option:\n\n  <info>bin\/console debug:container --parameter=kernel.debug<\/info>",
+            "help": "The <info>debug:container<\/info> command displays all configured <comment>public<\/comment> services:\n\n  <info>bin\/console debug:container<\/info>\n\nTo get specific information about a service, specify its name:\n\n  <info>bin\/console debug:container validator<\/info>\n\nTo see available types that can be used for autowiring, use the <info>--types<\/info> flag:\n\n  <info>bin\/console debug:container --types<\/info>\n\nBy default, private services are hidden. You can display all services by\nusing the <info>--show-private<\/info> flag:\n\n  <info>bin\/console debug:container --show-private<\/info>\n\nUse the --tags option to display tagged <comment>public<\/comment> services grouped by tag:\n\n  <info>bin\/console debug:container --tags<\/info>\n\nFind all services with a specific tag by specifying the tag name with the <info>--tag<\/info> option:\n\n  <info>bin\/console debug:container --tag=form.type<\/info>\n\nUse the <info>--parameters<\/info> option to display all parameters:\n\n  <info>bin\/console debug:container --parameters<\/info>\n\nDisplay a specific parameter by specifying its name with the <info>--parameter<\/info> option:\n\n  <info>bin\/console debug:container --parameter=kernel.debug<\/info>",
             "definition": {
                 "arguments": {
                     "name": {
@@ -140,6 +140,15 @@
                         "is_value_required": false,
                         "is_multiple": false,
                         "description": "Used to show public *and* private services",
+                        "default": false
+                    },
+                    "show-arguments": {
+                        "name": "--show-arguments",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Used to show arguments in services",
                         "default": false
                     },
                     "tag": {
@@ -176,6 +185,15 @@
                         "is_value_required": false,
                         "is_multiple": false,
                         "description": "Displays parameters for an application",
+                        "default": false
+                    },
+                    "types": {
+                        "name": "--types",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Displays types (classes\/interfaces) available in the container",
                         "default": false
                     },
                     "format": {

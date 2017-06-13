@@ -96,12 +96,18 @@ class BootKernelTest extends KernelTestCase
 	{
 		$bundles = self::$kernel->registerBundles();
 		
+		$expectedCount = 2 + (int) class_exists('Symfony\\Bundle\\WebServerBundle\\WebServerBundle');
+		
 		// Check that registerBundles() returned 2 bundles
-		$this->assertEquals(2, count($bundles));
+		$this->assertEquals($expectedCount, count($bundles));
 		
 		// Check the returned bundles are instances of the correct classes
 		$this->assertEquals(FrameworkBundle::class, get_class($bundles[0]));
 		$this->assertEquals(MotanaMultiKernelBundle::class, get_class($bundles[1]));
+		
+		if (class_exists('Symfony\\Bundle\\WebServerBundle\\WebServerBundle')) {
+			$this->assertEquals('Symfony\\Bundle\\WebServerBundle\\WebServerBundle', get_class($bundles[2]));
+		}
 	}
 	
 	/**

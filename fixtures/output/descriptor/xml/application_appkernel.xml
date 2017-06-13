@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<symfony name="Motana Multi-Kernel App Console - Symfony" version="3.2.9" kernel="app">
+<symfony name="Motana Multi-Kernel App Console - Symfony" version="[symfony-version]" kernel="app">
   <commands>
+    <command id="about" name="about">
+      <usages>
+        <usage>bin/console app about</usage>
+      </usages>
+      <description>Displays information about the current project</description>
+      <help>Displays information about the current project</help>
+      <arguments/>
+      <options>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
     <command id="help" name="help">
       <usages>
         <usage>bin/console app help [--format FORMAT] [--raw] [--] [&lt;command_name&gt;]</usage>
@@ -320,7 +360,7 @@
     </command>
     <command id="config:dump-reference" name="config:dump-reference">
       <usages>
-        <usage>bin/console app config:dump-reference [--format FORMAT] [--] [&lt;name&gt;]</usage>
+        <usage>bin/console app config:dump-reference [--format FORMAT] [--] [&lt;name&gt;] [&lt;path&gt;]</usage>
       </usages>
       <description>Dumps the default configuration for an extension</description>
       <help>The &lt;info&gt;config:dump-reference&lt;/info&gt; command dumps the default configuration for an
@@ -335,10 +375,18 @@
  this is either &lt;comment&gt;yaml&lt;/comment&gt; or &lt;comment&gt;xml&lt;/comment&gt;.
  When the option is not provided, &lt;comment&gt;yaml&lt;/comment&gt; is used.
  
-   &lt;info&gt;bin/console config:dump-reference FrameworkBundle --format=xml&lt;/info&gt;</help>
+   &lt;info&gt;bin/console config:dump-reference FrameworkBundle --format=xml&lt;/info&gt;
+ 
+ For dumping a specific option, add its path as second argument (only available for the yaml format):
+ 
+   &lt;info&gt;bin/console config:dump-reference framework profiler.matcher&lt;/info&gt;</help>
       <arguments>
         <argument name="name" is_required="0" is_array="0">
           <description>The Bundle name or the extension alias</description>
+          <defaults/>
+        </argument>
+        <argument name="path" is_required="0" is_array="0">
+          <description>The configuration option path</description>
           <defaults/>
         </argument>
       </arguments>
@@ -442,7 +490,7 @@
     </command>
     <command id="debug:container" name="debug:container">
       <usages>
-        <usage>bin/console app debug:container [--show-private] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--format FORMAT] [--raw] [--] [&lt;name&gt;]</usage>
+        <usage>bin/console app debug:container [--show-private] [--show-arguments] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--types] [--format FORMAT] [--raw] [--] [&lt;name&gt;]</usage>
       </usages>
       <description>Displays current services for an application</description>
       <help>The &lt;info&gt;debug:container&lt;/info&gt; command displays all configured &lt;comment&gt;public&lt;/comment&gt; services:
@@ -452,6 +500,10 @@
  To get specific information about a service, specify its name:
  
    &lt;info&gt;bin/console debug:container validator&lt;/info&gt;
+ 
+ To see available types that can be used for autowiring, use the &lt;info&gt;--types&lt;/info&gt; flag:
+ 
+   &lt;info&gt;bin/console debug:container --types&lt;/info&gt;
  
  By default, private services are hidden. You can display all services by
  using the &lt;info&gt;--show-private&lt;/info&gt; flag:
@@ -483,6 +535,9 @@
         <option name="--show-private" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
           <description>Used to show public *and* private services</description>
         </option>
+        <option name="--show-arguments" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Used to show arguments in services</description>
+        </option>
         <option name="--tag" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
           <description>Shows all services with a specific tag</description>
           <defaults/>
@@ -496,6 +551,9 @@
         </option>
         <option name="--parameters" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
           <description>Displays parameters for an application</description>
+        </option>
+        <option name="--types" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Displays types (classes/interfaces) available in the container</description>
         </option>
         <option name="--format" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
           <description>The output format (txt, xml, json, or md)</description>
@@ -686,30 +744,30 @@
         </option>
       </options>
     </command>
-    <command id="lint:yaml" name="lint:yaml">
+    <command id="lint:xliff" name="lint:xliff">
       <usages>
-        <usage>bin/console app lint:yaml [--format FORMAT] [--] [&lt;filename&gt;]</usage>
+        <usage>bin/console app lint:xliff [--format FORMAT] [--] [&lt;filename&gt;]</usage>
       </usages>
-      <description>Lints a file and outputs encountered errors</description>
-      <help>The &lt;info&gt;lint:yaml&lt;/info&gt; command lints a YAML file and outputs to STDOUT
+      <description>Lints a XLIFF file and outputs encountered errors</description>
+      <help>The &lt;info&gt;lint:xliff&lt;/info&gt; command lints a XLIFF file and outputs to STDOUT
  the first encountered syntax error.
  
- You can validates YAML contents passed from STDIN:
+ You can validates XLIFF contents passed from STDIN:
  
-   &lt;info&gt;cat filename | bin/console lint:yaml&lt;/info&gt;
+   &lt;info&gt;cat filename | bin/console lint:xliff&lt;/info&gt;
  
  You can also validate the syntax of a file:
  
-   &lt;info&gt;bin/console lint:yaml filename&lt;/info&gt;
+   &lt;info&gt;bin/console lint:xliff filename&lt;/info&gt;
  
  Or of a whole directory:
  
-   &lt;info&gt;bin/console lint:yaml dirname&lt;/info&gt;
-   &lt;info&gt;bin/console lint:yaml dirname --format=json&lt;/info&gt;
+   &lt;info&gt;bin/console lint:xliff dirname&lt;/info&gt;
+   &lt;info&gt;bin/console lint:xliff dirname --format=json&lt;/info&gt;
  
  Or find all files in a bundle:
  
-   &lt;info&gt;bin/console lint:yaml @AcmeDemoBundle&lt;/info&gt;</help>
+   &lt;info&gt;bin/console lint:xliff @AcmeDemoBundle&lt;/info&gt;</help>
       <arguments>
         <argument name="filename" is_required="0" is_array="0">
           <description>A file or a directory or STDIN</description>
@@ -755,249 +813,41 @@
         </option>
       </options>
     </command>
-    <command id="server:run" name="server:run">
+    <command id="lint:yaml" name="lint:yaml">
       <usages>
-        <usage>bin/console app server:run [-p|--port PORT] [-d|--docroot DOCROOT] [-r|--router ROUTER] [--] [&lt;address&gt;]</usage>
+        <usage>bin/console app lint:yaml [--format FORMAT] [--] [&lt;filename&gt;]</usage>
       </usages>
-      <description>Runs PHP built-in web server</description>
-      <help>The &lt;info&gt;server:run&lt;/info&gt; runs PHP built-in web server:
+      <description>Lints a file and outputs encountered errors</description>
+      <help>The &lt;info&gt;lint:yaml&lt;/info&gt; command lints a YAML file and outputs to STDOUT
+ the first encountered syntax error.
  
-   &lt;info&gt;bin/console server:run&lt;/info&gt;
+ You can validates YAML contents passed from STDIN:
  
- To change default bind address and port use the &lt;info&gt;address&lt;/info&gt; argument:
+   &lt;info&gt;cat filename | bin/console lint:yaml&lt;/info&gt;
  
-   &lt;info&gt;bin/console server:run 127.0.0.1:8080&lt;/info&gt;
+ You can also validate the syntax of a file:
  
- To change default docroot directory use the &lt;info&gt;--docroot&lt;/info&gt; option:
+   &lt;info&gt;bin/console lint:yaml filename&lt;/info&gt;
  
-   &lt;info&gt;bin/console server:run --docroot=htdocs/&lt;/info&gt;
+ Or of a whole directory:
  
- If you have custom docroot directory layout, you can specify your own
- router script using &lt;info&gt;--router&lt;/info&gt; option:
+   &lt;info&gt;bin/console lint:yaml dirname&lt;/info&gt;
+   &lt;info&gt;bin/console lint:yaml dirname --format=json&lt;/info&gt;
  
-   &lt;info&gt;bin/console server:run --router=app/config/router.php&lt;/info&gt;
+ Or find all files in a bundle:
  
- Specifing a router script is required when the used environment is not "dev",
- "prod", or "test".
- 
- See also: http://www.php.net/manual/en/features.commandline.webserver.php</help>
+   &lt;info&gt;bin/console lint:yaml @AcmeDemoBundle&lt;/info&gt;</help>
       <arguments>
-        <argument name="address" is_required="0" is_array="0">
-          <description>Address:port</description>
-          <defaults>
-            <default>127.0.0.1</default>
-          </defaults>
+        <argument name="filename" is_required="0" is_array="0">
+          <description>A file or a directory or STDIN</description>
+          <defaults/>
         </argument>
       </arguments>
       <options>
-        <option name="--port" shortcut="-p" accept_value="1" is_value_required="1" is_multiple="0">
-          <description>Address port number</description>
+        <option name="--format" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The output format</description>
           <defaults>
-            <default>8000</default>
-          </defaults>
-        </option>
-        <option name="--docroot" shortcut="-d" accept_value="1" is_value_required="1" is_multiple="0">
-          <description>Document root</description>
-          <defaults/>
-        </option>
-        <option name="--router" shortcut="-r" accept_value="1" is_value_required="1" is_multiple="0">
-          <description>Path to custom router script</description>
-          <defaults/>
-        </option>
-        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Display this help message</description>
-        </option>
-        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Do not output any message</description>
-        </option>
-        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
-        </option>
-        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Display this application version</description>
-        </option>
-        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Force ANSI output</description>
-        </option>
-        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Disable ANSI output</description>
-        </option>
-        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Do not ask any interactive question</description>
-        </option>
-        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
-          <description>The environment name</description>
-          <defaults>
-            <default>test</default>
-          </defaults>
-        </option>
-        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Switches off debug mode</description>
-        </option>
-      </options>
-    </command>
-    <command id="server:start" name="server:start">
-      <usages>
-        <usage>bin/console app server:start [-p|--port PORT] [-d|--docroot DOCROOT] [-r|--router ROUTER] [-f|--force] [--] [&lt;address&gt;]</usage>
-      </usages>
-      <description>Starts PHP built-in web server in the background</description>
-      <help>The &lt;info&gt;server:start&lt;/info&gt; runs PHP's built-in web server:
- 
-   &lt;info&gt;bin/console server:start&lt;/info&gt;
- 
- To change the default bind address and the default port use the &lt;info&gt;address&lt;/info&gt; argument:
- 
-   &lt;info&gt;bin/console server:start 127.0.0.1:8080&lt;/info&gt;
- 
- To change the default document root directory use the &lt;info&gt;--docroot&lt;/info&gt; option:
- 
-   &lt;info&gt;bin/console server:start --docroot=htdocs/&lt;/info&gt;
- 
- If you have a custom document root directory layout, you can specify your own
- router script using the &lt;info&gt;--router&lt;/info&gt; option:
- 
-   &lt;info&gt;bin/console server:start --router=app/config/router.php&lt;/info&gt;
- 
- Specifying a router script is required when the used environment is not &lt;comment&gt;"dev"&lt;/comment&gt; or
- &lt;comment&gt;"prod"&lt;/comment&gt;.
- 
- See also: http://www.php.net/manual/en/features.commandline.webserver.php</help>
-      <arguments>
-        <argument name="address" is_required="0" is_array="0">
-          <description>Address:port</description>
-          <defaults>
-            <default>127.0.0.1</default>
-          </defaults>
-        </argument>
-      </arguments>
-      <options>
-        <option name="--port" shortcut="-p" accept_value="1" is_value_required="1" is_multiple="0">
-          <description>Address port number</description>
-          <defaults>
-            <default>8000</default>
-          </defaults>
-        </option>
-        <option name="--docroot" shortcut="-d" accept_value="1" is_value_required="1" is_multiple="0">
-          <description>Document root</description>
-          <defaults/>
-        </option>
-        <option name="--router" shortcut="-r" accept_value="1" is_value_required="1" is_multiple="0">
-          <description>Path to custom router script</description>
-          <defaults/>
-        </option>
-        <option name="--force" shortcut="-f" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Force web server startup</description>
-        </option>
-        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Display this help message</description>
-        </option>
-        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Do not output any message</description>
-        </option>
-        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
-        </option>
-        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Display this application version</description>
-        </option>
-        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Force ANSI output</description>
-        </option>
-        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Disable ANSI output</description>
-        </option>
-        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Do not ask any interactive question</description>
-        </option>
-        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
-          <description>The environment name</description>
-          <defaults>
-            <default>test</default>
-          </defaults>
-        </option>
-        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Switches off debug mode</description>
-        </option>
-      </options>
-    </command>
-    <command id="server:status" name="server:status">
-      <usages>
-        <usage>bin/console app server:status [-p|--port PORT] [--] [&lt;address&gt;]</usage>
-      </usages>
-      <description>Outputs the status of the built-in web server for the given address</description>
-      <help>Outputs the status of the built-in web server for the given address</help>
-      <arguments>
-        <argument name="address" is_required="0" is_array="0">
-          <description>Address:port</description>
-          <defaults>
-            <default>127.0.0.1</default>
-          </defaults>
-        </argument>
-      </arguments>
-      <options>
-        <option name="--port" shortcut="-p" accept_value="1" is_value_required="1" is_multiple="0">
-          <description>Address port number</description>
-          <defaults>
-            <default>8000</default>
-          </defaults>
-        </option>
-        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Display this help message</description>
-        </option>
-        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Do not output any message</description>
-        </option>
-        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
-        </option>
-        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Display this application version</description>
-        </option>
-        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Force ANSI output</description>
-        </option>
-        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Disable ANSI output</description>
-        </option>
-        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Do not ask any interactive question</description>
-        </option>
-        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
-          <description>The environment name</description>
-          <defaults>
-            <default>test</default>
-          </defaults>
-        </option>
-        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Switches off debug mode</description>
-        </option>
-      </options>
-    </command>
-    <command id="server:stop" name="server:stop">
-      <usages>
-        <usage>bin/console app server:stop [-p|--port PORT] [--] [&lt;address&gt;]</usage>
-      </usages>
-      <description>Stops PHP's built-in web server that was started with the server:start command</description>
-      <help>The &lt;info&gt;server:stop&lt;/info&gt; stops PHP's built-in web server:
- 
-   &lt;info&gt;bin/console server:stop&lt;/info&gt;
- 
- To change the default bind address and the default port use the &lt;info&gt;address&lt;/info&gt; argument:
- 
-   &lt;info&gt;bin/console server:stop 127.0.0.1:8080&lt;/info&gt;</help>
-      <arguments>
-        <argument name="address" is_required="0" is_array="0">
-          <description>Address:port</description>
-          <defaults>
-            <default>127.0.0.1</default>
-          </defaults>
-        </argument>
-      </arguments>
-      <options>
-        <option name="--port" shortcut="-p" accept_value="1" is_value_required="1" is_multiple="0">
-          <description>Address port number</description>
-          <defaults>
-            <default>8000</default>
+            <default>txt</default>
           </defaults>
         </option>
         <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
@@ -1127,6 +977,7 @@
   </commands>
   <namespaces>
     <namespace id="_global">
+      <command>about</command>
       <command>help</command>
       <command>list</command>
     </namespace>
@@ -1148,13 +999,8 @@
       <command>debug:translation</command>
     </namespace>
     <namespace id="lint">
+      <command>lint:xliff</command>
       <command>lint:yaml</command>
-    </namespace>
-    <namespace id="server">
-      <command>server:run</command>
-      <command>server:start</command>
-      <command>server:status</command>
-      <command>server:stop</command>
     </namespace>
     <namespace id="translation">
       <command>translation:update</command>

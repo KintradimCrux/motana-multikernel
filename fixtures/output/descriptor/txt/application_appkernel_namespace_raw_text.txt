@@ -1,4 +1,4 @@
-Motana Multi-Kernel App Console - Symfony 3.2.9 (kernel: app, env: test, debug: false)
+Motana Multi-Kernel App Console - Symfony [symfony-version] (kernel: app, env: test, debug: false)
 
 Usage:
   bin/console app

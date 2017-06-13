@@ -1,4 +1,4 @@
-Motana Multi-Kernel App Console - Symfony `3.2.9` (kernel: app, env: test, debug: false)
+Motana Multi-Kernel App Console - Symfony `[symfony-version]` (kernel: app, env: test, debug: false)
 ========================================================================================
 
 Commands in namespace "debug"
@@ -147,7 +147,7 @@ Command "debug:container"
 * Description: Displays current services for an application
 * Usage:
 
-  * `bin/console app debug:container [--show-private] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--format FORMAT] [--raw] [--] [<name>]`
+  * `bin/console app debug:container [--show-private] [--show-arguments] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--types] [--format FORMAT] [--raw] [--] [<name>]`
 
 The `debug:container` command displays all configured public services:
 
@@ -156,6 +156,10 @@ The `debug:container` command displays all configured public services:
 To get specific information about a service, specify its name:
 
   `bin/console debug:container validator`
+
+To see available types that can be used for autowiring, use the `--types` flag:
+
+  `bin/console debug:container --types`
 
 By default, private services are hidden. You can display all services by
 using the `--show-private` flag:
@@ -200,6 +204,16 @@ Display a specific parameter by specifying its name with the `--parameter` optio
 * Description: Used to show public *and* private services
 * Default: `false`
 
+**show-arguments:**
+
+* Name: `--show-arguments`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Used to show arguments in services
+* Default: `false`
+
 **tag:**
 
 * Name: `--tag`
@@ -238,6 +252,16 @@ Display a specific parameter by specifying its name with the `--parameter` optio
 * Is value required: no
 * Is multiple: no
 * Description: Displays parameters for an application
+* Default: `false`
+
+**types:**
+
+* Name: `--types`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Displays types (classes/interfaces) available in the container
 * Default: `false`
 
 **format:**

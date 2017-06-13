@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<symfony name="Motana Multi-Kernel App Console - Symfony" version="3.2.9" kernel="boot">
+<symfony name="Motana Multi-Kernel App Console - Symfony" version="[symfony-version]" kernel="boot">
   <commands namespace="debug">
     <command id="debug:config" name="debug:config">
       <usages>
@@ -64,7 +64,7 @@
     <command id="debug:container" name="debug:container">
       <usages>
         <usage>bin/console debug:container [options] [--] [&lt;name&gt;]</usage>
-        <usage>bin/console &lt;kernel&gt; debug:container [--show-private] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--format FORMAT] [--raw] [--] [&lt;name&gt;]</usage>
+        <usage>bin/console &lt;kernel&gt; debug:container [--show-private] [--show-arguments] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--types] [--format FORMAT] [--raw] [--] [&lt;name&gt;]</usage>
       </usages>
       <description>Displays current services for an application</description>
       <help>The &lt;info&gt;debug:container&lt;/info&gt; command displays all configured &lt;comment&gt;public&lt;/comment&gt; services:
@@ -74,6 +74,10 @@
  To get specific information about a service, specify its name:
  
    &lt;info&gt;bin/console debug:container validator&lt;/info&gt;
+ 
+ To see available types that can be used for autowiring, use the &lt;info&gt;--types&lt;/info&gt; flag:
+ 
+   &lt;info&gt;bin/console debug:container --types&lt;/info&gt;
  
  By default, private services are hidden. You can display all services by
  using the &lt;info&gt;--show-private&lt;/info&gt; flag:
@@ -105,6 +109,9 @@
         <option name="--show-private" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
           <description>Used to show public *and* private services</description>
         </option>
+        <option name="--show-arguments" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Used to show arguments in services</description>
+        </option>
         <option name="--tag" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
           <description>Shows all services with a specific tag</description>
           <defaults/>
@@ -118,6 +125,9 @@
         </option>
         <option name="--parameters" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
           <description>Displays parameters for an application</description>
+        </option>
+        <option name="--types" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Displays types (classes/interfaces) available in the container</description>
         </option>
         <option name="--format" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
           <description>The output format (txt, xml, json, or md)</description>

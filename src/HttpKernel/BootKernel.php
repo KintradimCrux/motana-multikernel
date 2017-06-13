@@ -157,10 +157,16 @@ abstract class BootKernel extends Kernel
 	 */
 	public function registerBundles()
 	{
-		return array(
-			new FrameworkBundle(),
-			new MotanaMultiKernelBundle(),
-		);
+		$bundles = array();
+		
+		$bundles[] = new FrameworkBundle();
+		$bundles[] = new MotanaMultiKernelBundle();
+		
+		if (class_exists('Symfony\\Bundle\\WebServerBundle\\WebServerBundle')) {
+			$bundles[] = new \Symfony\Bundle\WebServerBundle\WebServerBundle();
+		}
+		
+		return $bundles;
 	}
 
 	/**

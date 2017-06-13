@@ -11,10 +11,6 @@
 
 namespace Tests\Motana\Bundle\MultiKernelBundle\Console;
 
-use Symfony\Bundle\FrameworkBundle\Command\ServerRunCommand;
-use Symfony\Bundle\FrameworkBundle\Command\ServerStartCommand;
-use Symfony\Bundle\FrameworkBundle\Command\ServerStatusCommand;
-use Symfony\Bundle\FrameworkBundle\Command\ServerStopCommand;
 use Symfony\Bundle\FrameworkBundle\Command\YamlLintCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -153,15 +149,17 @@ class MultiKernelApplicationTest extends ApplicationTestCase
 	 */
 	public function provide_testRegisteredCommands_data()
 	{
+		$serverCommandBundle = class_exists('Symfony\\Bundle\\WebServerBundle\\WebServerBundle') ? 'WebServerBundle' : 'FrameworkBundle';
+		
 		return array(
 			// Standard symfony commands that are always run on the boot kernel
 			array(HelpCommand::class, 'help'),
 			array(ListCommand::class, 'list'),
 			array(YamlLintCommand::class, 'lint:yaml'),
-			array(ServerRunCommand::class, 'server:run'),
-			array(ServerStartCommand::class, 'server:start'),
-			array(ServerStatusCommand::class, 'server:status'),
-			array(ServerStopCommand::class, 'server:stop'),
+			array('Symfony\\Bundle\\' . $serverCommandBundle . '\\Command\\ServerRunCommand', 'server:run'),
+			array('Symfony\\Bundle\\' . $serverCommandBundle . '\\Command\\ServerStartCommand', 'server:start'),
+			array('Symfony\\Bundle\\' . $serverCommandBundle . '\\Command\\ServerStatusCommand', 'server:status'),
+			array('Symfony\\Bundle\\' . $serverCommandBundle . '\\Command\\ServerStopCommand', 'server:stop'),
 			
 			// Standard Symfony commands wrapped into multi-kernel command instances
 			array(MultiKernelCommand::class, 'assets:install'),

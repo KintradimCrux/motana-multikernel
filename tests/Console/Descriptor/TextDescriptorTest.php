@@ -15,9 +15,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\BufferedOutput;
 
 use Motana\Bundle\MultiKernelBundle\Console\Descriptor\TextDescriptor;
+use Motana\Bundle\MultiKernelBundle\Console\Output\BufferedOutput;
 use Motana\Bundle\MultiKernelBundle\Test\ApplicationTestCase;
 
 /**

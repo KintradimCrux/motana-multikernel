@@ -141,4 +141,13 @@ class BootKernelRequestTest extends TestCase
 		$this->setUp('no_pathinfo');
 		$this->assertEquals('/', $this->callMethod(self::$request, 'preparePathInfo'));
 	}
+	
+	/**
+	 * @covers ::prepareRequestUri()
+	 */
+	public function testPrepareRequestUri()
+	{
+		$this->setUp('without_slash');
+		$this->assertEquals('/web/foobar/controller/action', $this->callMethod(self::$request, 'prepareRequestUri'));
+	}
 }

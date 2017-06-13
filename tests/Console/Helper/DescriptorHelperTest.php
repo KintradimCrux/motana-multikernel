@@ -14,13 +14,13 @@ namespace Tests\Motana\Bundle\MultiKernelBundle\Console\Helper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\BufferedOutput;
 
 use Motana\Bundle\MultiKernelBundle\Console\Helper\DescriptorHelper;
 use Motana\Bundle\MultiKernelBundle\Console\Descriptor\JsonDescriptor;
 use Motana\Bundle\MultiKernelBundle\Console\Descriptor\MarkdownDescriptor;
 use Motana\Bundle\MultiKernelBundle\Console\Descriptor\TextDescriptor;
 use Motana\Bundle\MultiKernelBundle\Console\Descriptor\XmlDescriptor;
+use Motana\Bundle\MultiKernelBundle\Console\Output\BufferedOutput;
 use Motana\Bundle\MultiKernelBundle\Test\ApplicationTestCase;
 
 /**

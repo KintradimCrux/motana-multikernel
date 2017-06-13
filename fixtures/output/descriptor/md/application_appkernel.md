@@ -1,9 +1,10 @@
-Motana Multi-Kernel App Console - Symfony `3.2.9` (kernel: app, env: test, debug: false)
+Motana Multi-Kernel App Console - Symfony `[symfony-version]` (kernel: app, env: test, debug: false)
 ========================================================================================
 
 Commands
 --------
 
+* about
 * help
 * list
 
@@ -30,18 +31,114 @@ Commands
 
 **lint:**
 
+* lint:xliff
 * lint:yaml
-
-**server:**
-
-* server:run
-* server:start
-* server:status
-* server:stop
 
 **translation:**
 
 * translation:update
+
+Command "about"
+---------------
+
+* Description: Displays information about the current project
+* Usage:
+
+  * `bin/console app about`
+
+Displays information about the current project
+
+### Options:
+
+**help:**
+
+* Name: `--help`
+* Shortcut: `-h`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this help message
+* Default: `false`
+
+**quiet:**
+
+* Name: `--quiet`
+* Shortcut: `-q`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not output any message
+* Default: `false`
+
+**verbose:**
+
+* Name: `--verbose`
+* Shortcut: `-v|-vv|-vvv`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+* Default: `false`
+
+**version:**
+
+* Name: `--version`
+* Shortcut: `-V`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this application version
+* Default: `false`
+
+**ansi:**
+
+* Name: `--ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Force ANSI output
+* Default: `false`
+
+**no-ansi:**
+
+* Name: `--no-ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Disable ANSI output
+* Default: `false`
+
+**no-interaction:**
+
+* Name: `--no-interaction`
+* Shortcut: `-n`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not ask any interactive question
+* Default: `false`
+
+**env:**
+
+* Name: `--env`
+* Shortcut: `-e`
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The environment name
+* Default: `'test'`
+
+**no-debug:**
+
+* Name: `--no-debug`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Switches off debug mode
+* Default: `false`
 
 Command "help"
 --------------
@@ -751,7 +848,7 @@ Command "config:dump-reference"
 * Description: Dumps the default configuration for an extension
 * Usage:
 
-  * `bin/console app config:dump-reference [--format FORMAT] [--] [<name>]`
+  * `bin/console app config:dump-reference [--format FORMAT] [--] [<name>] [<path>]`
 
 The `config:dump-reference` command dumps the default configuration for an
 extension/bundle.
@@ -767,6 +864,10 @@ When the option is not provided, yaml is used.
 
   `bin/console config:dump-reference FrameworkBundle --format=xml`
 
+For dumping a specific option, add its path as second argument (only available for the yaml format):
+
+  `bin/console config:dump-reference framework profiler.matcher`
+
 ### Arguments:
 
 **name:**
@@ -775,6 +876,14 @@ When the option is not provided, yaml is used.
 * Is required: no
 * Is array: no
 * Description: The Bundle name or the extension alias
+* Default: `NULL`
+
+**path:**
+
+* Name: path
+* Is required: no
+* Is array: no
+* Description: The configuration option path
 * Default: `NULL`
 
 ### Options:
@@ -1015,7 +1124,7 @@ Command "debug:container"
 * Description: Displays current services for an application
 * Usage:
 
-  * `bin/console app debug:container [--show-private] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--format FORMAT] [--raw] [--] [<name>]`
+  * `bin/console app debug:container [--show-private] [--show-arguments] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--types] [--format FORMAT] [--raw] [--] [<name>]`
 
 The `debug:container` command displays all configured public services:
 
@@ -1024,6 +1133,10 @@ The `debug:container` command displays all configured public services:
 To get specific information about a service, specify its name:
 
   `bin/console debug:container validator`
+
+To see available types that can be used for autowiring, use the `--types` flag:
+
+  `bin/console debug:container --types`
 
 By default, private services are hidden. You can display all services by
 using the `--show-private` flag:
@@ -1068,6 +1181,16 @@ Display a specific parameter by specifying its name with the `--parameter` optio
 * Description: Used to show public *and* private services
 * Default: `false`
 
+**show-arguments:**
+
+* Name: `--show-arguments`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Used to show arguments in services
+* Default: `false`
+
 **tag:**
 
 * Name: `--tag`
@@ -1106,6 +1229,16 @@ Display a specific parameter by specifying its name with the `--parameter` optio
 * Is value required: no
 * Is multiple: no
 * Description: Displays parameters for an application
+* Default: `false`
+
+**types:**
+
+* Name: `--types`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Displays types (classes/interfaces) available in the container
 * Default: `false`
 
 **format:**
@@ -1542,33 +1675,33 @@ You can display information about translations in all registered bundles in a sp
 * Description: Switches off debug mode
 * Default: `false`
 
-Command "lint:yaml"
--------------------
+Command "lint:xliff"
+--------------------
 
-* Description: Lints a file and outputs encountered errors
+* Description: Lints a XLIFF file and outputs encountered errors
 * Usage:
 
-  * `bin/console app lint:yaml [--format FORMAT] [--] [<filename>]`
+  * `bin/console app lint:xliff [--format FORMAT] [--] [<filename>]`
 
-The `lint:yaml` command lints a YAML file and outputs to STDOUT
+The `lint:xliff` command lints a XLIFF file and outputs to STDOUT
 the first encountered syntax error.
 
-You can validates YAML contents passed from STDIN:
+You can validates XLIFF contents passed from STDIN:
 
-  `cat filename | bin/console lint:yaml`
+  `cat filename | bin/console lint:xliff`
 
 You can also validate the syntax of a file:
 
-  `bin/console lint:yaml filename`
+  `bin/console lint:xliff filename`
 
 Or of a whole directory:
 
-  `bin/console lint:yaml dirname`
-  `bin/console lint:yaml dirname --format=json`
+  `bin/console lint:xliff dirname`
+  `bin/console lint:xliff dirname --format=json`
 
 Or find all files in a bundle:
 
-  `bin/console lint:yaml @AcmeDemoBundle`
+  `bin/console lint:xliff @AcmeDemoBundle`
 
 ### Arguments:
 
@@ -1682,499 +1815,55 @@ Or find all files in a bundle:
 * Description: Switches off debug mode
 * Default: `false`
 
-Command "server:run"
---------------------
+Command "lint:yaml"
+-------------------
 
-* Description: Runs PHP built-in web server
+* Description: Lints a file and outputs encountered errors
 * Usage:
 
-  * `bin/console app server:run [-p|--port PORT] [-d|--docroot DOCROOT] [-r|--router ROUTER] [--] [<address>]`
+  * `bin/console app lint:yaml [--format FORMAT] [--] [<filename>]`
 
-The `server:run` runs PHP built-in web server:
+The `lint:yaml` command lints a YAML file and outputs to STDOUT
+the first encountered syntax error.
 
-  `bin/console server:run`
+You can validates YAML contents passed from STDIN:
 
-To change default bind address and port use the `address` argument:
+  `cat filename | bin/console lint:yaml`
 
-  `bin/console server:run 127.0.0.1:8080`
+You can also validate the syntax of a file:
 
-To change default docroot directory use the `--docroot` option:
+  `bin/console lint:yaml filename`
 
-  `bin/console server:run --docroot=htdocs/`
+Or of a whole directory:
 
-If you have custom docroot directory layout, you can specify your own
-router script using `--router` option:
+  `bin/console lint:yaml dirname`
+  `bin/console lint:yaml dirname --format=json`
 
-  `bin/console server:run --router=app/config/router.php`
+Or find all files in a bundle:
 
-Specifing a router script is required when the used environment is not "dev",
-"prod", or "test".
-
-See also: http://www.php.net/manual/en/features.commandline.webserver.php
+  `bin/console lint:yaml @AcmeDemoBundle`
 
 ### Arguments:
 
-**address:**
+**filename:**
 
-* Name: address
+* Name: filename
 * Is required: no
 * Is array: no
-* Description: Address:port
-* Default: `'127.0.0.1'`
+* Description: A file or a directory or STDIN
+* Default: `NULL`
 
 ### Options:
 
-**port:**
+**format:**
 
-* Name: `--port`
-* Shortcut: `-p`
-* Accepts value: yes
-* Is value required: yes
-* Is multiple: no
-* Description: Address port number
-* Default: `'8000'`
-
-**docroot:**
-
-* Name: `--docroot`
-* Shortcut: `-d`
-* Accepts value: yes
-* Is value required: yes
-* Is multiple: no
-* Description: Document root
-* Default: `NULL`
-
-**router:**
-
-* Name: `--router`
-* Shortcut: `-r`
-* Accepts value: yes
-* Is value required: yes
-* Is multiple: no
-* Description: Path to custom router script
-* Default: `NULL`
-
-**help:**
-
-* Name: `--help`
-* Shortcut: `-h`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Display this help message
-* Default: `false`
-
-**quiet:**
-
-* Name: `--quiet`
-* Shortcut: `-q`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Do not output any message
-* Default: `false`
-
-**verbose:**
-
-* Name: `--verbose`
-* Shortcut: `-v|-vv|-vvv`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-* Default: `false`
-
-**version:**
-
-* Name: `--version`
-* Shortcut: `-V`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Display this application version
-* Default: `false`
-
-**ansi:**
-
-* Name: `--ansi`
+* Name: `--format`
 * Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Force ANSI output
-* Default: `false`
-
-**no-ansi:**
-
-* Name: `--no-ansi`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Disable ANSI output
-* Default: `false`
-
-**no-interaction:**
-
-* Name: `--no-interaction`
-* Shortcut: `-n`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Do not ask any interactive question
-* Default: `false`
-
-**env:**
-
-* Name: `--env`
-* Shortcut: `-e`
 * Accepts value: yes
 * Is value required: yes
 * Is multiple: no
-* Description: The environment name
-* Default: `'test'`
-
-**no-debug:**
-
-* Name: `--no-debug`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Switches off debug mode
-* Default: `false`
-
-Command "server:start"
-----------------------
-
-* Description: Starts PHP built-in web server in the background
-* Usage:
-
-  * `bin/console app server:start [-p|--port PORT] [-d|--docroot DOCROOT] [-r|--router ROUTER] [-f|--force] [--] [<address>]`
-
-The `server:start` runs PHP's built-in web server:
-
-  `bin/console server:start`
-
-To change the default bind address and the default port use the `address` argument:
-
-  `bin/console server:start 127.0.0.1:8080`
-
-To change the default document root directory use the `--docroot` option:
-
-  `bin/console server:start --docroot=htdocs/`
-
-If you have a custom document root directory layout, you can specify your own
-router script using the `--router` option:
-
-  `bin/console server:start --router=app/config/router.php`
-
-Specifying a router script is required when the used environment is not "dev" or
-"prod".
-
-See also: http://www.php.net/manual/en/features.commandline.webserver.php
-
-### Arguments:
-
-**address:**
-
-* Name: address
-* Is required: no
-* Is array: no
-* Description: Address:port
-* Default: `'127.0.0.1'`
-
-### Options:
-
-**port:**
-
-* Name: `--port`
-* Shortcut: `-p`
-* Accepts value: yes
-* Is value required: yes
-* Is multiple: no
-* Description: Address port number
-* Default: `'8000'`
-
-**docroot:**
-
-* Name: `--docroot`
-* Shortcut: `-d`
-* Accepts value: yes
-* Is value required: yes
-* Is multiple: no
-* Description: Document root
-* Default: `NULL`
-
-**router:**
-
-* Name: `--router`
-* Shortcut: `-r`
-* Accepts value: yes
-* Is value required: yes
-* Is multiple: no
-* Description: Path to custom router script
-* Default: `NULL`
-
-**force:**
-
-* Name: `--force`
-* Shortcut: `-f`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Force web server startup
-* Default: `false`
-
-**help:**
-
-* Name: `--help`
-* Shortcut: `-h`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Display this help message
-* Default: `false`
-
-**quiet:**
-
-* Name: `--quiet`
-* Shortcut: `-q`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Do not output any message
-* Default: `false`
-
-**verbose:**
-
-* Name: `--verbose`
-* Shortcut: `-v|-vv|-vvv`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-* Default: `false`
-
-**version:**
-
-* Name: `--version`
-* Shortcut: `-V`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Display this application version
-* Default: `false`
-
-**ansi:**
-
-* Name: `--ansi`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Force ANSI output
-* Default: `false`
-
-**no-ansi:**
-
-* Name: `--no-ansi`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Disable ANSI output
-* Default: `false`
-
-**no-interaction:**
-
-* Name: `--no-interaction`
-* Shortcut: `-n`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Do not ask any interactive question
-* Default: `false`
-
-**env:**
-
-* Name: `--env`
-* Shortcut: `-e`
-* Accepts value: yes
-* Is value required: yes
-* Is multiple: no
-* Description: The environment name
-* Default: `'test'`
-
-**no-debug:**
-
-* Name: `--no-debug`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Switches off debug mode
-* Default: `false`
-
-Command "server:status"
------------------------
-
-* Description: Outputs the status of the built-in web server for the given address
-* Usage:
-
-  * `bin/console app server:status [-p|--port PORT] [--] [<address>]`
-
-Outputs the status of the built-in web server for the given address
-
-### Arguments:
-
-**address:**
-
-* Name: address
-* Is required: no
-* Is array: no
-* Description: Address:port
-* Default: `'127.0.0.1'`
-
-### Options:
-
-**port:**
-
-* Name: `--port`
-* Shortcut: `-p`
-* Accepts value: yes
-* Is value required: yes
-* Is multiple: no
-* Description: Address port number
-* Default: `'8000'`
-
-**help:**
-
-* Name: `--help`
-* Shortcut: `-h`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Display this help message
-* Default: `false`
-
-**quiet:**
-
-* Name: `--quiet`
-* Shortcut: `-q`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Do not output any message
-* Default: `false`
-
-**verbose:**
-
-* Name: `--verbose`
-* Shortcut: `-v|-vv|-vvv`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-* Default: `false`
-
-**version:**
-
-* Name: `--version`
-* Shortcut: `-V`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Display this application version
-* Default: `false`
-
-**ansi:**
-
-* Name: `--ansi`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Force ANSI output
-* Default: `false`
-
-**no-ansi:**
-
-* Name: `--no-ansi`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Disable ANSI output
-* Default: `false`
-
-**no-interaction:**
-
-* Name: `--no-interaction`
-* Shortcut: `-n`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Do not ask any interactive question
-* Default: `false`
-
-**env:**
-
-* Name: `--env`
-* Shortcut: `-e`
-* Accepts value: yes
-* Is value required: yes
-* Is multiple: no
-* Description: The environment name
-* Default: `'test'`
-
-**no-debug:**
-
-* Name: `--no-debug`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Switches off debug mode
-* Default: `false`
-
-Command "server:stop"
----------------------
-
-* Description: Stops PHP's built-in web server that was started with the server:start command
-* Usage:
-
-  * `bin/console app server:stop [-p|--port PORT] [--] [<address>]`
-
-The `server:stop` stops PHP's built-in web server:
-
-  `bin/console server:stop`
-
-To change the default bind address and the default port use the `address` argument:
-
-  `bin/console server:stop 127.0.0.1:8080`
-
-### Arguments:
-
-**address:**
-
-* Name: address
-* Is required: no
-* Is array: no
-* Description: Address:port
-* Default: `'127.0.0.1'`
-
-### Options:
-
-**port:**
-
-* Name: `--port`
-* Shortcut: `-p`
-* Accepts value: yes
-* Is value required: yes
-* Is multiple: no
-* Description: Address port number
-* Default: `'8000'`
+* Description: The output format
+* Default: `'txt'`
 
 **help:**
 

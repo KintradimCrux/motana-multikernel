@@ -14,9 +14,9 @@ namespace Tests\Motana\Bundle\MultiKernelBundle\Console\Descriptor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\BufferedOutput;
 
 use Motana\Bundle\MultiKernelBundle\Console\Descriptor\XmlDescriptor;
+use Motana\Bundle\MultiKernelBundle\Console\Output\BufferedOutput;
 use Motana\Bundle\MultiKernelBundle\Test\ApplicationTestCase;
 
 /**

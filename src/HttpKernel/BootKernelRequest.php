@@ -75,9 +75,6 @@ class BootKernelRequest extends Request
 		if (false !== $pos = strpos($requestUri, '?')) {
 			$requestUri = substr($requestUri, 0, $pos);
 		}
-		if ($requestUri !== '' && $requestUri[0] !== '/') {
-			$requestUri = '/'.$requestUri;
-		}
 		
 		if ('' == $baseUrl) {
 			$pathInfo = $requestUri;
@@ -94,6 +91,23 @@ class BootKernelRequest extends Request
 		}
 		
 		return (string) $pathInfo;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @see \Symfony\Component\HttpFoundation\Request::prepareRequestUri()
+	 */
+	protected function prepareRequestUri()
+	{
+		$requestUri = parent::prepareRequestUri();
+		
+		if ($requestUri !== '' && $requestUri[0] !== '/') {
+			$requestUri = '/' . $requestUri;
+		}
+		
+		$this->server->set('REQUEST_URI', $requestUri);
+		
+		return $requestUri;
 	}
 	
 	// }}}

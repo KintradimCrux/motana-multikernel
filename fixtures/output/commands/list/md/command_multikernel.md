@@ -1,4 +1,4 @@
-Motana Multi-Kernel App Console - Symfony `3.2.9` (kernel: boot, env: test, debug: false)
+Motana Multi-Kernel App Console - Symfony `[symfony-version]` (kernel: boot, env: test, debug: false)
 =========================================================================================
 
 Kernels
@@ -10,6 +10,7 @@ Kernels
 Commands
 --------
 
+* about
 * help
 * list
 
@@ -36,6 +37,7 @@ Commands
 
 **lint:**
 
+* lint:xliff
 * lint:yaml
 
 **multi-kernel:**
@@ -44,6 +46,7 @@ Commands
 
 **server:**
 
+* server:log
 * server:run
 * server:start
 * server:status
@@ -52,6 +55,109 @@ Commands
 **translation:**
 
 * translation:update
+
+Command "about"
+---------------
+
+* Description: Displays information about the current project
+* Usage:
+
+  * `bin/console about [options]`
+  * `bin/console <kernel> about`
+
+Displays information about the current project
+
+### Options:
+
+**help:**
+
+* Name: `--help`
+* Shortcut: `-h`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this help message
+* Default: `false`
+
+**quiet:**
+
+* Name: `--quiet`
+* Shortcut: `-q`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not output any message
+* Default: `false`
+
+**verbose:**
+
+* Name: `--verbose`
+* Shortcut: `-v|-vv|-vvv`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+* Default: `false`
+
+**version:**
+
+* Name: `--version`
+* Shortcut: `-V`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this application version
+* Default: `false`
+
+**ansi:**
+
+* Name: `--ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Force ANSI output
+* Default: `false`
+
+**no-ansi:**
+
+* Name: `--no-ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Disable ANSI output
+* Default: `false`
+
+**no-interaction:**
+
+* Name: `--no-interaction`
+* Shortcut: `-n`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not ask any interactive question
+* Default: `false`
+
+**env:**
+
+* Name: `--env`
+* Shortcut: `-e`
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The environment name
+* Default: `'test'`
+
+**no-debug:**
+
+* Name: `--no-debug`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Switches off debug mode
+* Default: `false`
 
 Command "help"
 --------------
@@ -767,8 +873,8 @@ Command "config:dump-reference"
 * Description: Dumps the default configuration for an extension
 * Usage:
 
-  * `bin/console config:dump-reference [options] [--] [<name>]`
-  * `bin/console <kernel> config:dump-reference [--format FORMAT] [--] [<name>]`
+  * `bin/console config:dump-reference [options] [--] [<name>] [<path>]`
+  * `bin/console <kernel> config:dump-reference [--format FORMAT] [--] [<name>] [<path>]`
 
 The `config:dump-reference` command dumps the default configuration for an
 extension/bundle.
@@ -784,6 +890,10 @@ When the option is not provided, yaml is used.
 
   `bin/console config:dump-reference FrameworkBundle --format=xml`
 
+For dumping a specific option, add its path as second argument (only available for the yaml format):
+
+  `bin/console config:dump-reference framework profiler.matcher`
+
 ### Arguments:
 
 **name:**
@@ -792,6 +902,14 @@ When the option is not provided, yaml is used.
 * Is required: no
 * Is array: no
 * Description: The Bundle name or the extension alias
+* Default: `NULL`
+
+**path:**
+
+* Name: path
+* Is required: no
+* Is array: no
+* Description: The configuration option path
 * Default: `NULL`
 
 ### Options:
@@ -1034,7 +1152,7 @@ Command "debug:container"
 * Usage:
 
   * `bin/console debug:container [options] [--] [<name>]`
-  * `bin/console <kernel> debug:container [--show-private] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--format FORMAT] [--raw] [--] [<name>]`
+  * `bin/console <kernel> debug:container [--show-private] [--show-arguments] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--types] [--format FORMAT] [--raw] [--] [<name>]`
 
 The `debug:container` command displays all configured public services:
 
@@ -1043,6 +1161,10 @@ The `debug:container` command displays all configured public services:
 To get specific information about a service, specify its name:
 
   `bin/console debug:container validator`
+
+To see available types that can be used for autowiring, use the `--types` flag:
+
+  `bin/console debug:container --types`
 
 By default, private services are hidden. You can display all services by
 using the `--show-private` flag:
@@ -1087,6 +1209,16 @@ Display a specific parameter by specifying its name with the `--parameter` optio
 * Description: Used to show public *and* private services
 * Default: `false`
 
+**show-arguments:**
+
+* Name: `--show-arguments`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Used to show arguments in services
+* Default: `false`
+
 **tag:**
 
 * Name: `--tag`
@@ -1125,6 +1257,16 @@ Display a specific parameter by specifying its name with the `--parameter` optio
 * Is value required: no
 * Is multiple: no
 * Description: Displays parameters for an application
+* Default: `false`
+
+**types:**
+
+* Name: `--types`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Displays types (classes/interfaces) available in the container
 * Default: `false`
 
 **format:**
@@ -1563,6 +1705,147 @@ You can display information about translations in all registered bundles in a sp
 * Description: Switches off debug mode
 * Default: `false`
 
+Command "lint:xliff"
+--------------------
+
+* Description: Lints a XLIFF file and outputs encountered errors
+* Usage:
+
+  * `bin/console lint:xliff [options] [--] [<filename>]`
+  * `bin/console <kernel> lint:xliff [--format FORMAT] [--] [<filename>]`
+
+The `lint:xliff` command lints a XLIFF file and outputs to STDOUT
+the first encountered syntax error.
+
+You can validates XLIFF contents passed from STDIN:
+
+  `cat filename | bin/console lint:xliff`
+
+You can also validate the syntax of a file:
+
+  `bin/console lint:xliff filename`
+
+Or of a whole directory:
+
+  `bin/console lint:xliff dirname`
+  `bin/console lint:xliff dirname --format=json`
+
+Or find all files in a bundle:
+
+  `bin/console lint:xliff @AcmeDemoBundle`
+
+### Arguments:
+
+**filename:**
+
+* Name: filename
+* Is required: no
+* Is array: no
+* Description: A file or a directory or STDIN
+* Default: `NULL`
+
+### Options:
+
+**format:**
+
+* Name: `--format`
+* Shortcut: <none>
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The output format
+* Default: `'txt'`
+
+**help:**
+
+* Name: `--help`
+* Shortcut: `-h`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this help message
+* Default: `false`
+
+**quiet:**
+
+* Name: `--quiet`
+* Shortcut: `-q`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not output any message
+* Default: `false`
+
+**verbose:**
+
+* Name: `--verbose`
+* Shortcut: `-v|-vv|-vvv`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+* Default: `false`
+
+**version:**
+
+* Name: `--version`
+* Shortcut: `-V`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this application version
+* Default: `false`
+
+**ansi:**
+
+* Name: `--ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Force ANSI output
+* Default: `false`
+
+**no-ansi:**
+
+* Name: `--no-ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Disable ANSI output
+* Default: `false`
+
+**no-interaction:**
+
+* Name: `--no-interaction`
+* Shortcut: `-n`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not ask any interactive question
+* Default: `false`
+
+**env:**
+
+* Name: `--env`
+* Shortcut: `-e`
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The environment name
+* Default: `'test'`
+
+**no-debug:**
+
+* Name: `--no-debug`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Switches off debug mode
+* Default: `false`
+
 Command "lint:yaml"
 -------------------
 
@@ -1807,58 +2090,201 @@ Create a new app
 * Description: Switches off debug mode
 * Default: `false`
 
+Command "server:log"
+--------------------
+
+* Description: Starts a log server that displays logs in real time
+* Usage:
+
+  * `bin/console server:log [options]`
+  * `bin/console <kernel> server:log [--host HOST] [--format FORMAT] [--date-format DATE-FORMAT] [--filter FILTER]`
+
+`server:log` starts a log server to display in real time the log
+messages generated by your application:
+
+  `bin/console server:log`
+
+To get the information as a machine readable format, use the
+--filter option:
+
+`bin/console server:log --filter=port`
+
+### Options:
+
+**host:**
+
+* Name: `--host`
+* Shortcut: <none>
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The server host
+* Default: `'0.0.0.0:9911'`
+
+**format:**
+
+* Name: `--format`
+* Shortcut: <none>
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The line format
+* Default: `'%datetime% %start_tag%%level_name%%end_tag% <comment>[%channel%]</> %message%%context%%extra%'`
+
+**date-format:**
+
+* Name: `--date-format`
+* Shortcut: <none>
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The date format
+* Default: `'H:i:s'`
+
+**filter:**
+
+* Name: `--filter`
+* Shortcut: <none>
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: An expression to filter log. Example: "level > 200 or channel in ['app', 'doctrine']"
+* Default: `NULL`
+
+**help:**
+
+* Name: `--help`
+* Shortcut: `-h`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this help message
+* Default: `false`
+
+**quiet:**
+
+* Name: `--quiet`
+* Shortcut: `-q`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not output any message
+* Default: `false`
+
+**verbose:**
+
+* Name: `--verbose`
+* Shortcut: `-v|-vv|-vvv`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+* Default: `false`
+
+**version:**
+
+* Name: `--version`
+* Shortcut: `-V`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this application version
+* Default: `false`
+
+**ansi:**
+
+* Name: `--ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Force ANSI output
+* Default: `false`
+
+**no-ansi:**
+
+* Name: `--no-ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Disable ANSI output
+* Default: `false`
+
+**no-interaction:**
+
+* Name: `--no-interaction`
+* Shortcut: `-n`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not ask any interactive question
+* Default: `false`
+
+**env:**
+
+* Name: `--env`
+* Shortcut: `-e`
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The environment name
+* Default: `'test'`
+
+**no-debug:**
+
+* Name: `--no-debug`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Switches off debug mode
+* Default: `false`
+
 Command "server:run"
 --------------------
 
-* Description: Runs PHP built-in web server
+* Description: Runs a local web server
 * Usage:
 
-  * `bin/console server:run [options] [--] [<address>]`
-  * `bin/console <kernel> server:run [-p|--port PORT] [-d|--docroot DOCROOT] [-r|--router ROUTER] [--] [<address>]`
+  * `bin/console server:run [options] [--] [<addressport>]`
+  * `bin/console <kernel> server:run [-d|--docroot DOCROOT] [-r|--router ROUTER] [--] [<addressport>]`
 
-The `server:run` runs PHP built-in web server:
+`server:run` runs a local web server: By default, the server
+listens on 127.0.0.1 address and the port number is automatically selected
+as the first free port starting from 8000:
 
   `bin/console server:run`
 
-To change default bind address and port use the `address` argument:
+This command blocks the console. If you want to run other commands, stop it by
+pressing Control+C or use the non-blocking server:start
+command instead.
+
+Change the default address and port by passing them as an argument:
 
   `bin/console server:run 127.0.0.1:8080`
 
-To change default docroot directory use the `--docroot` option:
+Use the `--docroot` option to change the default docroot directory:
 
   `bin/console server:run --docroot=htdocs/`
 
-If you have custom docroot directory layout, you can specify your own
-router script using `--router` option:
+Specify your own router script via the `--router` option:
 
   `bin/console server:run --router=app/config/router.php`
-
-Specifing a router script is required when the used environment is not "dev",
-"prod", or "test".
 
 See also: http://www.php.net/manual/en/features.commandline.webserver.php
 
 ### Arguments:
 
-**address:**
+**addressport:**
 
-* Name: address
+* Name: addressport
 * Is required: no
 * Is array: no
-* Description: Address:port
-* Default: `'127.0.0.1'`
+* Description: The address to listen to (can be address:port, address, or port)
+* Default: `NULL`
 
 ### Options:
-
-**port:**
-
-* Name: `--port`
-* Shortcut: `-p`
-* Accepts value: yes
-* Is value required: yes
-* Is multiple: no
-* Description: Address port number
-* Default: `'8000'`
 
 **docroot:**
 
@@ -1867,7 +2293,7 @@ See also: http://www.php.net/manual/en/features.commandline.webserver.php
 * Accepts value: yes
 * Is value required: yes
 * Is multiple: no
-* Description: Document root
+* Description: Document root, usually where your front controllers are stored
 * Default: `NULL`
 
 **router:**
@@ -1973,55 +2399,46 @@ See also: http://www.php.net/manual/en/features.commandline.webserver.php
 Command "server:start"
 ----------------------
 
-* Description: Starts PHP built-in web server in the background
+* Description: Starts a local web server in the background
 * Usage:
 
-  * `bin/console server:start [options] [--] [<address>]`
-  * `bin/console <kernel> server:start [-p|--port PORT] [-d|--docroot DOCROOT] [-r|--router ROUTER] [-f|--force] [--] [<address>]`
+  * `bin/console server:start [options] [--] [<addressport>]`
+  * `bin/console <kernel> server:start [-d|--docroot DOCROOT] [-r|--router ROUTER] [--pidfile PIDFILE] [--] [<addressport>]`
 
-The `server:start` runs PHP's built-in web server:
+`server:start` runs a local web server: By default, the server
+listens on 127.0.0.1 address and the port number is automatically selected
+as the first free port starting from 8000:
 
   `bin/console server:start`
 
-To change the default bind address and the default port use the `address` argument:
+The server is run in the background and you can keep executing other commands.
+Execute server:stop to stop it.
+
+Change the default address and port by passing them as an argument:
 
   `bin/console server:start 127.0.0.1:8080`
 
-To change the default document root directory use the `--docroot` option:
+Use the `--docroot` option to change the default docroot directory:
 
   `bin/console server:start --docroot=htdocs/`
 
-If you have a custom document root directory layout, you can specify your own
-router script using the `--router` option:
+Specify your own router script via the `--router` option:
 
   `bin/console server:start --router=app/config/router.php`
-
-Specifying a router script is required when the used environment is not "dev" or
-"prod".
 
 See also: http://www.php.net/manual/en/features.commandline.webserver.php
 
 ### Arguments:
 
-**address:**
+**addressport:**
 
-* Name: address
+* Name: addressport
 * Is required: no
 * Is array: no
-* Description: Address:port
-* Default: `'127.0.0.1'`
+* Description: The address to listen to (can be address:port, address, or port)
+* Default: `NULL`
 
 ### Options:
-
-**port:**
-
-* Name: `--port`
-* Shortcut: `-p`
-* Accepts value: yes
-* Is value required: yes
-* Is multiple: no
-* Description: Address port number
-* Default: `'8000'`
 
 **docroot:**
 
@@ -2043,15 +2460,15 @@ See also: http://www.php.net/manual/en/features.commandline.webserver.php
 * Description: Path to custom router script
 * Default: `NULL`
 
-**force:**
+**pidfile:**
 
-* Name: `--force`
-* Shortcut: `-f`
-* Accepts value: no
-* Is value required: no
+* Name: `--pidfile`
+* Shortcut: <none>
+* Accepts value: yes
+* Is value required: yes
 * Is multiple: no
-* Description: Force web server startup
-* Default: `false`
+* Description: PID file
+* Default: `NULL`
 
 **help:**
 
@@ -2146,35 +2563,45 @@ See also: http://www.php.net/manual/en/features.commandline.webserver.php
 Command "server:status"
 -----------------------
 
-* Description: Outputs the status of the built-in web server for the given address
+* Description: Outputs the status of the local web server for the given address
 * Usage:
 
-  * `bin/console server:status [options] [--] [<address>]`
-  * `bin/console <kernel> server:status [-p|--port PORT] [--] [<address>]`
+  * `bin/console server:status [options]`
+  * `bin/console <kernel> server:status [--pidfile PIDFILE] [--filter FILTER]`
 
-Outputs the status of the built-in web server for the given address
+`server:status` shows the details of the given local web
+server, such as the address and port where it is listening to:
 
-### Arguments:
+  `bin/console server:status`
 
-**address:**
+To get the information as a machine readable format, use the
+--filter option:
 
-* Name: address
-* Is required: no
-* Is array: no
-* Description: Address:port
-* Default: `'127.0.0.1'`
+`bin/console server:status --filter=port`
+
+Supported values are port, host, and address.
 
 ### Options:
 
-**port:**
+**pidfile:**
 
-* Name: `--port`
-* Shortcut: `-p`
+* Name: `--pidfile`
+* Shortcut: <none>
 * Accepts value: yes
 * Is value required: yes
 * Is multiple: no
-* Description: Address port number
-* Default: `'8000'`
+* Description: PID file
+* Default: `NULL`
+
+**filter:**
+
+* Name: `--filter`
+* Shortcut: <none>
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The value to display (one of port, host, or address)
+* Default: `NULL`
 
 **help:**
 
@@ -2269,41 +2696,27 @@ Outputs the status of the built-in web server for the given address
 Command "server:stop"
 ---------------------
 
-* Description: Stops PHP's built-in web server that was started with the server:start command
+* Description: Stops the local web server that was started with the server:start command
 * Usage:
 
-  * `bin/console server:stop [options] [--] [<address>]`
-  * `bin/console <kernel> server:stop [-p|--port PORT] [--] [<address>]`
+  * `bin/console server:stop [options]`
+  * `bin/console <kernel> server:stop [--pidfile PIDFILE]`
 
-The `server:stop` stops PHP's built-in web server:
+`server:stop` stops the local web server:
 
   `bin/console server:stop`
 
-To change the default bind address and the default port use the `address` argument:
-
-  `bin/console server:stop 127.0.0.1:8080`
-
-### Arguments:
-
-**address:**
-
-* Name: address
-* Is required: no
-* Is array: no
-* Description: Address:port
-* Default: `'127.0.0.1'`
-
 ### Options:
 
-**port:**
+**pidfile:**
 
-* Name: `--port`
-* Shortcut: `-p`
+* Name: `--pidfile`
+* Shortcut: <none>
 * Accepts value: yes
 * Is value required: yes
 * Is multiple: no
-* Description: Address port number
-* Default: `'8000'`
+* Description: PID file
+* Default: `NULL`
 
 **help:**
 

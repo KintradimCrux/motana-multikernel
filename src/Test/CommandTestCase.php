@@ -13,7 +13,8 @@ namespace Motana\Bundle\MultiKernelBundle\Test;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
+
+use Motana\Bundle\MultiKernelBundle\Console\Output\BufferedOutput;
 
 /**
  * Abstract base class for testing console commands.
