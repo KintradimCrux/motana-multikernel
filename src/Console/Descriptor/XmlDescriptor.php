@@ -23,6 +23,7 @@ use Motana\Bundle\MultiKernelBundle\Console\MultiKernelApplication;
 /**
  * A replacement for the Symfony Standard Edition xml descriptor.
  * 
+ * @author Jean-François Simon <contact@jfsimon.fr>
  * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
 class XmlDescriptor extends Descriptor

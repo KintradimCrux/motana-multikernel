@@ -24,7 +24,8 @@ use Symfony\Component\Console\Input\InputDefinition;
  * The parseArgument() method has been modified to handle a {@link ConditionalArgument} correctly.
  * 
  * The methods hasParameterOption() and getParameterOption() have been changed to handle the -eprod option notation correctly.
- * 
+ *
+ * @author Fabien Potencier <fabien@symfony.com>
  * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
 class ArgvInput extends Input
