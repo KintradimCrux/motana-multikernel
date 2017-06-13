@@ -365,23 +365,6 @@ EOH
 	{
 		$case .= ! empty($options) ? '_' . implode('_', array_keys($options)) : '';
 		
-		switch ($case) {
-			case 'data':
-				return <<<EOD
-{
-    "name": "test",
-    "usage": "test [options] [arguments]",
-    "description": "JsonDescriptor test command",
-    "help": "Tests the writeData() method",
-    "definition": {
-        "arguments": [],
-        "options": []
-    }
-}
-
-EOD;
-		}
-		
 		if (is_file($file = self::$fixturesDir . '/output/descriptor/' . $format . '/'. $case . '.' . $format)) {
 			return file_get_contents($file);
 		}

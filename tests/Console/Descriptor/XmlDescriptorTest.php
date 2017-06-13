@@ -435,17 +435,6 @@ EOH
 	{
 		$case .= ! empty($options) ? '_' . implode('_', array_keys($options)) : '';
 		
-		switch ($case) {
-			case 'document':
-				return <<<EOD
-<?xml version="1.0" encoding="UTF-8"?>
-<child id="child1">
-  <grandchild id="child2"/>
-</child>
-
-EOD;
-		}
-
 		if (is_file($file = self::$fixturesDir . '/output/descriptor/' . $format . '/' . $case . '.' . $format)) {
 			return file_get_contents($file);
 		}

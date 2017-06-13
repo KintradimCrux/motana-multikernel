@@ -1,0 +1,10 @@
+{
+    "name": "test",
+    "usage": "test [options] [arguments]",
+    "description": "JsonDescriptor test command",
+    "help": "Tests the writeData() method",
+    "definition": {
+        "arguments": [],
+        "options": []
+    }
+}
