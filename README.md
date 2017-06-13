@@ -10,7 +10,7 @@ In order to define dependency on motana-multikernel in your project just add thi
 ```json
 {
 	"require": {
-		"motana/multikernel": "1.0.*"
+		"motana/multikernel": "^1.0"
 	}
 }
 ```
