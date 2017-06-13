@@ -1,19 +1,14 @@
 {
 	"name" : "motana/multikernel",
+	"version": "1.0",
 	"type" : "library",
 	"description" : "Motana Multi-Kernel Bundle",
-	"homepage" : "http://h3km3k.sytes.net/~torr/motana/",
-	"license" : "proprietary",
+	"homepage" : "http://github.com/KintradimCrux/motana-multikernel/",
+	"license" : "MIT",
 	"authors" : [
 		{
 			"name" : "Wenzel Jonas",
 			"email" : "mail@ramihyn.sytes.net"
-		}
-	],
-	"repositories" : [
-		{
-			"type" : "composer",
-			"url" : "https://svn.h3km3k.sytes.net"
 		}
 	],
 	"require" : {
@@ -27,9 +22,6 @@
 		"psr-4" : {
 			"Motana\\Bundle\\MultiKernelBundle\\" : "src/",
 			"Tests\\Motana\\Bundle\\MultiKernelBundle\\" : "tests/"
-		},
-		"classmap" : [
-			"apps/BootKernel.php"
-		]
+		}
 	}
 }
