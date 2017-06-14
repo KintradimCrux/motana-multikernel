@@ -1,6 +1,6 @@
 {
 	"name" : "motana/multikernel",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"type" : "library",
 	"description" : "Motana Multi-Kernel Bundle",
 	"keywords": ["kernel", "multi", "multi-kernel"],
