@@ -3,7 +3,7 @@
   <commands>
     <command id="about" name="about">
       <usages>
-        <usage>bin/console app about</usage>
+        <usage>bin/console app about [options]</usage>
       </usages>
       <description>Displays information about the current project</description>
       <help>Displays information about the current project</help>
@@ -43,7 +43,7 @@
     </command>
     <command id="help" name="help">
       <usages>
-        <usage>bin/console app help [--format FORMAT] [--raw] [--] [&lt;command_name&gt;]</usage>
+        <usage>bin/console app help [options] [--] [&lt;command_name&gt;]</usage>
       </usages>
       <description>Displays help for a command</description>
       <help>The &lt;info&gt;help&lt;/info&gt; command displays help for a given command:
@@ -107,7 +107,7 @@
     </command>
     <command id="list" name="list">
       <usages>
-        <usage>bin/console app list [--raw] [--format FORMAT] [--] [&lt;namespace&gt;]</usage>
+        <usage>bin/console app list [options] [--] [&lt;namespace&gt;]</usage>
       </usages>
       <description>Lists commands</description>
       <help>The &lt;info&gt;list&lt;/info&gt; command lists all commands:
@@ -145,7 +145,7 @@
     </command>
     <command id="assets:install" name="assets:install">
       <usages>
-        <usage>bin/console app assets:install [--symlink] [--relative] [--] [&lt;target&gt;]</usage>
+        <usage>bin/console app assets:install [options] [--] [&lt;target&gt;]</usage>
       </usages>
       <description>Installs bundles web assets under a public web directory</description>
       <help>The &lt;info&gt;assets:install&lt;/info&gt; command installs bundle assets into a given
@@ -213,7 +213,7 @@
     </command>
     <command id="cache:clear" name="cache:clear">
       <usages>
-        <usage>bin/console app cache:clear [--no-warmup] [--no-optional-warmers]</usage>
+        <usage>bin/console app cache:clear [options]</usage>
       </usages>
       <description>Clears the cache</description>
       <help>The &lt;info&gt;cache:clear&lt;/info&gt; command clears the application cache for a given environment
@@ -263,7 +263,7 @@
     </command>
     <command id="cache:pool:clear" name="cache:pool:clear">
       <usages>
-        <usage>bin/console app cache:pool:clear &lt;pools&gt; (&lt;pools&gt;)...</usage>
+        <usage>bin/console app cache:pool:clear [options] [--] &lt;pools&gt; (&lt;pools&gt;)...</usage>
       </usages>
       <description>Clears cache pools</description>
       <help>The &lt;info&gt;cache:pool:clear&lt;/info&gt; command clears the given cache pools or cache pool clearers.
@@ -310,7 +310,7 @@
     </command>
     <command id="cache:warmup" name="cache:warmup">
       <usages>
-        <usage>bin/console app cache:warmup [--no-optional-warmers]</usage>
+        <usage>bin/console app cache:warmup [options]</usage>
       </usages>
       <description>Warms up an empty cache</description>
       <help>The &lt;info&gt;cache:warmup&lt;/info&gt; command warms up the cache.
@@ -360,7 +360,7 @@
     </command>
     <command id="config:dump-reference" name="config:dump-reference">
       <usages>
-        <usage>bin/console app config:dump-reference [--format FORMAT] [--] [&lt;name&gt;] [&lt;path&gt;]</usage>
+        <usage>bin/console app config:dump-reference [options] [--] [&lt;name&gt;] [&lt;path&gt;]</usage>
       </usages>
       <description>Dumps the default configuration for an extension</description>
       <help>The &lt;info&gt;config:dump-reference&lt;/info&gt; command dumps the default configuration for an
@@ -431,7 +431,7 @@
     </command>
     <command id="debug:config" name="debug:config">
       <usages>
-        <usage>bin/console app debug:config [&lt;name&gt;] [&lt;path&gt;]</usage>
+        <usage>bin/console app debug:config [options] [--] [&lt;name&gt;] [&lt;path&gt;]</usage>
       </usages>
       <description>Dumps the current configuration for an extension</description>
       <help>The &lt;info&gt;debug:config&lt;/info&gt; command dumps the current configuration for an
@@ -490,7 +490,7 @@
     </command>
     <command id="debug:container" name="debug:container">
       <usages>
-        <usage>bin/console app debug:container [--show-private] [--show-arguments] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--types] [--format FORMAT] [--raw] [--] [&lt;name&gt;]</usage>
+        <usage>bin/console app debug:container [options] [--] [&lt;name&gt;]</usage>
       </usages>
       <description>Displays current services for an application</description>
       <help>The &lt;info&gt;debug:container&lt;/info&gt; command displays all configured &lt;comment&gt;public&lt;/comment&gt; services:
@@ -598,7 +598,7 @@
     </command>
     <command id="debug:event-dispatcher" name="debug:event-dispatcher">
       <usages>
-        <usage>bin/console app debug:event-dispatcher [--format FORMAT] [--raw] [--] [&lt;event&gt;]</usage>
+        <usage>bin/console app debug:event-dispatcher [options] [--] [&lt;event&gt;]</usage>
       </usages>
       <description>Displays configured listeners for an application</description>
       <help>The &lt;info&gt;debug:event-dispatcher&lt;/info&gt; command displays all configured listeners:
@@ -658,7 +658,7 @@
     </command>
     <command id="debug:translation" name="debug:translation">
       <usages>
-        <usage>bin/console app debug:translation [--domain [DOMAIN]] [--only-missing] [--only-unused] [--all] [--] &lt;locale&gt; [&lt;bundle&gt;]</usage>
+        <usage>bin/console app debug:translation [options] [--] &lt;locale&gt; [&lt;bundle&gt;]</usage>
       </usages>
       <description>Displays translation messages information</description>
       <help>The &lt;info&gt;debug:translation&lt;/info&gt; command helps finding unused or missing translation
@@ -746,7 +746,7 @@
     </command>
     <command id="lint:xliff" name="lint:xliff">
       <usages>
-        <usage>bin/console app lint:xliff [--format FORMAT] [--] [&lt;filename&gt;]</usage>
+        <usage>bin/console app lint:xliff [options] [--] [&lt;filename&gt;]</usage>
       </usages>
       <description>Lints a XLIFF file and outputs encountered errors</description>
       <help>The &lt;info&gt;lint:xliff&lt;/info&gt; command lints a XLIFF file and outputs to STDOUT
@@ -815,7 +815,7 @@
     </command>
     <command id="lint:yaml" name="lint:yaml">
       <usages>
-        <usage>bin/console app lint:yaml [--format FORMAT] [--] [&lt;filename&gt;]</usage>
+        <usage>bin/console app lint:yaml [options] [--] [&lt;filename&gt;]</usage>
       </usages>
       <description>Lints a file and outputs encountered errors</description>
       <help>The &lt;info&gt;lint:yaml&lt;/info&gt; command lints a YAML file and outputs to STDOUT
@@ -884,7 +884,7 @@
     </command>
     <command id="translation:update" name="translation:update">
       <usages>
-        <usage>bin/console app translation:update [--prefix [PREFIX]] [--no-prefix] [--output-format [OUTPUT-FORMAT]] [--dump-messages] [--force] [--no-backup] [--clean] [--domain [DOMAIN]] [--] &lt;locale&gt; [&lt;bundle&gt;]</usage>
+        <usage>bin/console app translation:update [options] [--] &lt;locale&gt; [&lt;bundle&gt;]</usage>
       </usages>
       <description>Updates the translation file</description>
       <help>The &lt;info&gt;translation:update&lt;/info&gt; command extracts translation strings from templates

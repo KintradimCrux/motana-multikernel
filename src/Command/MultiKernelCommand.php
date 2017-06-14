@@ -22,7 +22,7 @@ use Symfony\Component\Console\Command\Command;
 /**
  * A multi-kernel command executes a command on the application instances
  * for one or more kernels.
- * 
+ *
  * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
 class MultiKernelCommand extends ContainerAwareCommand
@@ -31,7 +31,7 @@ class MultiKernelCommand extends ContainerAwareCommand
 	
 	/**
 	 * Wrapped commands.
-	 * 
+	 *
 	 * @var Command[]
 	 */
 	private $commands;
@@ -41,7 +41,7 @@ class MultiKernelCommand extends ContainerAwareCommand
 	
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param string $name Command name
 	 * @param Command[] $commands An array of Command instances
 	 */
@@ -51,7 +51,7 @@ class MultiKernelCommand extends ContainerAwareCommand
 		
 		parent::__construct($name);
 	}
-
+	
 	// }}}
 	// {{{ Method overrides
 	
@@ -61,13 +61,20 @@ class MultiKernelCommand extends ContainerAwareCommand
 	 */
 	public function isEnabled()
 	{
-		$enabled = array();
-		
-		foreach ($this->commands as $command) {
-			$enabled[] = $command->isEnabled();
-		}
-		
-		return in_array(true, $enabled);
+		return in_array(true, array_map(function(Command $c){
+			return $c->isEnabled();
+		}, $this->commands));
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @see \Symfony\Component\Console\Command\Command::isHidden()
+	 */
+	public function isHidden()
+	{
+		return ! in_array(false, array_map(function(Command $c){
+			return $c->isHidden();
+		}, $this->commands));
 	}
 	
 	/**
@@ -77,50 +84,51 @@ class MultiKernelCommand extends ContainerAwareCommand
 	protected function configure()
 	{
 		$command = reset($this->commands);
+		/** @var Command $command */
 		
 		$this->setAliases($command->getAliases())
-		->setDefinition(clone($command->getDefinition()))
+		->setDefinition(clone($command->getNativeDefinition()))
 		->setDescription($command->getDescription())
-		->setHelp($command->getHelp())
-		->setHidden($command->isHidden())
-		->setHelperSet($command->getHelperSet());
+		->setHelp($command->getHelp());
+		
+		foreach ($command->getUsages() as $usage) {
+			$this->addUsage($usage);
+		}
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Command\Command::execute()
 	 */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-    	foreach ($this->commands as $kernelName => $command) {
-    		if ( ! $command->isEnabled()) {
-    			$output->writeln(sprintf('Skipping command on kernel <comment>%s</comment> (command disabled)', $kernelName));
-    			
-    			continue;
-    		}
-    		
-    		$output->writeln(sprintf('Executing command on kernel <comment>%s</comment>...', $kernelName));
-    		
-    		try {
-    			$command->getApplication()->doRun($input, $output);
-    		}
-    		catch (\Exception $e) {
-    			$property = new \ReflectionProperty(Application::class, 'runningCommand');
-    			$property->setAccessible(true);
-    			$property->setValue($command->getApplication(), null);
-    			
-    			if ($output instanceof ConsoleOutputInterface) {
-    				$command->getApplication()->renderException($e, $output->getErrorOutput());
-    			} else {
-    				$command->getApplication()->renderException($e, $output);
-    			}
-    		}
-    		
-    		if ('boot' !== $kernelName) {
-    			$command->getApplication()->getKernel()->shutdown();
-    		}
-    	}
-    }
-    
-    // }}}
+	protected function execute(InputInterface $input, OutputInterface $output)
+	{
+		foreach ($this->commands as $kernelName => $command) {
+			if ( ! $command->isEnabled()) {
+				if (OutputInterface::VERBOSITY_VERBOSE) {
+					$output->writeln(sprintf('Skipping command on kernel <comment>%s</comment> (command disabled)', $kernelName));
+				}
+				
+				continue;
+			}
+			
+			$output->writeln(sprintf('Executing command on kernel <comment>%s</comment>...', $kernelName));
+			
+			try {
+				$command->getApplication()->doRun($input, $output);
+			}
+			catch (\Exception $e) {
+				if ($output instanceof ConsoleOutputInterface) {
+					$command->getApplication()->renderException($e, $output->getErrorOutput());
+				} else {
+					$command->getApplication()->renderException($e, $output);
+				}
+			}
+			
+			if ('boot' !== $kernelName) {
+				$command->getApplication()->getKernel()->shutdown();
+			}
+		}
+	}
+	
+	// }}}
 }

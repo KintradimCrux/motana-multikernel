@@ -27,6 +27,8 @@ use Motana\Bundle\MultiKernelBundle\Console\MultiKernelApplication;
 use Motana\Bundle\MultiKernelBundle\Console\Input\ArgvInput;
 use Motana\Bundle\MultiKernelBundle\Console\Input\KernelArgument;
 use Motana\Bundle\MultiKernelBundle\Test\ApplicationTestCase;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\StringInput;
 
 /**
  * @coversDefaultClass Motana\Bundle\MultiKernelBundle\Console\MultiKernelApplication
@@ -128,6 +130,50 @@ class MultiKernelApplicationTest extends ApplicationTestCase
 	}
 	
 	/**
+	 * Data provider for testRemoveKernelArgument().
+	 * 
+	 * @return array
+	 */
+	public function provide_testRemoveKernelArgument_data()
+	{
+		return array(
+			array(ArgvInput::class, true, array('bin/console', 'boot', 'help')),
+			array(ArgvInput::class, false, array('bin/console', 'help')),
+			array(ArrayInput::class, true, array('kernel' => 'boot', 'command' => 'help')),
+			array(ArrayInput::class, false, array('command' => 'help')),
+			array(StringInput::class, true, 'boot help'),
+			array(StringInput::class, false, 'help'),
+		);
+	}
+	
+	/**
+	 * @covers ::removeKernelArgument()
+	 * @dataProvider provide_testRemoveKernelArgument_data
+	 * @param string $inputClassName Input class to test
+	 * @param boolean $shift Remove the first non-option token from input
+	 * @param mixed ...$ctorArgs Constructor parameters for the input
+	 */
+	public function testRemoveKernelArgument($inputClassName, $shift, ...$ctorArgs)
+	{
+		$_SERVER['PHP_SELF'] = 'bin/console';
+		
+		$class = new \ReflectionClass($inputClassName);
+		$input = $class->newInstanceArgs($ctorArgs);
+		
+		try {
+			$input->bind(self::$application->getDefinition());
+		} catch (\Exception $e) {
+			
+		}
+		
+		$this->callMethod(self::$application, 'removeKernelArgument', $input, $shift);
+
+		$this->assertEquals(array('command'), array_keys(self::$application->getDefinition()->getArguments()));
+		
+		$this->assertEquals(array('command' => 'help'), $input->getArguments());
+	}
+	
+	/**
 	 * @covers ::registerCommands()
 	 */
 	public function testRegisterCommands()
@@ -205,8 +251,8 @@ class MultiKernelApplicationTest extends ApplicationTestCase
 		
 		// Check the arguments are correct
 		$this->assertEquals(2, count($arguments));
-		$this->assertInputArgument($arguments[0], KernelArgument::class, 'kernel', InputArgument::OPTIONAL, 'The kernel to execute');
-		$this->assertInputArgument($arguments[1], InputArgument::class, 'command', InputArgument::OPTIONAL, 'The command to execute');
+		$this->assertInputArgument($arguments[0], KernelArgument::class, 'kernel', InputArgument::REQUIRED, 'The kernel to execute');
+		$this->assertInputArgument($arguments[1], InputArgument::class, 'command', InputArgument::REQUIRED, 'The command to execute');
 		
 		// Check the options are correct
 		$this->assertEquals(7, count($options));
@@ -244,6 +290,7 @@ class MultiKernelApplicationTest extends ApplicationTestCase
 		$content = $output->fetch();
 		
 		$this->assertContains('Executing command on kernel boot...', $content);
+		$this->assertNotContains('Executing command on kernel app...', $content);
 	}
 
 	/**
@@ -278,6 +325,7 @@ class MultiKernelApplicationTest extends ApplicationTestCase
 		$content = $output->fetch();
 		
 		$this->assertContains('Executing command on kernel boot...', $content);
+		$this->assertNotContains('Executing command on kernel app...', $content);
 	}
 	
 	/**

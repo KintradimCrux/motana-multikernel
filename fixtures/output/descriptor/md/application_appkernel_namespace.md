@@ -17,7 +17,7 @@ Command "debug:config"
 * Description: Dumps the current configuration for an extension
 * Usage:
 
-  * `bin/console app debug:config [<name>] [<path>]`
+  * `bin/console bin/console app debug:config [options] [--] [<name>] [<path>]`
 
 The `debug:config` command dumps the current configuration for an
 extension/bundle.
@@ -147,7 +147,7 @@ Command "debug:container"
 * Description: Displays current services for an application
 * Usage:
 
-  * `bin/console app debug:container [--show-private] [--show-arguments] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--types] [--format FORMAT] [--raw] [--] [<name>]`
+  * `bin/console bin/console app debug:container [options] [--] [<name>]`
 
 The `debug:container` command displays all configured public services:
 
@@ -380,7 +380,7 @@ Command "debug:event-dispatcher"
 * Description: Displays configured listeners for an application
 * Usage:
 
-  * `bin/console app debug:event-dispatcher [--format FORMAT] [--raw] [--] [<event>]`
+  * `bin/console bin/console app debug:event-dispatcher [options] [--] [<event>]`
 
 The `debug:event-dispatcher` command displays all configured listeners:
 
@@ -518,7 +518,7 @@ Command "debug:translation"
 * Description: Displays translation messages information
 * Usage:
 
-  * `bin/console app debug:translation [--domain [DOMAIN]] [--only-missing] [--only-unused] [--all] [--] <locale> [<bundle>]`
+  * `bin/console bin/console app debug:translation [options] [--] <locale> [<bundle>]`
 
 The `debug:translation` command helps finding unused or missing translation
 messages and comparing them with the fallback ones by inspecting the

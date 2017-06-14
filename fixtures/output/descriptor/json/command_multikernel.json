@@ -2,7 +2,7 @@
     "name": "help",
     "usage": [
         "bin\/console help [options] [--] [<command_name>]",
-        "bin\/console <kernel> help [--format FORMAT] [--raw] [--] [<command_name>]"
+        "bin\/console <kernel> help [options] [--] [<command_name>]"
     ],
     "description": "Displays help for a command",
     "help": "The <info>help<\/info> command displays help for a given command:\n\n  <info>bin\/console help list<\/info>\n\nYou can also output the help in other formats by using the <comment>--format<\/comment> option:\n\n  <info>bin\/console help --format=xml list<\/info>\n\nTo display the list of available commands, please use the <info>list<\/info> command.",

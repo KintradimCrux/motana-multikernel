@@ -119,7 +119,7 @@ class ArgvInputTest extends TestCase
 		self::$input->shift();
 		
 		// Check that shift() removed the first token
-		$this->assertEquals(array('-edev', '-f=dev', '-l', '-', '-q', '--no-debug', '--', 'debug:config'), $this->readAttribute(self::$input, 'tokens'));
+		$this->assertEquals(array('-edev', '-f=dev', '-l', '-', '-q', '--no-debug', '--', 'debug:config', ''), $this->readAttribute(self::$input, 'tokens'));
 	}
 	
 	/**

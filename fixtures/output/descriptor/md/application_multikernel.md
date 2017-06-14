@@ -62,8 +62,8 @@ Command "about"
 * Description: Displays information about the current project
 * Usage:
 
-  * `bin/console about [options]`
-  * `bin/console <kernel> about`
+  * `bin/console bin/console about [options]`
+  * `bin/console bin/console <kernel> about [options]`
 
 Displays information about the current project
 
@@ -165,8 +165,8 @@ Command "help"
 * Description: Displays help for a command
 * Usage:
 
-  * `bin/console help [options] [--] [<command_name>]`
-  * `bin/console <kernel> help [--format FORMAT] [--raw] [--] [<command_name>]`
+  * `bin/console bin/console help [options] [--] [<command_name>]`
+  * `bin/console bin/console <kernel> help [options] [--] [<command_name>]`
 
 The `help` command displays help for a given command:
 
@@ -306,8 +306,8 @@ Command "list"
 * Description: Lists commands
 * Usage:
 
-  * `bin/console list [options] [--] [<namespace>]`
-  * `bin/console <kernel> list [--raw] [--format FORMAT] [--] [<namespace>]`
+  * `bin/console bin/console list [options] [--] [<namespace>]`
+  * `bin/console bin/console <kernel> list [options] [--] [<namespace>]`
 
 The `list` command lists all commands:
 
@@ -363,8 +363,8 @@ Command "assets:install"
 * Description: Installs bundles web assets under a public web directory
 * Usage:
 
-  * `bin/console assets:install [options] [--] [<target>]`
-  * `bin/console <kernel> assets:install [--symlink] [--relative] [--] [<target>]`
+  * `bin/console bin/console assets:install [options] [--] [<target>]`
+  * `bin/console bin/console <kernel> assets:install [options] [--] [<target>]`
 
 The `assets:install` command installs bundle assets into a given
 directory (e.g. the web directory).
@@ -511,8 +511,8 @@ Command "cache:clear"
 * Description: Clears the cache
 * Usage:
 
-  * `bin/console cache:clear [options]`
-  * `bin/console <kernel> cache:clear [--no-warmup] [--no-optional-warmers]`
+  * `bin/console bin/console cache:clear [options]`
+  * `bin/console bin/console <kernel> cache:clear [options]`
 
 The `cache:clear` command clears the application cache for a given environment
 and debug mode:
@@ -638,8 +638,8 @@ Command "cache:pool:clear"
 * Description: Clears cache pools
 * Usage:
 
-  * `bin/console cache:pool:clear [options] [--] <pools> (<pools>)...`
-  * `bin/console <kernel> cache:pool:clear <pools> (<pools>)...`
+  * `bin/console bin/console cache:pool:clear [options] [--] <pools> (<pools>)...`
+  * `bin/console bin/console <kernel> cache:pool:clear [options] [--] <pools> (<pools>)...`
 
 The `cache:pool:clear` command clears the given cache pools or cache pool clearers.
 
@@ -753,8 +753,8 @@ Command "cache:warmup"
 * Description: Warms up an empty cache
 * Usage:
 
-  * `bin/console cache:warmup [options]`
-  * `bin/console <kernel> cache:warmup [--no-optional-warmers]`
+  * `bin/console bin/console cache:warmup [options]`
+  * `bin/console bin/console <kernel> cache:warmup [options]`
 
 The `cache:warmup` command warms up the cache.
 
@@ -873,8 +873,8 @@ Command "config:dump-reference"
 * Description: Dumps the default configuration for an extension
 * Usage:
 
-  * `bin/console config:dump-reference [options] [--] [<name>] [<path>]`
-  * `bin/console <kernel> config:dump-reference [--format FORMAT] [--] [<name>] [<path>]`
+  * `bin/console bin/console config:dump-reference [options] [--] [<name>] [<path>]`
+  * `bin/console bin/console <kernel> config:dump-reference [options] [--] [<name>] [<path>]`
 
 The `config:dump-reference` command dumps the default configuration for an
 extension/bundle.
@@ -1020,8 +1020,8 @@ Command "debug:config"
 * Description: Dumps the current configuration for an extension
 * Usage:
 
-  * `bin/console debug:config [options] [--] [<name>] [<path>]`
-  * `bin/console <kernel> debug:config [<name>] [<path>]`
+  * `bin/console bin/console debug:config [options] [--] [<name>] [<path>]`
+  * `bin/console bin/console <kernel> debug:config [options] [--] [<name>] [<path>]`
 
 The `debug:config` command dumps the current configuration for an
 extension/bundle.
@@ -1151,8 +1151,8 @@ Command "debug:container"
 * Description: Displays current services for an application
 * Usage:
 
-  * `bin/console debug:container [options] [--] [<name>]`
-  * `bin/console <kernel> debug:container [--show-private] [--show-arguments] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--types] [--format FORMAT] [--raw] [--] [<name>]`
+  * `bin/console bin/console debug:container [options] [--] [<name>]`
+  * `bin/console bin/console <kernel> debug:container [options] [--] [<name>]`
 
 The `debug:container` command displays all configured public services:
 
@@ -1385,8 +1385,8 @@ Command "debug:event-dispatcher"
 * Description: Displays configured listeners for an application
 * Usage:
 
-  * `bin/console debug:event-dispatcher [options] [--] [<event>]`
-  * `bin/console <kernel> debug:event-dispatcher [--format FORMAT] [--raw] [--] [<event>]`
+  * `bin/console bin/console debug:event-dispatcher [options] [--] [<event>]`
+  * `bin/console bin/console <kernel> debug:event-dispatcher [options] [--] [<event>]`
 
 The `debug:event-dispatcher` command displays all configured listeners:
 
@@ -1524,8 +1524,8 @@ Command "debug:translation"
 * Description: Displays translation messages information
 * Usage:
 
-  * `bin/console debug:translation [options] [--] <locale> [<bundle>]`
-  * `bin/console <kernel> debug:translation [--domain [DOMAIN]] [--only-missing] [--only-unused] [--all] [--] <locale> [<bundle>]`
+  * `bin/console bin/console debug:translation [options] [--] <locale> [<bundle>]`
+  * `bin/console bin/console <kernel> debug:translation [options] [--] <locale> [<bundle>]`
 
 The `debug:translation` command helps finding unused or missing translation
 messages and comparing them with the fallback ones by inspecting the
@@ -1711,8 +1711,8 @@ Command "lint:xliff"
 * Description: Lints a XLIFF file and outputs encountered errors
 * Usage:
 
-  * `bin/console lint:xliff [options] [--] [<filename>]`
-  * `bin/console <kernel> lint:xliff [--format FORMAT] [--] [<filename>]`
+  * `bin/console bin/console lint:xliff [options] [--] [<filename>]`
+  * `bin/console bin/console <kernel> lint:xliff [options] [--] [<filename>]`
 
 The `lint:xliff` command lints a XLIFF file and outputs to STDOUT
 the first encountered syntax error.
@@ -1852,8 +1852,8 @@ Command "lint:yaml"
 * Description: Lints a file and outputs encountered errors
 * Usage:
 
-  * `bin/console lint:yaml [options] [--] [<filename>]`
-  * `bin/console <kernel> lint:yaml [--format FORMAT] [--] [<filename>]`
+  * `bin/console bin/console lint:yaml [options] [--] [<filename>]`
+  * `bin/console bin/console <kernel> lint:yaml [options] [--] [<filename>]`
 
 The `lint:yaml` command lints a YAML file and outputs to STDOUT
 the first encountered syntax error.
@@ -1993,8 +1993,8 @@ Command "multi-kernel:create-app"
 * Description: Create a new app
 * Usage:
 
-  * `bin/console multi-kernel:create-app [options]`
-  * `bin/console <kernel> multi-kernel:create-app`
+  * `bin/console bin/console multi-kernel:create-app [options]`
+  * `bin/console bin/console <kernel> multi-kernel:create-app [options]`
 
 Create a new app
 
@@ -2096,8 +2096,8 @@ Command "server:log"
 * Description: Starts a log server that displays logs in real time
 * Usage:
 
-  * `bin/console server:log [options]`
-  * `bin/console <kernel> server:log [--host HOST] [--format FORMAT] [--date-format DATE-FORMAT] [--filter FILTER]`
+  * `bin/console bin/console server:log [options]`
+  * `bin/console bin/console <kernel> server:log [options]`
 
 `server:log` starts a log server to display in real time the log
 messages generated by your application:
@@ -2247,8 +2247,8 @@ Command "server:run"
 * Description: Runs a local web server
 * Usage:
 
-  * `bin/console server:run [options] [--] [<addressport>]`
-  * `bin/console <kernel> server:run [-d|--docroot DOCROOT] [-r|--router ROUTER] [--] [<addressport>]`
+  * `bin/console bin/console server:run [options] [--] [<addressport>]`
+  * `bin/console bin/console <kernel> server:run [options] [--] [<addressport>]`
 
 `server:run` runs a local web server: By default, the server
 listens on 127.0.0.1 address and the port number is automatically selected
@@ -2402,8 +2402,8 @@ Command "server:start"
 * Description: Starts a local web server in the background
 * Usage:
 
-  * `bin/console server:start [options] [--] [<addressport>]`
-  * `bin/console <kernel> server:start [-d|--docroot DOCROOT] [-r|--router ROUTER] [--pidfile PIDFILE] [--] [<addressport>]`
+  * `bin/console bin/console server:start [options] [--] [<addressport>]`
+  * `bin/console bin/console <kernel> server:start [options] [--] [<addressport>]`
 
 `server:start` runs a local web server: By default, the server
 listens on 127.0.0.1 address and the port number is automatically selected
@@ -2566,8 +2566,8 @@ Command "server:status"
 * Description: Outputs the status of the local web server for the given address
 * Usage:
 
-  * `bin/console server:status [options]`
-  * `bin/console <kernel> server:status [--pidfile PIDFILE] [--filter FILTER]`
+  * `bin/console bin/console server:status [options]`
+  * `bin/console bin/console <kernel> server:status [options]`
 
 `server:status` shows the details of the given local web
 server, such as the address and port where it is listening to:
@@ -2699,8 +2699,8 @@ Command "server:stop"
 * Description: Stops the local web server that was started with the server:start command
 * Usage:
 
-  * `bin/console server:stop [options]`
-  * `bin/console <kernel> server:stop [--pidfile PIDFILE]`
+  * `bin/console bin/console server:stop [options]`
+  * `bin/console bin/console <kernel> server:stop [options]`
 
 `server:stop` stops the local web server:
 
@@ -2814,8 +2814,8 @@ Command "translation:update"
 * Description: Updates the translation file
 * Usage:
 
-  * `bin/console translation:update [options] [--] <locale> [<bundle>]`
-  * `bin/console <kernel> translation:update [--prefix [PREFIX]] [--no-prefix] [--output-format [OUTPUT-FORMAT]] [--dump-messages] [--force] [--no-backup] [--clean] [--domain [DOMAIN]] [--] <locale> [<bundle>]`
+  * `bin/console bin/console translation:update [options] [--] <locale> [<bundle>]`
+  * `bin/console bin/console <kernel> translation:update [options] [--] <locale> [<bundle>]`
 
 The `translation:update` command extracts translation strings from templates
 of a given bundle or the app folder. It can display them or merge the new ones into the translation files.

@@ -119,6 +119,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 				try {
 					$attribute = $reflector->getProperty($attributeName);
 				} catch (\ReflectionException $e) {
+					
 				}
 			}
 		}
@@ -179,6 +180,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 				try {
 					$attribute = $reflector->getProperty($attributeName);
 				} catch (\ReflectionException $e) {
+					
 				}
 			}
 		}

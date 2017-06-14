@@ -1,8 +1,8 @@
 Motana Multi-Kernel App Console - Symfony [symfony-version] (kernel: boot, env: test, debug: false)
 
 Usage:
-  bin/console help [options] [--] [<kernel>] [<command>] [<command_name>]
-  bin/console <kernel> help [options] [--] [<kernel>] [<command>] [<command_name>]
+  bin/console help [options] [--] [<command_name>]
+  bin/console <kernel> help [options] [--] [<command_name>]
 
 Arguments:
   kernel        The kernel to execute

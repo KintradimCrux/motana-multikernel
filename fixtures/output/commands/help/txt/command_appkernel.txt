@@ -1,7 +1,7 @@
 Motana Multi-Kernel App Console - Symfony [symfony-version] (kernel: app, env: test, debug: false)
 
 Usage:
-  bin/console app help [options] [--] <command> [<command_name>]
+  bin/console app help [options] [--] [<command_name>]
 
 Arguments:
   command_name  The command name [default: "help"]

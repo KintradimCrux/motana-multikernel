@@ -197,10 +197,10 @@ class XmlDescriptor extends Descriptor
 		
 		$commandXML->appendChild($usagesXML = $dom->createElement('usages'));
 		if ( ! $kernel) {
-			$usagesXML->appendChild($dom->createElement('usage', $_SERVER['PHP_SELF'].' '.$command->getSynopsis(true)));
+			$usagesXML->appendChild($dom->createElement('usage', $_SERVER['PHP_SELF'] . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $command->getSynopsis(true))));
 		}
-		foreach (array_merge(array($command->getSynopsis()), $command->getAliases(), $command->getUsages()) as $usage) {
-			$usagesXML->appendChild($dom->createElement('usage', $_SERVER['PHP_SELF'].' '.($kernel ? $kernel : '<kernel>').' '.$usage));
+		foreach (array_merge(array($command->getSynopsis(true)), $command->getAliases(), $command->getUsages()) as $usage) {
+			$usagesXML->appendChild($dom->createElement('usage', $_SERVER['PHP_SELF'] . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage)));
 		}
 		
 		$commandXML->appendChild($descriptionXML = $dom->createElement('description'));

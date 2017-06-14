@@ -187,12 +187,12 @@ class TextDescriptor extends Descriptor
 		
 		if ( ! $kernel) {
 			$this->writeText("\n");
-			$this->writeText('  '.$_SERVER['PHP_SELF'].' '.$command->getSynopsis(true));
+			$this->writeText('  '.$_SERVER['PHP_SELF'] . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $command->getSynopsis(true)));
 		}
 		
 		foreach (array_merge(array($command->getSynopsis(true)), $command->getAliases(), $command->getUsages()) as $usage) {
 			$this->writeText("\n");
-			$this->writeText('  '.$_SERVER['PHP_SELF'].' '.($kernel ? $kernel : '<kernel>').' '.$usage);
+			$this->writeText('  '.$_SERVER['PHP_SELF'] . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage));
 		}
 		
 		$this->writeText("\n");

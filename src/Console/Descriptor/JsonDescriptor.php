@@ -177,11 +177,11 @@ class JsonDescriptor extends Descriptor
 		
 		$usages = array();
 		if ( ! $kernel) {
-			$usages[] = $_SERVER['PHP_SELF'].' '.$command->getSynopsis(true);
+			$usages[] = $_SERVER['PHP_SELF'] . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $command->getSynopsis(true));
 		}
 		
-		foreach (array_merge(array($command->getSynopsis()), $command->getUsages(), $command->getAliases()) as $usage) {
-			$usages[] = $_SERVER['PHP_SELF'].' '.($kernel ? $kernel : '<kernel>').' '.$usage;
+		foreach (array_merge(array($command->getSynopsis(true)), $command->getUsages(), $command->getAliases()) as $usage) {
+			$usages[] = $_SERVER['PHP_SELF'] . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage);
 		}
 		
 		return array(

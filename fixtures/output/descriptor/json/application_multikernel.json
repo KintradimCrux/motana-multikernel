@@ -8,7 +8,7 @@
             "name": "about",
             "usage": [
                 "bin\/console about [options]",
-                "bin\/console <kernel> about"
+                "bin\/console <kernel> about [options]"
             ],
             "description": "Displays information about the current project",
             "help": "Displays information about the current project",
@@ -103,7 +103,7 @@
             "name": "help",
             "usage": [
                 "bin\/console help [options] [--] [<command_name>]",
-                "bin\/console <kernel> help [--format FORMAT] [--raw] [--] [<command_name>]"
+                "bin\/console <kernel> help [options] [--] [<command_name>]"
             ],
             "description": "Displays help for a command",
             "help": "The <info>help<\/info> command displays help for a given command:\n\n  <info>bin\/console help list<\/info>\n\nYou can also output the help in other formats by using the <comment>--format<\/comment> option:\n\n  <info>bin\/console help --format=xml list<\/info>\n\nTo display the list of available commands, please use the <info>list<\/info> command.",
@@ -224,7 +224,7 @@
             "name": "list",
             "usage": [
                 "bin\/console list [options] [--] [<namespace>]",
-                "bin\/console <kernel> list [--raw] [--format FORMAT] [--] [<namespace>]"
+                "bin\/console <kernel> list [options] [--] [<namespace>]"
             ],
             "description": "Lists commands",
             "help": "The <info>list<\/info> command lists all commands:\n\n  <info>bin\/console list<\/info>\n\nYou can also display the commands for a specific namespace:\n\n  <info>bin\/console list test<\/info>\n\nYou can also output the information in other formats by using the <comment>--format<\/comment> option:\n\n  <info>bin\/console list --format=xml<\/info>\n\nIt's also possible to get raw list of commands (useful for embedding command runner):\n\n  <info>bin\/console list --raw<\/info>",
@@ -264,7 +264,7 @@
             "name": "assets:install",
             "usage": [
                 "bin\/console assets:install [options] [--] [<target>]",
-                "bin\/console <kernel> assets:install [--symlink] [--relative] [--] [<target>]"
+                "bin\/console <kernel> assets:install [options] [--] [<target>]"
             ],
             "description": "Installs bundles web assets under a public web directory",
             "help": "The <info>assets:install<\/info> command installs bundle assets into a given\ndirectory (e.g. the <comment>web<\/comment> directory).\n\n  <info>bin\/console assets:install web<\/info>\n\nA \"bundles\" directory will be created inside the target directory and the\n\"Resources\/public\" directory of each bundle will be copied into it.\n\nTo create a symlink to each bundle instead of copying its assets, use the\n<info>--symlink<\/info> option (will fall back to hard copies when symbolic links aren't possible:\n\n  <info>bin\/console assets:install web --symlink<\/info>\n\nTo make symlink relative, add the <info>--relative<\/info> option:\n\n  <info>bin\/console assets:install web --symlink --relative<\/info>",
@@ -385,7 +385,7 @@
             "name": "cache:clear",
             "usage": [
                 "bin\/console cache:clear [options]",
-                "bin\/console <kernel> cache:clear [--no-warmup] [--no-optional-warmers]"
+                "bin\/console <kernel> cache:clear [options]"
             ],
             "description": "Clears the cache",
             "help": "The <info>cache:clear<\/info> command clears the application cache for a given environment\nand debug mode:\n\n  <info>bin\/console cache:clear --env=dev<\/info>\n  <info>bin\/console cache:clear --env=prod --no-debug<\/info>",
@@ -498,7 +498,7 @@
             "name": "cache:pool:clear",
             "usage": [
                 "bin\/console cache:pool:clear [options] [--] <pools> (<pools>)...",
-                "bin\/console <kernel> cache:pool:clear <pools> (<pools>)..."
+                "bin\/console <kernel> cache:pool:clear [options] [--] <pools> (<pools>)..."
             ],
             "description": "Clears cache pools",
             "help": "The <info>cache:pool:clear<\/info> command clears the given cache pools or cache pool clearers.\n\n    bin\/console cache:pool:clear <cache pool or clearer 1> [...<cache pool or clearer N>]",
@@ -601,7 +601,7 @@
             "name": "cache:warmup",
             "usage": [
                 "bin\/console cache:warmup [options]",
-                "bin\/console <kernel> cache:warmup [--no-optional-warmers]"
+                "bin\/console <kernel> cache:warmup [options]"
             ],
             "description": "Warms up an empty cache",
             "help": "The <info>cache:warmup<\/info> command warms up the cache.\n\nBefore running this command, the cache must be empty.\n\nThis command does not generate the classes cache (as when executing this\ncommand, too many classes that should be part of the cache are already loaded\nin memory). Use <comment>curl<\/comment> or any other similar tool to warm up\nthe classes cache if you want.",
@@ -705,7 +705,7 @@
             "name": "config:dump-reference",
             "usage": [
                 "bin\/console config:dump-reference [options] [--] [<name>] [<path>]",
-                "bin\/console <kernel> config:dump-reference [--format FORMAT] [--] [<name>] [<path>]"
+                "bin\/console <kernel> config:dump-reference [options] [--] [<name>] [<path>]"
             ],
             "description": "Dumps the default configuration for an extension",
             "help": "The <info>config:dump-reference<\/info> command dumps the default configuration for an\nextension\/bundle.\n\nEither the extension alias or bundle name can be used:\n\n  <info>bin\/console config:dump-reference framework<\/info>\n  <info>bin\/console config:dump-reference FrameworkBundle<\/info>\n\nWith the <info>--format<\/info> option specifies the format of the configuration,\nthis is either <comment>yaml<\/comment> or <comment>xml<\/comment>.\nWhen the option is not provided, <comment>yaml<\/comment> is used.\n\n  <info>bin\/console config:dump-reference FrameworkBundle --format=xml<\/info>\n\nFor dumping a specific option, add its path as second argument (only available for the yaml format):\n\n  <info>bin\/console config:dump-reference framework profiler.matcher<\/info>",
@@ -824,7 +824,7 @@
             "name": "debug:config",
             "usage": [
                 "bin\/console debug:config [options] [--] [<name>] [<path>]",
-                "bin\/console <kernel> debug:config [<name>] [<path>]"
+                "bin\/console <kernel> debug:config [options] [--] [<name>] [<path>]"
             ],
             "description": "Dumps the current configuration for an extension",
             "help": "The <info>debug:config<\/info> command dumps the current configuration for an\nextension\/bundle.\n\nEither the extension alias or bundle name can be used:\n\n  <info>bin\/console debug:config framework<\/info>\n  <info>bin\/console debug:config FrameworkBundle<\/info>\n\nFor dumping a specific option, add its path as second argument:\n\n  <info>bin\/console debug:config framework serializer.enabled<\/info>",
@@ -934,7 +934,7 @@
             "name": "debug:container",
             "usage": [
                 "bin\/console debug:container [options] [--] [<name>]",
-                "bin\/console <kernel> debug:container [--show-private] [--show-arguments] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--types] [--format FORMAT] [--raw] [--] [<name>]"
+                "bin\/console <kernel> debug:container [options] [--] [<name>]"
             ],
             "description": "Displays current services for an application",
             "help": "The <info>debug:container<\/info> command displays all configured <comment>public<\/comment> services:\n\n  <info>bin\/console debug:container<\/info>\n\nTo get specific information about a service, specify its name:\n\n  <info>bin\/console debug:container validator<\/info>\n\nTo see available types that can be used for autowiring, use the <info>--types<\/info> flag:\n\n  <info>bin\/console debug:container --types<\/info>\n\nBy default, private services are hidden. You can display all services by\nusing the <info>--show-private<\/info> flag:\n\n  <info>bin\/console debug:container --show-private<\/info>\n\nUse the --tags option to display tagged <comment>public<\/comment> services grouped by tag:\n\n  <info>bin\/console debug:container --tags<\/info>\n\nFind all services with a specific tag by specifying the tag name with the <info>--tag<\/info> option:\n\n  <info>bin\/console debug:container --tag=form.type<\/info>\n\nUse the <info>--parameters<\/info> option to display all parameters:\n\n  <info>bin\/console debug:container --parameters<\/info>\n\nDisplay a specific parameter by specifying its name with the <info>--parameter<\/info> option:\n\n  <info>bin\/console debug:container --parameter=kernel.debug<\/info>",
@@ -1118,7 +1118,7 @@
             "name": "debug:event-dispatcher",
             "usage": [
                 "bin\/console debug:event-dispatcher [options] [--] [<event>]",
-                "bin\/console <kernel> debug:event-dispatcher [--format FORMAT] [--raw] [--] [<event>]"
+                "bin\/console <kernel> debug:event-dispatcher [options] [--] [<event>]"
             ],
             "description": "Displays configured listeners for an application",
             "help": "The <info>debug:event-dispatcher<\/info> command displays all configured listeners:\n\n  <info>bin\/console debug:event-dispatcher<\/info>\n\nTo get specific listeners for an event, specify its name:\n\n  <info>bin\/console debug:event-dispatcher kernel.request<\/info>",
@@ -1239,7 +1239,7 @@
             "name": "debug:translation",
             "usage": [
                 "bin\/console debug:translation [options] [--] <locale> [<bundle>]",
-                "bin\/console <kernel> debug:translation [--domain [DOMAIN]] [--only-missing] [--only-unused] [--all] [--] <locale> [<bundle>]"
+                "bin\/console <kernel> debug:translation [options] [--] <locale> [<bundle>]"
             ],
             "description": "Displays translation messages information",
             "help": "The <info>debug:translation<\/info> command helps finding unused or missing translation\nmessages and comparing them with the fallback ones by inspecting the\ntemplates and translation files of a given bundle or the app folder.\n\nYou can display information about bundle translations in a specific locale:\n\n  <info>bin\/console debug:translation en AcmeDemoBundle<\/info>\n\nYou can also specify a translation domain for the search:\n\n  <info>bin\/console debug:translation --domain=messages en AcmeDemoBundle<\/info>\n\nYou can only display missing messages:\n\n  <info>bin\/console debug:translation --only-missing en AcmeDemoBundle<\/info>\n\nYou can only display unused messages:\n\n  <info>bin\/console debug:translation --only-unused en AcmeDemoBundle<\/info>\n\nYou can display information about app translations in a specific locale:\n\n  <info>bin\/console debug:translation en<\/info>\n\nYou can display information about translations in all registered bundles in a specific locale:\n\n  <info>bin\/console debug:translation --all en<\/info>",
@@ -1385,7 +1385,7 @@
             "name": "lint:xliff",
             "usage": [
                 "bin\/console lint:xliff [options] [--] [<filename>]",
-                "bin\/console <kernel> lint:xliff [--format FORMAT] [--] [<filename>]"
+                "bin\/console <kernel> lint:xliff [options] [--] [<filename>]"
             ],
             "description": "Lints a XLIFF file and outputs encountered errors",
             "help": "The <info>lint:xliff<\/info> command lints a XLIFF file and outputs to STDOUT\nthe first encountered syntax error.\n\nYou can validates XLIFF contents passed from STDIN:\n\n  <info>cat filename | bin\/console lint:xliff<\/info>\n\nYou can also validate the syntax of a file:\n\n  <info>bin\/console lint:xliff filename<\/info>\n\nOr of a whole directory:\n\n  <info>bin\/console lint:xliff dirname<\/info>\n  <info>bin\/console lint:xliff dirname --format=json<\/info>\n\nOr find all files in a bundle:\n\n  <info>bin\/console lint:xliff @AcmeDemoBundle<\/info>",
@@ -1497,7 +1497,7 @@
             "name": "lint:yaml",
             "usage": [
                 "bin\/console lint:yaml [options] [--] [<filename>]",
-                "bin\/console <kernel> lint:yaml [--format FORMAT] [--] [<filename>]"
+                "bin\/console <kernel> lint:yaml [options] [--] [<filename>]"
             ],
             "description": "Lints a file and outputs encountered errors",
             "help": "The <info>lint:yaml<\/info> command lints a YAML file and outputs to STDOUT\nthe first encountered syntax error.\n\nYou can validates YAML contents passed from STDIN:\n\n  <info>cat filename | bin\/console lint:yaml<\/info>\n\nYou can also validate the syntax of a file:\n\n  <info>bin\/console lint:yaml filename<\/info>\n\nOr of a whole directory:\n\n  <info>bin\/console lint:yaml dirname<\/info>\n  <info>bin\/console lint:yaml dirname --format=json<\/info>\n\nOr find all files in a bundle:\n\n  <info>bin\/console lint:yaml @AcmeDemoBundle<\/info>",
@@ -1609,7 +1609,7 @@
             "name": "multi-kernel:create-app",
             "usage": [
                 "bin\/console multi-kernel:create-app [options]",
-                "bin\/console <kernel> multi-kernel:create-app"
+                "bin\/console <kernel> multi-kernel:create-app [options]"
             ],
             "description": "Create a new app",
             "help": "Create a new app",
@@ -1704,7 +1704,7 @@
             "name": "server:log",
             "usage": [
                 "bin\/console server:log [options]",
-                "bin\/console <kernel> server:log [--host HOST] [--format FORMAT] [--date-format DATE-FORMAT] [--filter FILTER]"
+                "bin\/console <kernel> server:log [options]"
             ],
             "description": "Starts a log server that displays logs in real time",
             "help": "<info>server:log<\/info> starts a log server to display in real time the log\nmessages generated by your application:\n\n  <info>bin\/console server:log<\/info>\n\nTo get the information as a machine readable format, use the\n<comment>--filter<\/> option:\n\n<info>bin\/console server:log --filter=port<\/info>",
@@ -1835,7 +1835,7 @@
             "name": "server:run",
             "usage": [
                 "bin\/console server:run [options] [--] [<addressport>]",
-                "bin\/console <kernel> server:run [-d|--docroot DOCROOT] [-r|--router ROUTER] [--] [<addressport>]"
+                "bin\/console <kernel> server:run [options] [--] [<addressport>]"
             ],
             "description": "Runs a local web server",
             "help": "<info>server:run<\/info> runs a local web server: By default, the server\nlistens on <comment>127.0.0.1<\/> address and the port number is automatically selected\nas the first free port starting from <comment>8000<\/>:\n\n  <info>bin\/console server:run<\/info>\n\nThis command blocks the console. If you want to run other commands, stop it by\npressing <comment>Control+C<\/> or use the non-blocking <comment>server:start<\/>\ncommand instead.\n\nChange the default address and port by passing them as an argument:\n\n  <info>bin\/console server:run 127.0.0.1:8080<\/info>\n\nUse the <info>--docroot<\/info> option to change the default docroot directory:\n\n  <info>bin\/console server:run --docroot=htdocs\/<\/info>\n\nSpecify your own router script via the <info>--router<\/info> option:\n\n  <info>bin\/console server:run --router=app\/config\/router.php<\/info>\n\nSee also: http:\/\/www.php.net\/manual\/en\/features.commandline.webserver.php",
@@ -1956,7 +1956,7 @@
             "name": "server:start",
             "usage": [
                 "bin\/console server:start [options] [--] [<addressport>]",
-                "bin\/console <kernel> server:start [-d|--docroot DOCROOT] [-r|--router ROUTER] [--pidfile PIDFILE] [--] [<addressport>]"
+                "bin\/console <kernel> server:start [options] [--] [<addressport>]"
             ],
             "description": "Starts a local web server in the background",
             "help": "<info>server:start<\/info> runs a local web server: By default, the server\nlistens on <comment>127.0.0.1<\/> address and the port number is automatically selected\nas the first free port starting from <comment>8000<\/>:\n\n  <info>bin\/console server:start<\/info>\n\nThe server is run in the background and you can keep executing other commands.\nExecute <comment>server:stop<\/> to stop it.\n\nChange the default address and port by passing them as an argument:\n\n  <info>bin\/console server:start 127.0.0.1:8080<\/info>\n\nUse the <info>--docroot<\/info> option to change the default docroot directory:\n\n  <info>bin\/console server:start --docroot=htdocs\/<\/info>\n\nSpecify your own router script via the <info>--router<\/info> option:\n\n  <info>bin\/console server:start --router=app\/config\/router.php<\/info>\n\nSee also: http:\/\/www.php.net\/manual\/en\/features.commandline.webserver.php",
@@ -2086,7 +2086,7 @@
             "name": "server:status",
             "usage": [
                 "bin\/console server:status [options]",
-                "bin\/console <kernel> server:status [--pidfile PIDFILE] [--filter FILTER]"
+                "bin\/console <kernel> server:status [options]"
             ],
             "description": "Outputs the status of the local web server for the given address",
             "help": "<info>server:status<\/info> shows the details of the given local web\nserver, such as the address and port where it is listening to:\n\n  <info>bin\/console server:status<\/info>\n\nTo get the information as a machine readable format, use the\n<comment>--filter<\/> option:\n\n<info>bin\/console server:status --filter=port<\/info>\n\nSupported values are <comment>port<\/>, <comment>host<\/>, and <comment>address<\/>.",
@@ -2199,7 +2199,7 @@
             "name": "server:stop",
             "usage": [
                 "bin\/console server:stop [options]",
-                "bin\/console <kernel> server:stop [--pidfile PIDFILE]"
+                "bin\/console <kernel> server:stop [options]"
             ],
             "description": "Stops the local web server that was started with the server:start command",
             "help": "<info>server:stop<\/info> stops the local web server:\n\n  <info>bin\/console server:stop<\/info>",
@@ -2303,7 +2303,7 @@
             "name": "translation:update",
             "usage": [
                 "bin\/console translation:update [options] [--] <locale> [<bundle>]",
-                "bin\/console <kernel> translation:update [--prefix [PREFIX]] [--no-prefix] [--output-format [OUTPUT-FORMAT]] [--dump-messages] [--force] [--no-backup] [--clean] [--domain [DOMAIN]] [--] <locale> [<bundle>]"
+                "bin\/console <kernel> translation:update [options] [--] <locale> [<bundle>]"
             ],
             "description": "Updates the translation file",
             "help": "The <info>translation:update<\/info> command extracts translation strings from templates\nof a given bundle or the app folder. It can display them or merge the new ones into the translation files.\n\nWhen new translation strings are found it can automatically add a prefix to the translation\nmessage.\n\nExample running against a Bundle (AcmeBundle)\n  <info>bin\/console translation:update --dump-messages en AcmeBundle<\/info>\n  <info>bin\/console translation:update --force --prefix=\"new_\" fr AcmeBundle<\/info>\n\nExample running against app messages (app\/Resources folder)\n  <info>bin\/console translation:update --dump-messages en<\/info>\n  <info>bin\/console translation:update --force --prefix=\"new_\" fr<\/info>",

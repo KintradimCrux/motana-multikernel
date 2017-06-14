@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <command id="help" name="help">
   <usages>
-    <usage>bin/console app help [--format FORMAT] [--raw] [-h|--help] [-q|--quiet] [-v|vv|vvv|--verbose] [-V|--version] [--ansi] [--no-ansi] [-n|--no-interaction] [-e|--env ENV] [--no-debug] [--] &lt;command&gt; [&lt;command_name&gt;]</usage>
+    <usage>bin/console app help [options] [--] [&lt;command_name&gt;]</usage>
   </usages>
   <description>Displays help for a command</description>
   <help>The &lt;info&gt;help&lt;/info&gt; command displays help for a given command:

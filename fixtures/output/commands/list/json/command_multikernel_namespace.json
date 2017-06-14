@@ -8,7 +8,7 @@
             "name": "debug:config",
             "usage": [
                 "bin\/console debug:config [options] [--] [<name>] [<path>]",
-                "bin\/console <kernel> debug:config [<name>] [<path>]"
+                "bin\/console <kernel> debug:config [options] [--] [<name>] [<path>]"
             ],
             "description": "Dumps the current configuration for an extension",
             "help": "The <info>debug:config<\/info> command dumps the current configuration for an\nextension\/bundle.\n\nEither the extension alias or bundle name can be used:\n\n  <info>bin\/console debug:config framework<\/info>\n  <info>bin\/console debug:config FrameworkBundle<\/info>\n\nFor dumping a specific option, add its path as second argument:\n\n  <info>bin\/console debug:config framework serializer.enabled<\/info>",
@@ -118,7 +118,7 @@
             "name": "debug:container",
             "usage": [
                 "bin\/console debug:container [options] [--] [<name>]",
-                "bin\/console <kernel> debug:container [--show-private] [--show-arguments] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--types] [--format FORMAT] [--raw] [--] [<name>]"
+                "bin\/console <kernel> debug:container [options] [--] [<name>]"
             ],
             "description": "Displays current services for an application",
             "help": "The <info>debug:container<\/info> command displays all configured <comment>public<\/comment> services:\n\n  <info>bin\/console debug:container<\/info>\n\nTo get specific information about a service, specify its name:\n\n  <info>bin\/console debug:container validator<\/info>\n\nTo see available types that can be used for autowiring, use the <info>--types<\/info> flag:\n\n  <info>bin\/console debug:container --types<\/info>\n\nBy default, private services are hidden. You can display all services by\nusing the <info>--show-private<\/info> flag:\n\n  <info>bin\/console debug:container --show-private<\/info>\n\nUse the --tags option to display tagged <comment>public<\/comment> services grouped by tag:\n\n  <info>bin\/console debug:container --tags<\/info>\n\nFind all services with a specific tag by specifying the tag name with the <info>--tag<\/info> option:\n\n  <info>bin\/console debug:container --tag=form.type<\/info>\n\nUse the <info>--parameters<\/info> option to display all parameters:\n\n  <info>bin\/console debug:container --parameters<\/info>\n\nDisplay a specific parameter by specifying its name with the <info>--parameter<\/info> option:\n\n  <info>bin\/console debug:container --parameter=kernel.debug<\/info>",
@@ -302,7 +302,7 @@
             "name": "debug:event-dispatcher",
             "usage": [
                 "bin\/console debug:event-dispatcher [options] [--] [<event>]",
-                "bin\/console <kernel> debug:event-dispatcher [--format FORMAT] [--raw] [--] [<event>]"
+                "bin\/console <kernel> debug:event-dispatcher [options] [--] [<event>]"
             ],
             "description": "Displays configured listeners for an application",
             "help": "The <info>debug:event-dispatcher<\/info> command displays all configured listeners:\n\n  <info>bin\/console debug:event-dispatcher<\/info>\n\nTo get specific listeners for an event, specify its name:\n\n  <info>bin\/console debug:event-dispatcher kernel.request<\/info>",
@@ -423,7 +423,7 @@
             "name": "debug:translation",
             "usage": [
                 "bin\/console debug:translation [options] [--] <locale> [<bundle>]",
-                "bin\/console <kernel> debug:translation [--domain [DOMAIN]] [--only-missing] [--only-unused] [--all] [--] <locale> [<bundle>]"
+                "bin\/console <kernel> debug:translation [options] [--] <locale> [<bundle>]"
             ],
             "description": "Displays translation messages information",
             "help": "The <info>debug:translation<\/info> command helps finding unused or missing translation\nmessages and comparing them with the fallback ones by inspecting the\ntemplates and translation files of a given bundle or the app folder.\n\nYou can display information about bundle translations in a specific locale:\n\n  <info>bin\/console debug:translation en AcmeDemoBundle<\/info>\n\nYou can also specify a translation domain for the search:\n\n  <info>bin\/console debug:translation --domain=messages en AcmeDemoBundle<\/info>\n\nYou can only display missing messages:\n\n  <info>bin\/console debug:translation --only-missing en AcmeDemoBundle<\/info>\n\nYou can only display unused messages:\n\n  <info>bin\/console debug:translation --only-unused en AcmeDemoBundle<\/info>\n\nYou can display information about app translations in a specific locale:\n\n  <info>bin\/console debug:translation en<\/info>\n\nYou can display information about translations in all registered bundles in a specific locale:\n\n  <info>bin\/console debug:translation --all en<\/info>",

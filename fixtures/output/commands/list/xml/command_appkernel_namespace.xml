@@ -3,7 +3,7 @@
   <commands namespace="debug">
     <command id="debug:config" name="debug:config">
       <usages>
-        <usage>bin/console app debug:config [&lt;name&gt;] [&lt;path&gt;]</usage>
+        <usage>bin/console app debug:config [options] [--] [&lt;name&gt;] [&lt;path&gt;]</usage>
       </usages>
       <description>Dumps the current configuration for an extension</description>
       <help>The &lt;info&gt;debug:config&lt;/info&gt; command dumps the current configuration for an
@@ -62,7 +62,7 @@
     </command>
     <command id="debug:container" name="debug:container">
       <usages>
-        <usage>bin/console app debug:container [--show-private] [--show-arguments] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--types] [--format FORMAT] [--raw] [--] [&lt;name&gt;]</usage>
+        <usage>bin/console app debug:container [options] [--] [&lt;name&gt;]</usage>
       </usages>
       <description>Displays current services for an application</description>
       <help>The &lt;info&gt;debug:container&lt;/info&gt; command displays all configured &lt;comment&gt;public&lt;/comment&gt; services:
@@ -170,7 +170,7 @@
     </command>
     <command id="debug:event-dispatcher" name="debug:event-dispatcher">
       <usages>
-        <usage>bin/console app debug:event-dispatcher [--format FORMAT] [--raw] [--] [&lt;event&gt;]</usage>
+        <usage>bin/console app debug:event-dispatcher [options] [--] [&lt;event&gt;]</usage>
       </usages>
       <description>Displays configured listeners for an application</description>
       <help>The &lt;info&gt;debug:event-dispatcher&lt;/info&gt; command displays all configured listeners:
@@ -230,7 +230,7 @@
     </command>
     <command id="debug:translation" name="debug:translation">
       <usages>
-        <usage>bin/console app debug:translation [--domain [DOMAIN]] [--only-missing] [--only-unused] [--all] [--] &lt;locale&gt; [&lt;bundle&gt;]</usage>
+        <usage>bin/console app debug:translation [options] [--] &lt;locale&gt; [&lt;bundle&gt;]</usage>
       </usages>
       <description>Displays translation messages information</description>
       <help>The &lt;info&gt;debug:translation&lt;/info&gt; command helps finding unused or missing translation

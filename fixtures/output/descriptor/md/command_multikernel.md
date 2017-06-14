@@ -4,8 +4,8 @@ Command "help"
 * Description: Displays help for a command
 * Usage:
 
-  * `bin/console help [options] [--] [<command_name>]`
-  * `bin/console <kernel> help [--format FORMAT] [--raw] [--] [<command_name>]`
+  * `bin/console bin/console help [options] [--] [<command_name>]`
+  * `bin/console bin/console <kernel> help [options] [--] [<command_name>]`
 
 The `help` command displays help for a given command:
 

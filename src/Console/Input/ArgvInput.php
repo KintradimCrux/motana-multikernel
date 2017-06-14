@@ -199,7 +199,9 @@ class ArgvInput extends Input
 				continue;
 			}
 			
-			array_splice($this->tokens, $index, 1);
+			array_splice($this->tokens, $index, 1, array());
+			
+			break;
 		}
 	}
 	

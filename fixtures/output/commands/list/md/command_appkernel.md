@@ -44,7 +44,7 @@ Command "about"
 * Description: Displays information about the current project
 * Usage:
 
-  * `bin/console app about`
+  * `bin/console bin/console app about [options]`
 
 Displays information about the current project
 
@@ -146,7 +146,7 @@ Command "help"
 * Description: Displays help for a command
 * Usage:
 
-  * `bin/console app help [--format FORMAT] [--raw] [--] [<command_name>]`
+  * `bin/console bin/console app help [options] [--] [<command_name>]`
 
 The `help` command displays help for a given command:
 
@@ -286,7 +286,7 @@ Command "list"
 * Description: Lists commands
 * Usage:
 
-  * `bin/console app list [--raw] [--format FORMAT] [-h|--help] [-q|--quiet] [-v|vv|vvv|--verbose] [-V|--version] [--ansi] [--no-ansi] [-n|--no-interaction] [-e|--env ENV] [--no-debug] [--] <command> [<namespace>]`
+  * `bin/console bin/console app list [options] [--] [<namespace>]`
 
 The `list` command lists all commands:
 
@@ -342,7 +342,7 @@ Command "assets:install"
 * Description: Installs bundles web assets under a public web directory
 * Usage:
 
-  * `bin/console app assets:install [--symlink] [--relative] [--] [<target>]`
+  * `bin/console bin/console app assets:install [options] [--] [<target>]`
 
 The `assets:install` command installs bundle assets into a given
 directory (e.g. the web directory).
@@ -489,7 +489,7 @@ Command "cache:clear"
 * Description: Clears the cache
 * Usage:
 
-  * `bin/console app cache:clear [--no-warmup] [--no-optional-warmers]`
+  * `bin/console bin/console app cache:clear [options]`
 
 The `cache:clear` command clears the application cache for a given environment
 and debug mode:
@@ -615,7 +615,7 @@ Command "cache:pool:clear"
 * Description: Clears cache pools
 * Usage:
 
-  * `bin/console app cache:pool:clear <pools> (<pools>)...`
+  * `bin/console bin/console app cache:pool:clear [options] [--] <pools> (<pools>)...`
 
 The `cache:pool:clear` command clears the given cache pools or cache pool clearers.
 
@@ -729,7 +729,7 @@ Command "cache:warmup"
 * Description: Warms up an empty cache
 * Usage:
 
-  * `bin/console app cache:warmup [--no-optional-warmers]`
+  * `bin/console bin/console app cache:warmup [options]`
 
 The `cache:warmup` command warms up the cache.
 
@@ -848,7 +848,7 @@ Command "config:dump-reference"
 * Description: Dumps the default configuration for an extension
 * Usage:
 
-  * `bin/console app config:dump-reference [--format FORMAT] [--] [<name>] [<path>]`
+  * `bin/console bin/console app config:dump-reference [options] [--] [<name>] [<path>]`
 
 The `config:dump-reference` command dumps the default configuration for an
 extension/bundle.
@@ -994,7 +994,7 @@ Command "debug:config"
 * Description: Dumps the current configuration for an extension
 * Usage:
 
-  * `bin/console app debug:config [<name>] [<path>]`
+  * `bin/console bin/console app debug:config [options] [--] [<name>] [<path>]`
 
 The `debug:config` command dumps the current configuration for an
 extension/bundle.
@@ -1124,7 +1124,7 @@ Command "debug:container"
 * Description: Displays current services for an application
 * Usage:
 
-  * `bin/console app debug:container [--show-private] [--show-arguments] [--tag TAG] [--tags] [--parameter PARAMETER] [--parameters] [--types] [--format FORMAT] [--raw] [--] [<name>]`
+  * `bin/console bin/console app debug:container [options] [--] [<name>]`
 
 The `debug:container` command displays all configured public services:
 
@@ -1357,7 +1357,7 @@ Command "debug:event-dispatcher"
 * Description: Displays configured listeners for an application
 * Usage:
 
-  * `bin/console app debug:event-dispatcher [--format FORMAT] [--raw] [--] [<event>]`
+  * `bin/console bin/console app debug:event-dispatcher [options] [--] [<event>]`
 
 The `debug:event-dispatcher` command displays all configured listeners:
 
@@ -1495,7 +1495,7 @@ Command "debug:translation"
 * Description: Displays translation messages information
 * Usage:
 
-  * `bin/console app debug:translation [--domain [DOMAIN]] [--only-missing] [--only-unused] [--all] [--] <locale> [<bundle>]`
+  * `bin/console bin/console app debug:translation [options] [--] <locale> [<bundle>]`
 
 The `debug:translation` command helps finding unused or missing translation
 messages and comparing them with the fallback ones by inspecting the
@@ -1681,7 +1681,7 @@ Command "lint:xliff"
 * Description: Lints a XLIFF file and outputs encountered errors
 * Usage:
 
-  * `bin/console app lint:xliff [--format FORMAT] [--] [<filename>]`
+  * `bin/console bin/console app lint:xliff [options] [--] [<filename>]`
 
 The `lint:xliff` command lints a XLIFF file and outputs to STDOUT
 the first encountered syntax error.
@@ -1821,7 +1821,7 @@ Command "lint:yaml"
 * Description: Lints a file and outputs encountered errors
 * Usage:
 
-  * `bin/console app lint:yaml [--format FORMAT] [--] [<filename>]`
+  * `bin/console bin/console app lint:yaml [options] [--] [<filename>]`
 
 The `lint:yaml` command lints a YAML file and outputs to STDOUT
 the first encountered syntax error.
@@ -1961,7 +1961,7 @@ Command "translation:update"
 * Description: Updates the translation file
 * Usage:
 
-  * `bin/console app translation:update [--prefix [PREFIX]] [--no-prefix] [--output-format [OUTPUT-FORMAT]] [--dump-messages] [--force] [--no-backup] [--clean] [--domain [DOMAIN]] [--] <locale> [<bundle>]`
+  * `bin/console bin/console app translation:update [options] [--] <locale> [<bundle>]`
 
 The `translation:update` command extracts translation strings from templates
 of a given bundle or the app folder. It can display them or merge the new ones into the translation files.

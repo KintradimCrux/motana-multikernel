@@ -4,8 +4,8 @@ Command "help"
 * Description: Displays help for a command
 * Usage:
 
-  * `bin/console help [options] [--] [<kernel>] [<command>] [<command_name>]`
-  * `bin/console <kernel> help [--format FORMAT] [--raw] [-h|--help] [-q|--quiet] [-v|vv|vvv|--verbose] [-V|--version] [--ansi] [--no-ansi] [-n|--no-interaction] [-e|--env ENV] [--no-debug] [--] [<kernel>] [<command>] [<command_name>]`
+  * `bin/console bin/console help [options] [--] [<command_name>]`
+  * `bin/console bin/console <kernel> help [options] [--] [<command_name>]`
 
 The `help` command displays help for a given command:
 
@@ -22,7 +22,7 @@ To display the list of available commands, please use the `list` command.
 **kernel:**
 
 * Name: kernel
-* Is required: no
+* Is required: yes
 * Is array: no
 * Description: The kernel to execute
 * Default: `NULL`

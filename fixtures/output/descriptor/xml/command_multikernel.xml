@@ -2,7 +2,7 @@
 <command id="help" name="help">
   <usages>
     <usage>bin/console help [options] [--] [&lt;command_name&gt;]</usage>
-    <usage>bin/console &lt;kernel&gt; help [--format FORMAT] [--raw] [--] [&lt;command_name&gt;]</usage>
+    <usage>bin/console &lt;kernel&gt; help [options] [--] [&lt;command_name&gt;]</usage>
   </usages>
   <description>Displays help for a command</description>
   <help>The &lt;info&gt;help&lt;/info&gt; command displays help for a given command:

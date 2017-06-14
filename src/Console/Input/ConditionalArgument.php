@@ -111,7 +111,7 @@ class ConditionalArgument extends InputArgument
 	 */
 	public function getDefault()
 	{
-		if ( ! parent::isRequired()) {
+		if ( ! $this->isRequired()) {
 			return $this->default;
 		}
 	}

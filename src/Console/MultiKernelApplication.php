@@ -24,10 +24,12 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Motana\Bundle\MultiKernelBundle\Command\MultiKernelCommand;
 use Motana\Bundle\MultiKernelBundle\Console\Input\ArgvInput;
 use Motana\Bundle\MultiKernelBundle\Console\Input\KernelArgument;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\StringInput;
 
 /**
  * Multi-Kernel Application.
- * 
+ *
  * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
 class MultiKernelApplication extends Application
@@ -36,21 +38,21 @@ class MultiKernelApplication extends Application
 	
 	/**
 	 * Application instances.
-	 * 
+	 *
 	 * @var Application[]
 	 */
 	private $applications = array();
 	
 	/**
 	 * Boolean indicating that commands are registered.
-	 * 
+	 *
 	 * @var boolean
 	 */
 	private $commandsRegistered = false;
 	
 	// }}}
 	// {{{ Constructor
-
+	
 	/**
 	 * Constructor.
 	 *
@@ -87,13 +89,15 @@ class MultiKernelApplication extends Application
 			throw new \InvalidArgumentException(sprintf('A MultiKernelApplication requires a %s to work', ArgvInput::class));
 		}
 		
-		try { $input->bind($this->getDefinition()); }
-		catch (\Exception $e) { }
+		try {
+			$input->bind($this->getDefinition());
+		} catch (\Exception $e) {
+			
+		}
 		
 		if (null !== $kernelName = $input->getArgument('kernel')) {
-			/** @var ArgvInput $input */
-			$input->shift();
-
+			$this->removeKernelArgument($input);
+			
 			if ((null !== $command = $input->getArgument('command')) && ! in_array($command, ['help', 'list'])) {
 				$output->writeln(sprintf('Executing command on kernel <comment>%s</comment>...', $kernelName));
 			}
@@ -101,7 +105,9 @@ class MultiKernelApplication extends Application
 			return $this->getApplication($kernelName)
 				->doRun($input, $output);
 		}
-
+		
+		$this->removeKernelArgument($input, false);
+		
 		$container = $this->getKernel()->getContainer();
 		foreach ($this->all() as $command) {
 			if ($command instanceof ContainerAwareInterface) {
@@ -120,8 +126,8 @@ class MultiKernelApplication extends Application
 	protected function getDefaultInputDefinition()
 	{
 		return new InputDefinition(array(
-			new KernelArgument('kernel', InputArgument::OPTIONAL, 'The kernel to execute', array_keys($this->getKernel()->getKernels())),
-			new InputArgument('command', InputArgument::OPTIONAL, 'The command to execute'),
+			new KernelArgument('kernel', InputArgument::REQUIRED, 'The kernel to execute', array_keys($this->getKernel()->getKernels())),
+			new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
 			
 			new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message'),
 			new InputOption('--quiet', '-q', InputOption::VALUE_NONE, 'Do not output any message'),
@@ -173,7 +179,7 @@ class MultiKernelApplication extends Application
 				case 'server:stop':
 					$this->add(reset($commandList));
 					break;
-				
+					
 				default:
 					if ($count === count($commandList)) {
 						$this->add(new MultiKernelCommand($commandName, $commandList));
@@ -211,6 +217,49 @@ class MultiKernelApplication extends Application
 	private function getApplication($applicationName)
 	{
 		return isset($this->applications[$applicationName]) ? $this->applications[$applicationName] : null;
+	}
+	
+	/**
+	 * Removes the kernel argument from the input definition.
+	 *
+	 * @return void
+	 */
+	private function removeKernelArgument(InputInterface $input, $shift = true)
+	{
+		if ($this->getDefinition()->hasArgument('kernel')) {
+			$this->getDefinition()->setArguments(
+				array_filter(
+					$this->getDefinition()->getArguments(),
+					function(InputArgument $argument, $argumentName) {
+						return 'kernel' !== $argumentName;
+					}, ARRAY_FILTER_USE_BOTH
+				)
+			);
+		}
+		
+		if ($shift) {
+			if ($input instanceof ArgvInput) {
+				$input->shift();
+			} elseif ($input instanceof ArrayInput) {
+				$input->__construct(array_merge(
+					array_filter(
+						$input->getArguments(),
+						function($argumentValue, $argumentName){
+							return 'kernel' !== $argumentName; 
+						}, ARRAY_FILTER_USE_BOTH
+					),
+					$input->getOptions()
+				));
+			} elseif ($input instanceof StringInput) {
+				$input->__construct(ltrim(strstr((string) $input, ' ')));
+			}
+		}
+		
+		try {
+			$input->bind($this->getDefinition());
+		} catch (\Exception $e) {
+			
+		}
 	}
 	
 	// }}}
