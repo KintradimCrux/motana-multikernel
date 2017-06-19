@@ -1606,10 +1606,10 @@
             }
         },
         {
-            "name": "multi-kernel:create-app",
+            "name": "multikernel:create-app",
             "usage": [
-                "bin\/console multi-kernel:create-app [options]",
-                "bin\/console <kernel> multi-kernel:create-app [options]"
+                "bin\/console multikernel:create-app [options]",
+                "bin\/console <kernel> multikernel:create-app [options]"
             ],
             "description": "Create a new app",
             "help": "Create a new app",
@@ -2528,9 +2528,9 @@
             ]
         },
         {
-            "id": "multi-kernel",
+            "id": "multikernel",
             "commands": [
-                "multi-kernel:create-app"
+                "multikernel:create-app"
             ]
         },
         {

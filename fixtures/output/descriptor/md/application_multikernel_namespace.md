@@ -23,8 +23,8 @@ Command "debug:config"
 * Description: Dumps the current configuration for an extension
 * Usage:
 
-  * `bin/console bin/console debug:config [options] [--] [<name>] [<path>]`
-  * `bin/console bin/console <kernel> debug:config [options] [--] [<name>] [<path>]`
+  * `bin/console debug:config [options] [--] [<name>] [<path>]`
+  * `bin/console <kernel> debug:config [options] [--] [<name>] [<path>]`
 
 The `debug:config` command dumps the current configuration for an
 extension/bundle.
@@ -37,6 +37,12 @@ Either the extension alias or bundle name can be used:
 For dumping a specific option, add its path as second argument:
 
   `bin/console debug:config framework serializer.enabled`
+
+
+### Kernels:
+
+* boot
+* app
 
 ### Arguments:
 
@@ -154,8 +160,8 @@ Command "debug:container"
 * Description: Displays current services for an application
 * Usage:
 
-  * `bin/console bin/console debug:container [options] [--] [<name>]`
-  * `bin/console bin/console <kernel> debug:container [options] [--] [<name>]`
+  * `bin/console debug:container [options] [--] [<name>]`
+  * `bin/console <kernel> debug:container [options] [--] [<name>]`
 
 The `debug:container` command displays all configured public services:
 
@@ -189,6 +195,12 @@ Use the `--parameters` option to display all parameters:
 Display a specific parameter by specifying its name with the `--parameter` option:
 
   `bin/console debug:container --parameter=kernel.debug`
+
+
+### Kernels:
+
+* boot
+* app
 
 ### Arguments:
 
@@ -388,8 +400,8 @@ Command "debug:event-dispatcher"
 * Description: Displays configured listeners for an application
 * Usage:
 
-  * `bin/console bin/console debug:event-dispatcher [options] [--] [<event>]`
-  * `bin/console bin/console <kernel> debug:event-dispatcher [options] [--] [<event>]`
+  * `bin/console debug:event-dispatcher [options] [--] [<event>]`
+  * `bin/console <kernel> debug:event-dispatcher [options] [--] [<event>]`
 
 The `debug:event-dispatcher` command displays all configured listeners:
 
@@ -398,6 +410,12 @@ The `debug:event-dispatcher` command displays all configured listeners:
 To get specific listeners for an event, specify its name:
 
   `bin/console debug:event-dispatcher kernel.request`
+
+
+### Kernels:
+
+* boot
+* app
 
 ### Arguments:
 
@@ -527,8 +545,8 @@ Command "debug:translation"
 * Description: Displays translation messages information
 * Usage:
 
-  * `bin/console bin/console debug:translation [options] [--] <locale> [<bundle>]`
-  * `bin/console bin/console <kernel> debug:translation [options] [--] <locale> [<bundle>]`
+  * `bin/console debug:translation [options] [--] <locale> [<bundle>]`
+  * `bin/console <kernel> debug:translation [options] [--] <locale> [<bundle>]`
 
 The `debug:translation` command helps finding unused or missing translation
 messages and comparing them with the fallback ones by inspecting the
@@ -557,6 +575,12 @@ You can display information about app translations in a specific locale:
 You can display information about translations in all registered bundles in a specific locale:
 
   `bin/console debug:translation --all en`
+
+
+### Kernels:
+
+* boot
+* app
 
 ### Arguments:
 

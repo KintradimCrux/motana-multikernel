@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\Console\Output;
+namespace Motana\Bundle\MultikernelBundle\Console\Output;
 
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\HttpKernel\Kernel;

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-use Motana\Bundle\MultiKernelBundle\HttpKernel\Kernel;
+use Motana\Bundle\MultikernelBundle\HttpKernel\Kernel;
 
 class BrokenCacheKernel extends Kernel
 {

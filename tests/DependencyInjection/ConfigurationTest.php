@@ -9,17 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\DependencyInjection;
+namespace Tests\Motana\Bundle\MultikernelBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\ArrayNode;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\ScalarNode;
 
-use Motana\Bundle\MultiKernelBundle\DependencyInjection\Configuration;
-use Motana\Bundle\MultiKernelBundle\Test\TestCase;
+use Motana\Bundle\MultikernelBundle\DependencyInjection\Configuration;
+use Motana\Bundle\MultikernelBundle\Test\TestCase;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\DependencyInjection\Configuration
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\DependencyInjection\Configuration
  */
 class ConfigurationTest extends TestCase
 {
@@ -48,6 +48,10 @@ class ConfigurationTest extends TestCase
 
 		$expected = array(
 			'default' => null,
+			'class_cache.exclude' => array(),
+			'commands.add' => array(),
+			'commands.global' => array(),
+			'commands.hidden' => array(),
 		);
 		
 		$config = array();

@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\HttpKernel;
+namespace Tests\Motana\Bundle\MultikernelBundle\HttpKernel;
 
-use Motana\Bundle\MultiKernelBundle\Test\KernelTestCase;
+use Motana\Bundle\MultikernelBundle\Test\KernelTestCase;
 use Motana\Component\HttpKernel\Kernel;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\HttpKernel\Kernel
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\HttpKernel\Kernel
  */
 class KernelTest extends KernelTestCase
 {
@@ -106,5 +106,17 @@ class KernelTest extends KernelTestCase
 		
 		// Check the container has the kernel.secret parameter
 		$this->assertEquals('ThisTokenIsNotSoSecretChangeIt', $container->getParameter('kernel.secret'));
+	}
+
+	/**
+	 * @covers ::registerContainerConfiguration()
+	 * @expectedException Symfony\Component\Config\Exception\FileLocatorFileNotFoundException
+	 * @expectedExceptionMessageRegExp |^The file "(.*)/fixtures/kernels/working/apps/app/config/config_invalid.yml" does not exist.$|
+	 */
+	public function testRegisterContainerConfigurationThrowsException()
+	{
+		$this->writeAttribute(self::$kernel, 'environment', 'invalid');
+		
+		self::$kernel->boot();
 	}
 }

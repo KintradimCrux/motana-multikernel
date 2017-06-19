@@ -1,9 +1,9 @@
 {
 	"name" : "motana/multikernel",
-	"version": "1.0.3",
-	"type" : "library",
+	"version": "1.1.0",
+	"type" : "symfony-bundle",
 	"description" : "Motana Multi-Kernel Bundle",
-	"keywords": ["kernel", "multi", "multi-kernel"],
+	"keywords": ["symfony", "kernel", "multi-kernel"],
 	"homepage" : "http://github.com/KintradimCrux/motana-multikernel/",
 	"license" : "MIT",
 	"authors" : [
@@ -23,8 +23,12 @@
 	},
 	"autoload" : {
 		"psr-4" : {
-			"Motana\\Bundle\\MultiKernelBundle\\" : "src/",
-			"Tests\\Motana\\Bundle\\MultiKernelBundle\\" : "tests/"
+			"Motana\\Bundle\\MultikernelBundle\\" : "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Tests\\Motana\\Bundle\\MultikernelBundle\\" : "tests/"
 		}
 	}
 }

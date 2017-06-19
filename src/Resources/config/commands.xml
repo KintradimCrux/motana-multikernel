@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    
+    <parameters>
+    
+    	<!-- Commands to add as multi-kernel command, bypassing the requirement of being available for all kernels -->
+    	<parameter key="motana.multikernel.commands.add" type="collection">
+    		<!-- parameters from config.yml will be appended here -->
+    	</parameter>
+    	
+    	<!-- Commands that will always be run on the boot kernel and will be hidden in the other kernels -->
+    	<parameter key="motana.multikernel.commands.global" type="collection">
+    		<parameter>lint:yaml</parameter>
+	    	<parameter>lint:xliff</parameter>
+	    	<parameter>server:log</parameter>
+    		<parameter>server:run</parameter>
+    		<parameter>server:start</parameter>
+    		<parameter>server:status</parameter>
+    		<parameter>server:stop</parameter>
+    		<!-- parameters from config.yml will be appended here -->
+    	</parameter>
+    	
+    	<!-- Commands that will be hidden in all kernels -->
+    	<parameter key="motana.multikernel.commands.hidden" type="collection">
+    		<!-- parameters from config.yml will be appended here -->
+    	</parameter>
+    	
+    </parameters>
+</container>

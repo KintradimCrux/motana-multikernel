@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symfony name="Motana Multi-Kernel App Console - Symfony" version="[symfony-version]" kernel="boot">
+  <kernels>
+    <kernel>boot</kernel>
+    <kernel>app</kernel>
+  </kernels>
   <commands namespace="debug">
     <command id="debug:config" name="debug:config">
       <usages>

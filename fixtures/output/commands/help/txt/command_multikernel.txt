@@ -4,6 +4,10 @@ Usage:
   bin/console help [options] [--] [<command_name>]
   bin/console <kernel> help [options] [--] [<command_name>]
 
+Kernels:
+  boot
+  app
+
 Arguments:
   kernel        The kernel to execute
   command_name  The command name [default: "help"]

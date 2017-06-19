@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\Console\Descriptor;
+namespace Motana\Bundle\MultikernelBundle\Console\Descriptor;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
-use Motana\Bundle\MultiKernelBundle\Console\MultiKernelApplication;
+use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
 
 /**
  * A replacement for the Symfony Standard Edition markdown descriptor.
@@ -101,18 +101,18 @@ class MarkdownDescriptor extends Descriptor
 	 */
 	protected function describeCommand(Command $command, array $options = array())
 	{
-		$kernel = $command->getApplication() instanceof MultiKernelApplication ? null : $command->getApplication()->getKernel()->getName();
+		$kernel = $command->getApplication() instanceof MultikernelApplication ? null : $command->getApplication()->getKernel()->getName();
 		
 		$command->getSynopsis();
 		$command->mergeApplicationDefinition(false);
 		
 		$usages = array();
 		if ( ! $kernel) {
-			$usages[] = $_SERVER['PHP_SELF'] . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $command->getSynopsis(true));
+			$usages[] = str_replace(array(' <kernel>', ' <command>'), '', $command->getSynopsis(true));
 		}
 		
 		foreach (array_merge(array($command->getSynopsis(true)), $command->getUsages(), $command->getAliases()) as $usage) {
-			$usages[] = $_SERVER['PHP_SELF'] . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage);
+			$usages[] = ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage);
 		}
 		
 		$this->write(array(
@@ -129,6 +129,18 @@ class MarkdownDescriptor extends Descriptor
 			$this->write("\n");
 			$this->write($this->formatDescription($help));
 			$this->write("\n");
+		}
+
+		$application = $command->getApplication();
+		if ($application instanceof MultikernelApplication) {
+			$this->write("\n\n");
+			$this->write(array(
+				'### Kernels:' . "\n",
+				array_reduce(array_keys($application->getKernel()->getKernels()), function($carry, $kernel) {
+					return $carry .= "\n" . '* ' . $kernel;
+				}),
+				"\n",
+			));
 		}
 		
 		if ($command->getNativeDefinition()) {
@@ -152,7 +164,7 @@ class MarkdownDescriptor extends Descriptor
 			$this->write($help. "\n" . str_repeat('=', Helper::strlen($help)));
 		}
 		
-		if ($application instanceof MultiKernelApplication) {
+		if ($application instanceof MultikernelApplication) {
 			$this->write("\n\n");
 			$this->write(array(
 				'Kernels' . "\n",
@@ -176,7 +188,22 @@ class MarkdownDescriptor extends Descriptor
 			));
 		}
 		
-		foreach ($description->getNamespaces() as $namespace) {
+		$commands = $description->getCommands();
+		
+		$namespaces = $description->getNamespaces();
+		foreach ($namespaces as $namespaceIndex => $namespace) {
+			foreach ($namespace['commands'] as $commandIndex => $commandName) {
+				if ( ! isset($commands[$commandName])) {
+					unset($namespace['commands'][$commandIndex]);
+				}
+			}
+			
+			if (empty($namespace['commands'])) {
+				unset($namespaces[$namespaceIndex]);
+			}
+		}
+		
+		foreach ($namespaces as $namespace) {
 			if (ApplicationDescription::GLOBAL_NAMESPACE !== $namespace['id']) {
 				$this->write("\n\n");
 				$this->write('**' . $namespace['id'] . ':**');

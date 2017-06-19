@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\Test;
+namespace Tests\Motana\Bundle\MultikernelBundle\Test;
 
 use Symfony\Component\Filesystem\Filesystem;
 
-use Motana\Bundle\MultiKernelBundle\Test\TestCase;
+use Motana\Bundle\MultikernelBundle\Test\TestCase;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\Test\TestCase
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\Test\TestCase
  */
 class TestCaseTest extends \PHPUnit_Framework_TestCase
 {
@@ -153,7 +153,7 @@ class TestCaseTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @covers ::setObjectAttribute()
 	 * @expectedException PHPUnit_Framework_Exception
-	 * @expectedExceptionMessage Argument #1 (No Value) of Motana\Bundle\MultiKernelBundle\Test\TestCase::setObjectAttribute() must be a object
+	 * @expectedExceptionMessage Argument #1 (No Value) of Motana\Bundle\MultikernelBundle\Test\TestCase::setObjectAttribute() must be a object
 	 */
 	public function testSetObjectAttributeChecksObjectType()
 	{
@@ -164,7 +164,7 @@ class TestCaseTest extends \PHPUnit_Framework_TestCase
 	 * @covers ::setObjectAttribute()
 	 * @depends testSetObjectAttributeChecksObjectType
 	 * @expectedException PHPUnit_Framework_Exception
-	 * @expectedExceptionMessage Argument #2 (No Value) of Motana\Bundle\MultiKernelBundle\Test\TestCase::setObjectAttribute() must be a string
+	 * @expectedExceptionMessage Argument #2 (No Value) of Motana\Bundle\MultikernelBundle\Test\TestCase::setObjectAttribute() must be a string
 	 */
 	public function testSetObjectAttributeChecksAttributeNameType()
 	{
@@ -175,7 +175,7 @@ class TestCaseTest extends \PHPUnit_Framework_TestCase
 	 * @covers ::setObjectAttribute()
 	 * @depends testSetObjectAttributeChecksAttributeNameType
 	 * @expectedException PHPUnit_Framework_Exception
-	 * @expectedExceptionMessage Argument #2 (No Value) of Motana\Bundle\MultiKernelBundle\Test\TestCase::setObjectAttribute() must be a valid attribute name
+	 * @expectedExceptionMessage Argument #2 (No Value) of Motana\Bundle\MultikernelBundle\Test\TestCase::setObjectAttribute() must be a valid attribute name
 	 */
 	public function testSetObjectAttributeChecksAttributeNameIsValid()
 	{
@@ -229,7 +229,7 @@ class TestCaseTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @covers ::setStaticAttribute()
 	 * @expectedException PHPUnit_Framework_Exception
-	 * @expectedExceptionMessage Argument #1 (No Value) of Motana\Bundle\MultiKernelBundle\Test\TestCase::setStaticAttribute() must be a string
+	 * @expectedExceptionMessage Argument #1 (No Value) of Motana\Bundle\MultikernelBundle\Test\TestCase::setStaticAttribute() must be a string
 	 */
 	public function testSetStaticAttributeChecksClassNameType()
 	{
@@ -240,7 +240,7 @@ class TestCaseTest extends \PHPUnit_Framework_TestCase
 	 * @covers ::setStaticAttribute()
 	 * @depends testSetStaticAttributeChecksClassNameType
 	 * @expectedException PHPUnit_Framework_Exception
-	 * @expectedExceptionMessage Argument #1 (No Value) of Motana\Bundle\MultiKernelBundle\Test\TestCase::setStaticAttribute() must be a class name
+	 * @expectedExceptionMessage Argument #1 (No Value) of Motana\Bundle\MultikernelBundle\Test\TestCase::setStaticAttribute() must be a class name
 	 */
 	public function testSetStaticAttributeChecksClassExists()
 	{
@@ -251,7 +251,7 @@ class TestCaseTest extends \PHPUnit_Framework_TestCase
 	 * @covers ::setStaticAttribute()
 	 * @depends testSetStaticAttributeChecksClassExists
 	 * @expectedException PHPUnit_Framework_Exception
-	 * @expectedExceptionMessage Argument #2 (No Value) of Motana\Bundle\MultiKernelBundle\Test\TestCase::setStaticAttribute() must be a string
+	 * @expectedExceptionMessage Argument #2 (No Value) of Motana\Bundle\MultikernelBundle\Test\TestCase::setStaticAttribute() must be a string
 	 */
 	public function testSetStaticAttributeChecksAttributeNameType()
 	{
@@ -262,7 +262,7 @@ class TestCaseTest extends \PHPUnit_Framework_TestCase
 	 * @covers ::setStaticAttribute()
 	 * @depends testSetStaticAttributeChecksClassExists
 	 * @expectedException PHPUnit_Framework_Exception
-	 * @expectedExceptionMessage Argument #2 (No Value) of Motana\Bundle\MultiKernelBundle\Test\TestCase::setStaticAttribute() must be a valid attribute name
+	 * @expectedExceptionMessage Argument #2 (No Value) of Motana\Bundle\MultikernelBundle\Test\TestCase::setStaticAttribute() must be a valid attribute name
 	 */
 	public function testSetStaticAttributeChecksAttributeNameIsValid()
 	{
@@ -316,7 +316,7 @@ class TestCaseTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @covers ::writeAttribute()
 	 * @expectedException PHPUnit_Framework_Exception
-	 * @expectedExceptionMessage Argument #2 (No Value) of Motana\Bundle\MultiKernelBundle\Test\TestCase::writeAttribute() must be a string
+	 * @expectedExceptionMessage Argument #2 (No Value) of Motana\Bundle\MultikernelBundle\Test\TestCase::writeAttribute() must be a string
 	 */
 	public function testWriteAttributeChecksAttributeNameType()
 	{
@@ -327,7 +327,7 @@ class TestCaseTest extends \PHPUnit_Framework_TestCase
 	 * @covers ::writeAttribute()
 	 * @depends testWriteAttributeChecksAttributeNameType
 	 * @expectedException PHPUnit_Framework_Exception
-	 * @expectedExceptionMessage Argument #2 (No Value) of Motana\Bundle\MultiKernelBundle\Test\TestCase::writeAttribute() must be a valid attribute name
+	 * @expectedExceptionMessage Argument #2 (No Value) of Motana\Bundle\MultikernelBundle\Test\TestCase::writeAttribute() must be a valid attribute name
 	 */
 	public function testWriteAttributeChecksAttributeIsValid()
 	{
@@ -338,7 +338,7 @@ class TestCaseTest extends \PHPUnit_Framework_TestCase
 	 * @covers ::writeAttribute()
 	 * @depends testWriteAttributeChecksAttributeIsValid
 	 * @expectedException PHPUnit_Framework_Exception
-	 * @expectedExceptionMessage Argument #1 (No Value) of Motana\Bundle\MultiKernelBundle\Test\TestCase::writeAttribute() must be a class name or object
+	 * @expectedExceptionMessage Argument #1 (No Value) of Motana\Bundle\MultikernelBundle\Test\TestCase::writeAttribute() must be a class name or object
 	 */
 	public function testWriteAttributeChecksClassOrObjectType()
 	{
@@ -349,7 +349,7 @@ class TestCaseTest extends \PHPUnit_Framework_TestCase
 	 * @covers ::writeAttribute()
 	 * @depends testWriteAttributeChecksClassOrObjectType
 	 * @expectedException PHPUnit_Framework_Exception
-	 * @expectedExceptionMessage Argument #1 (No Value) of Motana\Bundle\MultiKernelBundle\Test\TestCase::writeAttribute() must be a class name
+	 * @expectedExceptionMessage Argument #1 (No Value) of Motana\Bundle\MultikernelBundle\Test\TestCase::writeAttribute() must be a class name
 	 */
 	public function testWriteAttributeStaticChecksClassExists()
 	{

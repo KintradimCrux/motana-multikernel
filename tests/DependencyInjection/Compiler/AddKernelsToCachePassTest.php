@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\HttpKernel\DependencyInjection;
+namespace Tests\Motana\Bundle\MultikernelBundle\HttpKernel\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use Motana\Bundle\MultiKernelBundle\DependencyInjection\Compiler\AddKernelsToCachePass;
-use Motana\Bundle\MultiKernelBundle\Test\KernelTestCase;
+use Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\AddKernelsToCachePass;
+use Motana\Bundle\MultikernelBundle\Test\KernelTestCase;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\DependencyInjection\Compiler\AddKernelsToCachePass
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\AddKernelsToCachePass
  */
 class AddKernelsToCachePassTest extends KernelTestCase
 {

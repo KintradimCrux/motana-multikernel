@@ -9,18 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\Console\Input;
+namespace Tests\Motana\Bundle\MultikernelBundle\Console\Input;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
-use Motana\Bundle\MultiKernelBundle\Console\Input\ArgvInput;
-use Motana\Bundle\MultiKernelBundle\Console\Input\KernelArgument;
-use Motana\Bundle\MultiKernelBundle\Test\TestCase;
+use Motana\Bundle\MultikernelBundle\Console\Input\ArgvInput;
+use Motana\Bundle\MultikernelBundle\Console\Input\KernelArgument;
+use Motana\Bundle\MultikernelBundle\Test\TestCase;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\Console\Input\ArgvInput
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\Console\Input\ArgvInput
  */
 class ArgvInputTest extends TestCase
 {

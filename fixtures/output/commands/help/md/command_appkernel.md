@@ -4,7 +4,7 @@ Command "help"
 * Description: Displays help for a command
 * Usage:
 
-  * `bin/console bin/console app help [options] [--] [<command_name>]`
+  * `bin/console app help [options] [--] [<command_name>]`
 
 The `help` command displays help for a given command:
 

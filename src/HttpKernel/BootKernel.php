@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\HttpKernel;
+namespace Motana\Bundle\MultikernelBundle\HttpKernel;
 
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache;
@@ -17,8 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-use Motana\Bundle\MultiKernelBundle\DependencyInjection\Compiler\AddKernelsToCachePass;
-use Motana\Bundle\MultiKernelBundle\MotanaMultiKernelBundle;
+use Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\AddKernelsToCachePass;
+use Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle;
 
 /**
  * Abstract boot kernel base class for multi-kernel applications, which boots
@@ -121,11 +121,11 @@ abstract class BootKernel extends Kernel
 		
 		if ($kernel = $this->loadKernel($this->getKernelFromRequest($request))) {
 			return $kernel->handle(Request::createFromGlobals(), $type, $catch);
-		} elseif ($kernel = $this->loadKernel($this->getContainer()->getParameter('motana_multi_kernel.default'))) {
+		} elseif ($kernel = $this->loadKernel($this->getContainer()->getParameter('motana.multikernel.default'))) {
 			return $kernel->handle(Request::createFromGlobals(), $type, $catch);
 		}
 		
-		throw new NotFoundHttpException(sprintf('Unable to find the kernel for path "%s". The application is wrongly configured.', $request->getPathInfo()));
+		throw new NotFoundHttpException('Unable to load the default kernel. Did you forget to set the motana_multikernel.default in config.yml?');
 	}
 	
 	/**
@@ -160,7 +160,7 @@ abstract class BootKernel extends Kernel
 		$bundles = array();
 		
 		$bundles[] = new FrameworkBundle();
-		$bundles[] = new MotanaMultiKernelBundle();
+		$bundles[] = new MotanaMultikernelBundle();
 		
 		if (class_exists('Symfony\\Bundle\\WebServerBundle\\WebServerBundle')) {
 			$bundles[] = new \Symfony\Bundle\WebServerBundle\WebServerBundle();

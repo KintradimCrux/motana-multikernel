@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\Console\Input;
+namespace Motana\Bundle\MultikernelBundle\Console\Input;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;

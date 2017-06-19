@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\DependencyInjection\Compiler;
+namespace Tests\Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use Motana\Bundle\MultiKernelBundle\DependencyInjection\Compiler\ExcludeClassesFromCachePass;
-use Motana\Bundle\MultiKernelBundle\MotanaMultiKernelBundle;
-use Motana\Bundle\MultiKernelBundle\Test\KernelTestCase;
+use Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\ExcludeClassesFromCachePass;
+use Motana\Bundle\MultikernelBundle\MotanaMultiKernelBundle;
+use Motana\Bundle\MultikernelBundle\Test\KernelTestCase;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\DependencyInjection\Compiler\ExcludeClassesFromCachePass
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\ExcludeClassesFromCachePass
  */
 class ExcludeClassesFromCachePassTest extends KernelTestCase
 {

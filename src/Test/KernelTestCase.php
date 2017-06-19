@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\Test;
+namespace Motana\Bundle\MultikernelBundle\Test;
 
 use Symfony\Component\Finder\Finder;
 
-use Motana\Bundle\MultiKernelBundle\HttpKernel\Kernel;
-use Motana\Bundle\MultiKernelBundle\HttpKernel\BootKernel;
+use Motana\Bundle\MultikernelBundle\HttpKernel\Kernel;
+use Motana\Bundle\MultikernelBundle\HttpKernel\BootKernel;
 
 /**
  * Base class for tests requiring a kernel.

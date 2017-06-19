@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\Console\Descriptor;
+namespace Motana\Bundle\MultikernelBundle\Console\Descriptor;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -18,7 +18,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
-use Motana\Bundle\MultiKernelBundle\Console\MultiKernelApplication;
+use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
 
 /**
  * A replacement for the Symfony Standard Edition json descriptor.
@@ -75,23 +75,39 @@ class JsonDescriptor extends Descriptor
 		$describedNamespace = isset($options['namespace']) ? $options['namespace'] : null;
 		$description = new ApplicationDescription($application, $describedNamespace);
 		
-		if ($application instanceof MultiKernelApplication) {
+		if ($application instanceof MultikernelApplication) {
 			$kernels = array_keys($application->getKernel()->getKernels());
 		}
 		
-		$commands = array();
-		foreach ($description->getCommands() as $command) {
-			$commands[] = $this->getCommandData($command);
+		$commands = $description->getCommands();
+		
+		$namespaces = $description->getNamespaces();
+		
+		foreach ($namespaces as $namespaceIndex => $namespace) {
+			foreach ($namespace['commands'] as $commandIndex => $commandName) {
+				if ( ! isset($commands[$commandName])) {
+					unset($namespace['commands'][$commandIndex]);
+				}
+			}
+			
+			if (empty($namespace['commands'])) {
+				unset($namespaces[$namespaceIndex]);
+			}
 		}
 		
-		if ($application instanceof MultiKernelApplication) {
+		$commandData = array();
+		foreach ($description->getCommands() as $command) {
+			$commandData[] = $this->getCommandData($command, false);
+		}
+		
+		if ($application instanceof MultikernelApplication) {
 			$data = $describedNamespace
-				? array('kernels' => $kernels, 'commands' => $commands, 'namespace' => $describedNamespace)
-				: array('kernels' => $kernels, 'commands' => $commands, 'namespaces' => array_values($description->getNamespaces()));
+			? array('kernels' => $kernels, 'commands' => $commandData, 'namespace' => $describedNamespace)
+			: array('kernels' => $kernels, 'commands' => $commandData, 'namespaces' => array_values($namespaces));
 		} else {
 			$data = $describedNamespace
-				? array('commands' => $commands, 'namespace' => $describedNamespace)
-				: array('commands' => $commands, 'namespaces' => array_values($description->getNamespaces()));
+			? array('commands' => $commandData, 'namespace' => $describedNamespace)
+			: array('commands' => $commandData, 'namespaces' => array_values($namespaces));
 		}
 		
 		$this->writeData($data, $options);
@@ -168,9 +184,9 @@ class JsonDescriptor extends Descriptor
 	 * @param Command $command Command to describe
 	 * @return array
 	 */
-	private function getCommandData(Command $command)
+	private function getCommandData(Command $command, $addKernel = true)
 	{
-		$kernel = $command->getApplication() instanceof MultiKernelApplication ? null : $command->getApplication()->getKernel()->getName();
+		$kernel = $command->getApplication() instanceof MultikernelApplication ? null : $command->getApplication()->getKernel()->getName();
 		
 		$command->getSynopsis();
 		$command->mergeApplicationDefinition(false);
@@ -184,13 +200,20 @@ class JsonDescriptor extends Descriptor
 			$usages[] = $_SERVER['PHP_SELF'] . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage);
 		}
 		
-		return array(
+		$data = array(
 			'name' => $command->getName(),
 			'usage' => $usages,
 			'description' => $command->getDescription(),
 			'help' => $this->getProcessedHelp($command),
+			'kernels' => $command->getApplication() instanceof MultikernelApplication ? array_keys($command->getApplication()->getKernel()->getKernels()) : null,
 			'definition' => $this->getInputDefinitionData($command->getNativeDefinition()),
 		);
+		
+		if ( ! $command->getApplication() instanceof MultikernelApplication || ! $addKernel) {
+			unset($data['kernels']);
+		}
+		
+		return $data;
 	}
 	
 	/**

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\Console\Descriptor;
+namespace Motana\Bundle\MultikernelBundle\Console\Descriptor;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -20,7 +20,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
-use Motana\Bundle\MultiKernelBundle\Console\MultiKernelApplication;
+use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
 
 /**
  * A replacement for the Symfony Standard Edition text descriptor.
@@ -173,7 +173,7 @@ class TextDescriptor extends Descriptor
 	 */
 	protected function describeCommand(Command $command, array $options = array())
 	{
-		$kernel = $command->getApplication() instanceof MultiKernelApplication ? null : $command->getApplication()->getKernel()->getName();
+		$kernel = $command->getApplication() instanceof MultikernelApplication ? null : $command->getApplication()->getKernel()->getName();
 		
 		$command->getSynopsis(true);
 		$command->getSynopsis(false);
@@ -194,8 +194,17 @@ class TextDescriptor extends Descriptor
 			$this->writeText("\n");
 			$this->writeText('  '.$_SERVER['PHP_SELF'] . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage));
 		}
-		
+
 		$this->writeText("\n");
+		
+		if ($command->getApplication() instanceof MultikernelApplication) {
+			$this->writeText("\n");
+			$this->writeText("<comment>Kernels:</comment>\n");
+			foreach ($command->getApplication()->getKernel()->getKernels() as $kernel) {
+				$this->writeText('  '.$kernel->getName(), $options);
+				$this->writeText("\n");
+			}
+		}
 		
 		$definition = $command->getNativeDefinition();
 		if ($definition->getOptions() || $definition->getArguments()) {
@@ -223,29 +232,15 @@ class TextDescriptor extends Descriptor
 		$describedNamespace = isset($options['namespace']) ? $options['namespace'] : null;
 		$description = new ApplicationDescription($application, $describedNamespace);
 		
-		/*
-		if (isset($options['raw_text']) && $options['raw_text']) {
-			$width = $this->getColumnWidth($description->getCommands());
-			
-			foreach ($description->getCommands() as $command) {
-				$this->writeText(sprintf("%-{$width}s %s\n", $command->getName(), $command->getDescription()), $options);
-			}
-			
-			$this->writeText("\n");
-			
-			return;
-		}
-		*/
-		
 		if ('' !== $help = $application->getHelp()) {
 			$this->writeText($help."\n\n", $options);
 		}
 		
 		$this->writeText("<comment>Usage:</comment>\n", $options);
 		
-		$kernel = $application instanceof MultiKernelApplication ? null : $application->getKernel()->getName();
+		$kernel = $application instanceof MultikernelApplication ? null : $application->getKernel()->getName();
 		
-		if ($application instanceof MultiKernelApplication) {
+		if ($application instanceof MultikernelApplication) {
 			$this->writeText("  ".$_SERVER['PHP_SELF']."\n", $options);
 			$this->writeText("    <info>To display the list of kernels and commands available on all kernels</info>", $options);
 			$this->writeText("\n\n");
@@ -259,7 +254,7 @@ class TextDescriptor extends Descriptor
 		}
 		$this->writeText("\n\n");
 		
-		if ($application instanceof MultiKernelApplication) {
+		if ($application instanceof MultikernelApplication) {
 			$this->writeText("  ".$_SERVER['PHP_SELF']." <command> [options] [--] [arguments]\n", $options);
 			$this->writeText("    <info>To run a command for all kernels</info>", $options);
 			$this->writeText("\n\n");
@@ -273,7 +268,7 @@ class TextDescriptor extends Descriptor
 		}
 		$this->writeText("\n\n");
 	
-		if ($application instanceof MultiKernelApplication) {
+		if ($application instanceof MultikernelApplication) {
 			$this->writeText("<comment>Kernels:</comment>\n");
 			foreach ($application->getKernel()->getKernels() as $kernel) {
 				$this->writeText('  '.$kernel->getName(), $options);
@@ -297,7 +292,21 @@ class TextDescriptor extends Descriptor
 		}
 		
 		$commands = $description->getCommands();
-		foreach ($description->getNamespaces() as $namespace) {
+		
+		$namespaces = $description->getNamespaces();
+		foreach ($namespaces as $namespaceIndex => $namespace) {
+			foreach ($namespace['commands'] as $commandIndex => $commandName) {
+				if ( ! isset($commands[$commandName])) {
+					unset($namespace['commands'][$commandIndex]);
+				}
+			}
+			
+			if (empty($namespace['commands'])) {
+				unset($namespaces[$namespaceIndex]);
+			}
+		}
+		
+		foreach ($namespaces as $namespace) {
 			if ( ! $describedNamespace && ApplicationDescription::GLOBAL_NAMESPACE !== $namespace['id']) {
 				$this->writeText("\n\n");
 				$this->writeText(' <comment>'.$namespace['id'].'</comment>', $options);

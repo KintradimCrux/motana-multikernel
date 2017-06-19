@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\HttpKernel;
+namespace Tests\Motana\Bundle\MultikernelBundle\HttpKernel;
 
-use Motana\Bundle\MultiKernelBundle\HttpKernel\BootKernelRequest;
+use Motana\Bundle\MultikernelBundle\HttpKernel\BootKernelRequest;
 
-use Motana\Bundle\MultiKernelBundle\Test\TestCase;
+use Motana\Bundle\MultikernelBundle\Test\TestCase;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\HttpKernel\BootKernelRequest
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\HttpKernel\BootKernelRequest
  */
 class BootKernelRequestTest extends TestCase
 {

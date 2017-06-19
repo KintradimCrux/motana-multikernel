@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\Console\Output;
+namespace Tests\Motana\Bundle\MultikernelBundle\Console\Output;
 
 use Symfony\Component\HttpKernel\Kernel;
 
-use Motana\Bundle\MultiKernelBundle\Console\Output\BufferedOutput;
-use Motana\Bundle\MultiKernelBundle\Test\TestCase;
+use Motana\Bundle\MultikernelBundle\Console\Output\BufferedOutput;
+use Motana\Bundle\MultikernelBundle\Test\TestCase;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\Console\Output\BufferedOutput
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\Console\Output\BufferedOutput
  */
 class BufferedOutputTest extends TestCase
 {

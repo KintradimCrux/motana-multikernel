@@ -1,6 +1,6 @@
 <?php
 
-namespace Motana\Bundle\MultiKernelBundle\HttpKernel;
+namespace Motana\Bundle\MultikernelBundle\HttpKernel;
 
 use Symfony\Component\HttpFoundation\Request;
 

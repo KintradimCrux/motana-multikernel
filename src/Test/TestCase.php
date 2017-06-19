@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\Test;
+namespace Motana\Bundle\MultikernelBundle\Test;
 
 use Symfony\Component\Filesystem\Filesystem;
 

@@ -1,0 +1,38 @@
+Executing command on kernel boot...
+
+Available registered bundles with their extension alias if available
+====================================================================
+
+ ------------------------- -------------------- 
+  Bundle name               Extension alias     
+ ------------------------- -------------------- 
+  FrameworkBundle           framework           
+  MotanaMultikernelBundle   motana_multikernel  
+  WebServerBundle           web_server          
+ ------------------------- -------------------- 
+
+ // Provide the name of a bundle as the first argument of this command to dump its configuration. (e.g.                 
+ // debug:config FrameworkBundle)                                                                                       
+
+ // For dumping a specific option, add its path as the second argument of this command. (e.g. debug:config              
+ // FrameworkBundle serializer to dump the framework.serializer configuration)                                          
+
+Executing command on kernel app...
+
+Available registered bundles with their extension alias if available
+====================================================================
+
+ ------------------------- -------------------- 
+  Bundle name               Extension alias     
+ ------------------------- -------------------- 
+  FrameworkBundle           framework           
+  MotanaMultikernelBundle   motana_multikernel  
+  WebServerBundle           web_server          
+ ------------------------- -------------------- 
+
+ // Provide the name of a bundle as the first argument of this command to dump its configuration. (e.g.                 
+ // debug:config FrameworkBundle)                                                                                       
+
+ // For dumping a specific option, add its path as the second argument of this command. (e.g. debug:config              
+ // FrameworkBundle serializer to dump the framework.serializer configuration)                                          
+

@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\Command;
+namespace Tests\Motana\Bundle\MultikernelBundle\Command;
 
-use Motana\Bundle\MultiKernelBundle\Command\HelpCommand;
-use Motana\Bundle\MultiKernelBundle\Test\CommandTestCase;
+use Motana\Bundle\MultikernelBundle\Command\HelpCommand;
+use Motana\Bundle\MultikernelBundle\Test\CommandTestCase;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\Command\HelpCommand
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\Command\HelpCommand
  */
 class HelpCommandTest extends CommandTestCase
 {
@@ -64,7 +64,7 @@ class HelpCommandTest extends CommandTestCase
 	
 	/**
 	 * {@inheritDoc}
-	 * @see Motana\Bundle\MultiKernelBundle\Test\CommandTestCase::convertParametersToOptions()
+	 * @see Motana\Bundle\MultikernelBundle\Test\CommandTestCase::convertParametersToOptions()
 	 */
 	protected static function convertParametersToOptions(array $parameters = array())
 	{

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-class BrokenBootKernel extends Motana\Bundle\MultiKernelBundle\HttpKernel\BootKernel
+class BrokenBootKernel extends Motana\Bundle\MultikernelBundle\HttpKernel\BootKernel
 {
 	/**
 	 * {@inheritDoc}

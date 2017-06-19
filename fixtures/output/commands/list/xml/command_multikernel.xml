@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symfony name="Motana Multi-Kernel App Console - Symfony" version="[symfony-version]" kernel="boot">
+  <kernels>
+    <kernel>boot</kernel>
+    <kernel>app</kernel>
+  </kernels>
   <commands>
     <command id="about" name="about">
       <usages>
@@ -896,10 +900,10 @@
         </option>
       </options>
     </command>
-    <command id="multi-kernel:create-app" name="multi-kernel:create-app">
+    <command id="multikernel:create-app" name="multikernel:create-app">
       <usages>
-        <usage>bin/console multi-kernel:create-app [options]</usage>
-        <usage>bin/console &lt;kernel&gt; multi-kernel:create-app [options]</usage>
+        <usage>bin/console multikernel:create-app [options]</usage>
+        <usage>bin/console &lt;kernel&gt; multikernel:create-app [options]</usage>
       </usages>
       <description>Create a new app</description>
       <help>Create a new app</help>
@@ -1391,8 +1395,8 @@
       <command>lint:xliff</command>
       <command>lint:yaml</command>
     </namespace>
-    <namespace id="multi-kernel">
-      <command>multi-kernel:create-app</command>
+    <namespace id="multikernel">
+      <command>multikernel:create-app</command>
     </namespace>
     <namespace id="server">
       <command>server:log</command>

@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\Test;
+namespace Motana\Bundle\MultikernelBundle\Test;
 
-use Motana\Bundle\MultiKernelBundle\Console\Application;
-use Motana\Bundle\MultiKernelBundle\HttpKernel\BootKernel;
-use Motana\Bundle\MultiKernelBundle\Console\MultiKernelApplication;
+use Motana\Bundle\MultikernelBundle\Console\Application;
+use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
+use Motana\Bundle\MultikernelBundle\HttpKernel\BootKernel;
 
 /**
  * Base class for tests requiring an Application.
@@ -29,14 +29,14 @@ abstract class ApplicationTestCase extends KernelTestCase
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \Motana\Bundle\MultiKernelBundle\Test\KernelTestCase::setUp()
+	 * @see \Motana\Bundle\MultikernelBundle\Test\KernelTestCase::setUp()
 	 */
 	protected function setUp($type = 'working', $app = null, $environment = 'test', $debug = false)
 	{
 		parent::setUp($type, $app, $environment, $debug);
 		
 		if (self::$kernel instanceof BootKernel) {
-			self::$application = new MultiKernelApplication(self::$kernel);
+			self::$application = new MultikernelApplication(self::$kernel);
 		} else {
 			self::$application = new Application(self::$kernel);
 		}

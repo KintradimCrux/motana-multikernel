@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\Console\Descriptor;
+namespace Motana\Bundle\MultikernelBundle\Console\Descriptor;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -18,7 +18,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
-use Motana\Bundle\MultiKernelBundle\Console\MultiKernelApplication;
+use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
 
 /**
  * A replacement for the Symfony Standard Edition xml descriptor.
@@ -179,11 +179,12 @@ class XmlDescriptor extends Descriptor
 	 * Returns the DOM document for a Command instance.
 	 * 
 	 * @param Command $command Command to describe
+	 * @param boolean $addKernels Boolean indicating to add kernels
 	 * @return \DOMDocument
 	 */
-	private function getCommandDocument(Command $command)
+	private function getCommandDocument(Command $command, $addKernels = true)
 	{
-		$kernel = $command->getApplication() instanceof MultiKernelApplication ? null : $command->getApplication()->getKernel()->getName();
+		$kernel = $command->getApplication() instanceof MultikernelApplication ? null : $command->getApplication()->getKernel()->getName();
 		
 		$dom = new \DOMDocument('1.0', 'UTF-8');
 		
@@ -209,6 +210,13 @@ class XmlDescriptor extends Descriptor
 		$commandXML->appendChild($helpXML = $dom->createElement('help'));
 		$helpXML->appendChild($dom->createTextNode(str_replace("\n", "\n ", $this->getProcessedHelp($command))));
 		
+		if ( ! $kernel && $addKernels) {
+			$commandXML->appendChild($kernelsXML = $dom->createElement('kernels'));
+			foreach ($command->getApplication()->getKernel()->getKernels() as $kernelName => $kernel) {
+				$kernelsXML->appendChild($dom->createElement('kernel', $kernelName));
+			}
+		}
+		
 		$definitionXML = $this->getInputDefinitionDocument($command->getNativeDefinition());
 		$this->appendDocument($commandXML, $definitionXML->getElementsByTagName('definition')->item(0));
 		
@@ -224,6 +232,8 @@ class XmlDescriptor extends Descriptor
 	 */
 	private function getApplicationDocument(Application $application, $namespace = null)
 	{
+		$kernel = $application instanceof MultikernelApplication ? null : $application->getKernel()->getName();
+		
 		$dom = new \DOMDocument('1.0', 'UTF-8');
 		
 		$dom->appendChild($rootXml = $dom->createElement('symfony'));
@@ -236,6 +246,13 @@ class XmlDescriptor extends Descriptor
 			$rootXml->setAttribute('kernel', $application->getKernel()->getName());
 		}
 		
+		if ( ! $kernel) {
+			$rootXml->appendChild($kernelsXML = $dom->createElement('kernels'));
+			foreach ($application->getKernel()->getKernels() as $kernelName => $kernel) {
+				$kernelsXML->appendChild($dom->createElement('kernel', $kernelName));
+			}
+		}
+		
 		$rootXml->appendChild($commandsXML = $dom->createElement('commands'));
 		
 		$description = new ApplicationDescription($application, $namespace);
@@ -245,17 +262,32 @@ class XmlDescriptor extends Descriptor
 		}
 		
 		foreach ($description->getCommands() as $command) {
-			$this->appendDocument($commandsXML, $this->getCommandDocument($command));
+			$this->appendDocument($commandsXML, $this->getCommandDocument($command, false));
 		}
 		
 		if ( ! $namespace) {
 			$rootXml->appendChild($namespacesXML = $dom->createElement('namespaces'));
 			
-			foreach ($description->getNamespaces() as $namespaceDescription) {
-				$namespacesXML->appendChild($namespaceArrayXML = $dom->createElement('namespace'));
-				$namespaceArrayXML->setAttribute('id', $namespaceDescription['id']);
+			$commands = $description->getCommands();
+			
+			$namespaces = $description->getNamespaces();
+			foreach ($namespaces as $namespaceIndex => $namespace) {
+				foreach ($namespace['commands'] as $commandIndex => $commandName) {
+					if ( ! isset($commands[$commandName])) {
+						unset($namespace['commands'][$commandIndex]);
+					}
+				}
 				
-				foreach ($namespaceDescription['commands'] as $name) {
+				if (empty($namespace['commands'])) {
+					unset($namespaces[$namespaceIndex]);
+				}
+			}
+			
+			foreach ($namespaces as $namespace) {
+				$namespacesXML->appendChild($namespaceArrayXML = $dom->createElement('namespace'));
+				$namespaceArrayXML->setAttribute('id', $namespace['id']);
+				
+				foreach ($namespace['commands'] as $name) {
 					$namespaceArrayXML->appendChild($commandXML = $dom->createElement('command'));
 					$commandXML->appendChild($dom->createTextNode($name));
 				}

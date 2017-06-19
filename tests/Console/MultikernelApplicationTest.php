@@ -9,31 +9,31 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\Console;
+namespace Tests\Motana\Bundle\MultikernelBundle\Console;
 
 use Symfony\Bundle\FrameworkBundle\Command\YamlLintCommand;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
-use Motana\Bundle\MultiKernelBundle\Command\HelpCommand;
-use Motana\Bundle\MultiKernelBundle\Command\ListCommand;
-use Motana\Bundle\MultiKernelBundle\Command\MultiKernelCommand;
-use Motana\Bundle\MultiKernelBundle\Command\MultiKernelCreateAppCommand;
-use Motana\Bundle\MultiKernelBundle\Console\Application;
-use Motana\Bundle\MultiKernelBundle\Console\MultiKernelApplication;
-use Motana\Bundle\MultiKernelBundle\Console\Input\ArgvInput;
-use Motana\Bundle\MultiKernelBundle\Console\Input\KernelArgument;
-use Motana\Bundle\MultiKernelBundle\Test\ApplicationTestCase;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\StringInput;
+use Motana\Bundle\MultikernelBundle\Command\HelpCommand;
+use Motana\Bundle\MultikernelBundle\Command\ListCommand;
+use Motana\Bundle\MultikernelBundle\Command\MultikernelCommand;
+use Motana\Bundle\MultikernelBundle\Command\MultikernelCreateAppCommand;
+use Motana\Bundle\MultikernelBundle\Console\Application;
+use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
+use Motana\Bundle\MultikernelBundle\Console\Input\ArgvInput;
+use Motana\Bundle\MultikernelBundle\Console\Input\KernelArgument;
+use Motana\Bundle\MultikernelBundle\Test\ApplicationTestCase;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\Console\MultiKernelApplication
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\Console\MultiKernelApplication
  */
-class MultiKernelApplicationTest extends ApplicationTestCase
+class MultikernelApplicationTest extends ApplicationTestCase
 {
 	/**
 	 * {@inheritDoc}
@@ -174,7 +174,86 @@ class MultiKernelApplicationTest extends ApplicationTestCase
 	}
 	
 	/**
+	 * @covers ::getApplicationCommands()
+	 */
+	public function testGetApplicationCommands()
+	{
+		$expected = array(
+			'about' => 'boot:app',
+			'help' => 'boot:app',
+			'list' => 'boot:app',
+
+			'assets:install' => 'boot:app',
+			
+			'cache:clear' => 'boot:app',
+			'cache:pool:clear' => 'boot:app',
+			'cache:warmup' => 'boot:app',
+			
+			'config:dump-reference' => 'boot:app',
+			
+			'debug:config' => 'boot:app',
+			'debug:container' => 'boot:app',
+			'debug:event-dispatcher' => 'boot:app',
+			'debug:translation' => 'boot:app',
+			
+			'multikernel:create-app' => 'boot',
+			
+			'translation:update' => 'boot:app',
+		);
+		
+		$application = $this->callMethod(self::$application, 'getApplication', 'boot');
+		$application->add($application->get('help')->setAliases(array('help:help')));
+		
+		$map = array_map(function($a) {
+			return implode(':', array_keys($a));
+		}, $this->callMethod(self::$application, 'getApplicationCommands'));
+		
+		$this->assertEquals($expected, $map);
+	}
+	
+	/**
+	 * @covers ::hideCommands()
+	 */
+	public function testHideCommands()
+	{
+		$commands = array(
+			'boot' => new HelpCommand(),
+			'app' => new HelpCommand(),
+		);
+		
+		$this->callMethod(self::$application, 'hideCommands', $commands);
+		
+		foreach ($commands as $command) {
+			$this->assertTrue($command->isHidden());
+		}
+	}
+	
+	/**
+	 * @covers ::hideCommands()
+	 * @depends testHideCommands
+	 */
+	public function testHideCommandsWithName()
+	{
+		$commands = array(
+			'boot' => new HelpCommand(),
+			'app' => new HelpCommand(),
+		);
+		
+		$globalCommand = self::$application->get('help');
+		
+		$this->callMethod(self::$application, 'hideCommands', $commands, 'help');
+		
+		foreach ($commands as $command) {
+			$this->assertTrue($command->isHidden());
+		}
+		
+		$this->assertTrue($globalCommand->isHidden());
+	}
+	
+	/**
 	 * @covers ::registerCommands()
+	 * @depends testGetApplicationCommands
+	 * @depends testHideCommandsWithName
 	 */
 	public function testRegisterCommands()
 	{
@@ -186,6 +265,36 @@ class MultiKernelApplicationTest extends ApplicationTestCase
 		
 		// Check the list command is an instance of the correct class
 		$this->assertInstanceOf(ListCommand::class, self::$application->find('list'));
+	}
+	
+	/**
+	 * @covers ::registerCommands()
+	 * @depends testRegisterCommands
+	 * @expectedException Symfony\Component\Console\Exception\CommandNotFoundException
+	 * @expectedExceptionMessage The command "debug:config" does not exist.
+	 */
+	public function testRegisterCommandsHidesCommands()
+	{
+		$container = self::$application->getKernel()->getContainer();
+		
+		$parameters = array_merge($this->getObjectAttribute($container, 'parameters'), array(
+			'motana.multikernel.commands.hidden' => array(
+				'help',
+				'list',
+				'debug:config',
+			),
+		));
+		$this->writeAttribute($container, 'parameters', $parameters);
+		
+		$this->writeAttribute(self::$application, 'commandsRegistered', false);
+		$this->callMethod(self::$application, 'registerCommands');
+		
+		// Check that the help and list commands are available
+		self::$application->get('help');
+		self::$application->get('list');
+		
+		// Check that the debug:config command is hidden
+		self::$application->get('debug:config');
 	}
 	
 	/**
@@ -220,7 +329,7 @@ class MultiKernelApplicationTest extends ApplicationTestCase
 			array(MultiKernelCommand::class, 'translation:update'),
 			
 			// Multi-kernel bundle commands
-			array(MultiKernelCreateAppCommand::class, 'multi-kernel:create-app'),
+			array(MultiKernelCreateAppCommand::class, 'multikernel:create-app'),
 		);
 	}
 	
@@ -269,7 +378,7 @@ class MultiKernelApplicationTest extends ApplicationTestCase
 	 * @covers ::doRun()
 	 * @depends testGetDefaultInputDefinition
 	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage A MultiKernelApplication requires a Motana\Bundle\MultiKernelBundle\Console\Input\ArgvInput to work
+	 * @expectedExceptionMessage A MultikernelApplication requires a Motana\Bundle\MultikernelBundle\Console\Input\ArgvInput to work
 	 */
 	public function testDoRunChecksInputType()
 	{
@@ -278,6 +387,7 @@ class MultiKernelApplicationTest extends ApplicationTestCase
 
 	/**
 	 * @covers ::doRun()
+	 * @covers ::doRunSingleKernel()
 	 * @depends testDoRunChecksInputType
 	 */
 	public function testDoRunSingleKernel()
@@ -295,6 +405,7 @@ class MultiKernelApplicationTest extends ApplicationTestCase
 
 	/**
 	 * @covers ::doRun()
+	 * @covers ::doRunMultiKernel()
 	 * @depends testDoRunSingleKernel
 	 */
 	public function testDoRunMultiKernel()

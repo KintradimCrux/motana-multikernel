@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\Console\Descriptor;
+namespace Motana\Bundle\MultikernelBundle\Console\Descriptor;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Descriptor\Descriptor as BaseDescriptor;

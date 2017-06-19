@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\DependencyInjection\Compiler;
+namespace Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -30,8 +30,8 @@ class ExcludeClassesFromCachePass implements CompilerPassInterface
 	{
 		if ($container->hasDefinition('kernel.class_cache.cache_warmer')){
 			$definition = $container->getDefinition('kernel.class_cache.cache_warmer');
-			if ($container->hasParameter('motana_multi_kernel.class_cache.exclude')) {
-				$classes = array_merge($definition->getArgument(0), $container->getParameter('motana_multi_kernel.class_cache.exclude'));
+			if ($container->hasParameter('motana.multikernel.class_cache.exclude')) {
+				$classes = array_merge($definition->getArgument(0), $container->getParameter('motana.multikernel.class_cache.exclude'));
 				
 				sort($classes);
 				

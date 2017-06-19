@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\Console\Helper;
+namespace Motana\Bundle\MultikernelBundle\Console\Helper;
 
 use Symfony\Component\Console\Descriptor\DescriptorInterface;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Motana\Bundle\MultiKernelBundle\Console\Descriptor\JsonDescriptor;
-use Motana\Bundle\MultiKernelBundle\Console\Descriptor\MarkdownDescriptor;
-use Motana\Bundle\MultiKernelBundle\Console\Descriptor\TextDescriptor;
-use Motana\Bundle\MultiKernelBundle\Console\Descriptor\XmlDescriptor;
+use Motana\Bundle\MultikernelBundle\Console\Descriptor\JsonDescriptor;
+use Motana\Bundle\MultikernelBundle\Console\Descriptor\MarkdownDescriptor;
+use Motana\Bundle\MultikernelBundle\Console\Descriptor\TextDescriptor;
+use Motana\Bundle\MultikernelBundle\Console\Descriptor\XmlDescriptor;
 
 /**
  * A replacement for the Symfony Standard Edition descriptor helper.

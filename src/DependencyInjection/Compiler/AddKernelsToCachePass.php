@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\DependencyInjection\Compiler;
+namespace Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
-use Motana\Bundle\MultiKernelBundle\HttpKernel\BootKernel;
+use Motana\Bundle\MultikernelBundle\HttpKernel\BootKernel;
 
 /**
  * Add kernel data for the BootKernel to cache.

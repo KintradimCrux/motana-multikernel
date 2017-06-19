@@ -9,22 +9,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\Console\Helper;
+namespace Tests\Motana\Bundle\MultikernelBundle\Console\Helper;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-use Motana\Bundle\MultiKernelBundle\Console\Helper\DescriptorHelper;
-use Motana\Bundle\MultiKernelBundle\Console\Descriptor\JsonDescriptor;
-use Motana\Bundle\MultiKernelBundle\Console\Descriptor\MarkdownDescriptor;
-use Motana\Bundle\MultiKernelBundle\Console\Descriptor\TextDescriptor;
-use Motana\Bundle\MultiKernelBundle\Console\Descriptor\XmlDescriptor;
-use Motana\Bundle\MultiKernelBundle\Console\Output\BufferedOutput;
-use Motana\Bundle\MultiKernelBundle\Test\ApplicationTestCase;
+use Motana\Bundle\MultikernelBundle\Console\Helper\DescriptorHelper;
+use Motana\Bundle\MultikernelBundle\Console\Descriptor\JsonDescriptor;
+use Motana\Bundle\MultikernelBundle\Console\Descriptor\MarkdownDescriptor;
+use Motana\Bundle\MultikernelBundle\Console\Descriptor\TextDescriptor;
+use Motana\Bundle\MultikernelBundle\Console\Descriptor\XmlDescriptor;
+use Motana\Bundle\MultikernelBundle\Console\Output\BufferedOutput;
+use Motana\Bundle\MultikernelBundle\Test\ApplicationTestCase;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\Console\Helper\DescriptorHelper
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\Console\Helper\DescriptorHelper
  */
 class DescriptorHelperTest extends ApplicationTestCase
 {
@@ -45,7 +45,7 @@ class DescriptorHelperTest extends ApplicationTestCase
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \Motana\Bundle\MultiKernelBundle\Test\ApplicationTestCase::setUp()
+	 * @see \Motana\Bundle\MultikernelBundle\Test\ApplicationTestCase::setUp()
 	 */
 	protected function setUp($type = null, $app = null, $environment = 'test', $debug = false)
 	{
@@ -234,16 +234,7 @@ EOH
 	/**
 	 * Returns the expected output for each of the tests.
 	 *
-	 * @param string $case Case:
-	 * - argument
-	 * - argument_with_default
-	 * - option
-	 * - option_with_default
-	 * - definition
-	 * - command_multikernel
-	 * - command_appkernel
-	 * - application_multikernel
-	 * - application_appkernel
+	 * @param string $case Template base name
 	 * @param array $options Display options
 	 * @param string $format Output format
 	 * @return string

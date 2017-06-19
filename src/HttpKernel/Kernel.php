@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\HttpKernel;
+namespace Motana\Bundle\MultikernelBundle\HttpKernel;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
@@ -89,9 +89,7 @@ abstract class Kernel extends BaseKernel
 	 */
 	public function registerContainerConfiguration(LoaderInterface $loader)
 	{
-		if (is_file($file = $this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml')) {
-			$loader->load($file);
-		}
+		$loader->load($this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml');
 	}
 	
 	// }}}

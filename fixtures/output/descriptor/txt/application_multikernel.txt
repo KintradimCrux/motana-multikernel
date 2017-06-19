@@ -54,8 +54,8 @@ Commands:
   lint:xliff                   Lints a XLIFF file and outputs encountered errors
   lint:yaml                    Lints a file and outputs encountered errors
 
- multi-kernel
-  multi-kernel:create-app      Create a new app
+ multikernel
+  multikernel:create-app       Create a new app
 
  server
   server:log                   Starts a log server that displays logs in real time

@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\Console\Descriptor;
+namespace Tests\Motana\Bundle\MultikernelBundle\Console\Descriptor;
 
-use Motana\Bundle\MultiKernelBundle\Console\Descriptor\Descriptor;
-use Motana\Bundle\MultiKernelBundle\Test\TestCase;
+use Motana\Bundle\MultikernelBundle\Console\Descriptor\Descriptor;
+use Motana\Bundle\MultikernelBundle\Test\TestCase;
 use Symfony\Component\Console\Command\Command;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\Console\Descriptor\Descriptor
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\Console\Descriptor\Descriptor
  */
 class DescriptorTest extends TestCase
 {

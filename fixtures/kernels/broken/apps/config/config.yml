@@ -4,8 +4,8 @@ imports:
 # Put parameters here that don't need to change for each app
 
 framework:
-    secret: "%secret%"
+    secret: "%kernel.secret%"
 
 # Motana framework configuration
-motana_multi_kernel:
-    default: "%kernel%"
+motana_multikernel:
+    default: "%kernel.default%"

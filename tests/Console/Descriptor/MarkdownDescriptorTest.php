@@ -9,18 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\Console\Descriptor;
+namespace Tests\Motana\Bundle\MultikernelBundle\Console\Descriptor;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-use Motana\Bundle\MultiKernelBundle\Console\Descriptor\MarkdownDescriptor;
-use Motana\Bundle\MultiKernelBundle\Console\Output\BufferedOutput;
-use Motana\Bundle\MultiKernelBundle\Test\ApplicationTestCase;
+use Motana\Bundle\MultikernelBundle\Console\Descriptor\MarkdownDescriptor;
+use Motana\Bundle\MultikernelBundle\Console\Output\BufferedOutput;
+use Motana\Bundle\MultikernelBundle\Test\ApplicationTestCase;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\Console\Descriptor\MarkdownDescriptor
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\Console\Descriptor\MarkdownDescriptor
  */
 class MarkdownDescriptorTest extends ApplicationTestCase
 {
@@ -41,7 +41,7 @@ class MarkdownDescriptorTest extends ApplicationTestCase
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \Motana\Bundle\MultiKernelBundle\Test\ApplicationTestCase::setUp()
+	 * @see \Motana\Bundle\MultikernelBundle\Test\ApplicationTestCase::setUp()
 	 */
 	protected function setUp($type = null, $app = null, $environment = 'test', $debug = false)
 	{
@@ -219,6 +219,23 @@ EOH
 	}
 	
 	/**
+	 * @covers ::describeApplication()
+	 * @depends testDescribeApplication
+	 */
+	public function testDescribeApplicationRemovesAliasesAndEmptyNamespaces()
+	{
+		$_SERVER['PHP_SELF'] = 'bin/console';
+		
+		$this->setUp('working', 'app');
+		
+		self::$application->add(self::$application->get('help')->setAliases(array('help:help')));
+		
+		self::$descriptor->describe(self::$output, self::$application, array());
+		
+		$this->assertEquals($this->getTemplate('application_appkernel', array('alias' => 'help')), self::$output->fetch());
+	}
+	
+	/**
 	 * @covers ::describe()
 	 * @depends testDescribeApplication
 	 * @expectedException Symfony\Component\Console\Exception\InvalidArgumentException
@@ -232,18 +249,7 @@ EOH
 	/**
 	 * Returns the expected output for each of the tests.
 	 *
-	 * @param string $case Case:
-	 * - description
-	 * - help
-	 * - argument
-	 * - argument_with_default
-	 * - option
-	 * - option_with_default
-	 * - definition
-	 * - command_multikernel
-	 * - command_appkernel
-	 * - application_multikernel
-	 * - application_appkernel
+	 * @param string $case Template base name
 	 * @param array $options Display options
 	 * @param string $format Output format (default: md)
 	 * @return string

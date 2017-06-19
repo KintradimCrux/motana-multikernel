@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\HttpKernel;
+namespace Tests\Motana\Bundle\MultikernelBundle\HttpKernel;
 
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -17,20 +17,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-use Motana\Bundle\MultiKernelBundle\DependencyInjection\Compiler\AddKernelsToCachePass;
-use Motana\Bundle\MultiKernelBundle\HttpKernel\BootKernel;
-use Motana\Bundle\MultiKernelBundle\HttpKernel\BootKernelRequest;
-use Motana\Bundle\MultiKernelBundle\MotanaMultiKernelBundle;
-use Motana\Bundle\MultiKernelBundle\Test\KernelTestCase;
+use Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\AddKernelsToCachePass;
+use Motana\Bundle\MultikernelBundle\HttpKernel\BootKernel;
+use Motana\Bundle\MultikernelBundle\HttpKernel\BootKernelRequest;
+use Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle;
+use Motana\Bundle\MultikernelBundle\Test\KernelTestCase;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\HttpKernel\BootKernel
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\HttpKernel\BootKernel
  */
 class BootKernelTest extends KernelTestCase
 {
 	/**
 	 * {@inheritDoc}
-	 * @see \Motana\Bundle\MultiKernelBundle\Test\KernelTestCase::setUp()
+	 * @see \Motana\Bundle\MultikernelBundle\Test\KernelTestCase::setUp()
 	 */
 	protected function setUp($type = 'working', $app = null, $environment = 'test', $debug = false)
 	{
@@ -103,7 +103,7 @@ class BootKernelTest extends KernelTestCase
 		
 		// Check the returned bundles are instances of the correct classes
 		$this->assertEquals(FrameworkBundle::class, get_class($bundles[0]));
-		$this->assertEquals(MotanaMultiKernelBundle::class, get_class($bundles[1]));
+		$this->assertEquals(MotanaMultikernelBundle::class, get_class($bundles[1]));
 		
 		if (class_exists('Symfony\\Bundle\\WebServerBundle\\WebServerBundle')) {
 			$this->assertEquals('Symfony\\Bundle\\WebServerBundle\\WebServerBundle', get_class($bundles[2]));
@@ -563,7 +563,7 @@ class BootKernelTest extends KernelTestCase
 	/**
 	 * @covers ::handle()
 	 * @expectedException Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-	 * @expectedExceptionMessage Unable to find the kernel for path "/foobar/controller/action". The application is wrongly configured.
+	 * @expectedExceptionMessage Unable to load the default kernel. Did you forget to set the motana_multikernel.default in config.yml?
 	 */
 	public function testHandleNoDefaultKernel()
 	{
@@ -571,7 +571,7 @@ class BootKernelTest extends KernelTestCase
 		$container = self::$kernel->getContainer();
 		
 		$parameters = array_merge($this->getObjectAttribute($container, 'parameters'), array(
-			'motana_multi_kernel.default' => 'invalid',
+			'motana.multikernel.default' => 'invalid',
 		));
 		$this->writeAttribute($container, 'parameters', $parameters);
 		

@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\Command;
+namespace Motana\Bundle\MultikernelBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\HelpCommand as SymfonyHelpCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Motana\Bundle\MultiKernelBundle\Console\Helper\DescriptorHelper;
+use Motana\Bundle\MultikernelBundle\Console\Helper\DescriptorHelper;
 
 /**
  * A replacement for the Symfony Standard Edition help command.

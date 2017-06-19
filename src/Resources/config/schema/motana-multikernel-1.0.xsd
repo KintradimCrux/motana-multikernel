@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://symfony.com/schema/dic/motana-multikernel"
+ 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://symfony.com/schema/dic/motana-multikernel"
+	elementFormDefault="qualified">
+
+	<xsd:element name="config" type="config"/>
+
+	<xsd:complexType name="config">
+		<xsd:sequence>
+			<xsd:element name="class-cache" type="class_cache" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="commands" type="commands" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+		<xsd:attribute name="default" type="xsd:string"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="class_cache">
+		<xsd:sequence>
+			<xsd:element name="exclude" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="commands">
+		<xsd:sequence>
+			<xsd:element name="add" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="global" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="hidden" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+</xsd:schema>

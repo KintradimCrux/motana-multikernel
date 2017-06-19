@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\Test;
+namespace Motana\Bundle\MultikernelBundle\Test;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 
-use Motana\Bundle\MultiKernelBundle\Console\Output\BufferedOutput;
+use Motana\Bundle\MultikernelBundle\Console\Output\BufferedOutput;
 
 /**
  * Abstract base class for testing console commands.
@@ -62,7 +62,7 @@ abstract class CommandTestCase extends ApplicationTestCase
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \Motana\Bundle\MultiKernelBundle\Test\ApplicationTestCase::setUp()
+	 * @see \Motana\Bundle\MultikernelBundle\Test\ApplicationTestCase::setUp()
 	 */
 	protected function setUp($type = null, $app = null, $environment = 'test', $debug = false)
 	{
@@ -97,14 +97,18 @@ abstract class CommandTestCase extends ApplicationTestCase
 		
 		$this->setUp($type, $app);
 		
-		$input = new ArrayInput(array_merge(array('command' => $this->commandName), $this->commandParameters, $parameters));
+		$format = isset($parameters['--format']) ? $parameters['--format'] : 'txt';
+		
+		$parameters = array_merge(array('command' => $this->commandName), $this->commandParameters, $parameters);
+		
+		$input = new ArrayInput($this->filterCommandParameters($parameters));
 		$input->bind(self::$command->getDefinition());
 		
 		$this->callMethod(self::$command, 'execute', $input, self::$output);
 		
 		$options = $this->convertParametersToOptions($parameters);
 		
-		$this->assertEquals($this->getTemplate($template, $options, $parameters['--format'], $this->commandName), self::$output->fetch());
+		$this->assertEquals($this->getTemplate($template, $options, $format, $this->commandName), self::$output->fetch());
 	}
 	
 	/**
@@ -119,11 +123,20 @@ abstract class CommandTestCase extends ApplicationTestCase
 	}
 	
 	/**
+	 * Filters input command parameters before binding input.
+	 * 
+	 * @param array $parameters Parameters to filter
+	 * @return unknown
+	 */
+	protected static function filterCommandParameters(array $parameters = array())
+	{
+		return $parameters;
+	}
+	
+	/**
 	 * Returns the expected output for each of the tests.
 	 *
-	 * @param string $case Case:
-	 * - command_multikernel
-	 * - command_appkernel
+	 * @param string $case Template base name
 	 * @param array $options Display options
 	 * @param string $format Output format
 	 * @param string $commandName Command name
@@ -133,7 +146,7 @@ abstract class CommandTestCase extends ApplicationTestCase
 	{
 		$case .= ! empty($options) ? '_' . implode('_', array_keys($options)) : '';
 		
-		if (is_file($file = self::$fixturesDir . '/output/commands/' . $commandName . '/' . $format . '/' . $case . '.' . $format)) {
+		if (is_file($file = self::$fixturesDir . '/output/commands/' . str_replace(':', '_', $commandName) . '/' . $format . '/' . $case . '.' . $format)) {
 			return file_get_contents($file);
 		}
 		
@@ -141,7 +154,10 @@ abstract class CommandTestCase extends ApplicationTestCase
 		
 		$output = clone(self::$output);
 		$content = $output->fetch();
-		file_put_contents($file, $content);
+		
+		if ( ! empty($content)) {
+			file_put_contents($file, $content);
+		}
 		
 		return $content;
 	}

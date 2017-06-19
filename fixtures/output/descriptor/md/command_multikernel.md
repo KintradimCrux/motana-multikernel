@@ -4,8 +4,8 @@ Command "help"
 * Description: Displays help for a command
 * Usage:
 
-  * `bin/console bin/console help [options] [--] [<command_name>]`
-  * `bin/console bin/console <kernel> help [options] [--] [<command_name>]`
+  * `bin/console help [options] [--] [<command_name>]`
+  * `bin/console <kernel> help [options] [--] [<command_name>]`
 
 The `help` command displays help for a given command:
 
@@ -16,6 +16,12 @@ You can also output the help in other formats by using the --format option:
   `bin/console help --format=xml list`
 
 To display the list of available commands, please use the `list` command.
+
+
+### Kernels:
+
+* boot
+* app
 
 ### Arguments:
 

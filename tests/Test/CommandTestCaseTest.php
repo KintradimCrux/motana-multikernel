@@ -9,17 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\Test;
+namespace Tests\Motana\Bundle\MultikernelBundle\Test;
 
-use Tests\Motana\Bundle\MultiKernelBundle\Command\HelpCommandTest;
+use Tests\Motana\Bundle\MultikernelBundle\Command\HelpCommandTest;
 
-use Motana\Bundle\MultiKernelBundle\Console\Application;
-use Motana\Bundle\MultiKernelBundle\Console\MultiKernelApplication;
-use Motana\Bundle\MultiKernelBundle\Test\ApplicationTestCase;
-use Motana\Bundle\MultiKernelBundle\Test\CommandTestCase;
+use Motana\Bundle\MultikernelBundle\Console\Application;
+use Motana\Bundle\MultikernelBundle\Console\MultiKernelApplication;
+use Motana\Bundle\MultikernelBundle\Test\ApplicationTestCase;
+use Motana\Bundle\MultikernelBundle\Test\CommandTestCase;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\Test\CommandTestCase
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\Test\CommandTestCase
  */
 class CommandTestCaseTest extends ApplicationTestCase
 {
@@ -30,7 +30,7 @@ class CommandTestCaseTest extends ApplicationTestCase
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \Motana\Bundle\MultiKernelBundle\Test\ApplicationTestCase::setUp()
+	 * @see \Motana\Bundle\MultikernelBundle\Test\ApplicationTestCase::setUp()
 	 */
 	protected function setUp($type = null, $app = null, $environment = 'test', $debug = false)
 	{
@@ -112,6 +112,21 @@ class CommandTestCaseTest extends ApplicationTestCase
 		)));
 	}
 	
+	public function testFilterCommandParameters()
+	{
+		$this->assertEquals(array(
+			'command' => 'help',
+			'command_name' => 'help',
+			'--format' => 'txt',
+			'--raw' => true,
+		), $this->callStaticMethod(CommandTestCase::class, 'filterCommandParameters', array(
+			'command' => 'help',
+			'command_name' => 'help',
+			'--format' => 'txt',
+			'--raw' => true,
+		)));
+	}
+	
 	/**
 	 * Data provider for testGetTemplate().
 	 * 
@@ -163,6 +178,26 @@ class CommandTestCaseTest extends ApplicationTestCase
 		$this->assertEquals($this->getTemplate($case, $options, $format, $commandName), $template);
 		
 		$this->assertEquals('some content', file_get_contents($file = self::$fixturesDir . '/output/commands/invalid/' . $format . '/' . $case . '.' . $format));
+		
+		self::getFs()->remove(dirname(dirname($file)));
+	}
+	
+	/**
+	 * @covers ::getTemplate()
+	 */
+	public function testGetTemplateSavesNoEmptyFile()
+	{
+		$output = $this->getStaticAttribute(CommandTestCase::class, 'output');
+		$output->fetch();
+		
+		$case = 'command_multikernel_quiet';
+		$options = array();
+		$format = 'txt';
+		$commandName = 'invalid';
+		
+		$template = $this->callStaticMethod(CommandTestCase::class, 'getTemplate', $case, $options, $format, $commandName);
+		
+		$this->assertFalse(is_file($file = self::$fixturesDir . '/output/commands/invalid/' . $format . '/' . $case . '.' . $format));
 		
 		self::getFs()->remove(dirname(dirname($file)));
 	}

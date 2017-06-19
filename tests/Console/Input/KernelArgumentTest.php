@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\Console\Input;
+namespace Tests\Motana\Bundle\MultikernelBundle\Console\Input;
 
 use Symfony\Component\Console\Input\InputArgument;
 
-use Motana\Bundle\MultiKernelBundle\Console\Input\KernelArgument;
-use Motana\Bundle\MultiKernelBundle\Test\TestCase;
+use Motana\Bundle\MultikernelBundle\Console\Input\KernelArgument;
+use Motana\Bundle\MultikernelBundle\Test\TestCase;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\Console\Input\KernelArgument
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\Console\Input\KernelArgument
  */
 class KernelArgumentTest extends TestCase
 {

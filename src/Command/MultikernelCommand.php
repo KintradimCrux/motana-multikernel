@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Motana\Bundle\MultiKernelBundle\Command;
+namespace Motana\Bundle\MultikernelBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command;
 
 /**
  * A multi-kernel command executes a command on the application instances
@@ -25,7 +25,7 @@ use Symfony\Component\Console\Command\Command;
  *
  * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
-class MultiKernelCommand extends ContainerAwareCommand
+class MultikernelCommand extends ContainerAwareCommand
 {
 	// {{{ Properties
 	
@@ -61,9 +61,12 @@ class MultiKernelCommand extends ContainerAwareCommand
 	 */
 	public function isEnabled()
 	{
-		return in_array(true, array_map(function(Command $c){
-			return $c->isEnabled();
-		}, $this->commands));
+		return in_array(true, array_map(
+			function(Command $c) {
+				return $c->isEnabled();
+			},
+			$this->commands
+		));
 	}
 	
 	/**
@@ -72,9 +75,12 @@ class MultiKernelCommand extends ContainerAwareCommand
 	 */
 	public function isHidden()
 	{
-		return ! in_array(false, array_map(function(Command $c){
-			return $c->isHidden();
-		}, $this->commands));
+		return ! in_array(false, array_map(
+			function(Command $c) {
+				return $c->isHidden();
+			},
+			$this->commands
+		));
 	}
 	
 	/**
@@ -86,7 +92,7 @@ class MultiKernelCommand extends ContainerAwareCommand
 		$command = reset($this->commands);
 		/** @var Command $command */
 		
-		$this->setAliases($command->getAliases())
+		$this->setAliases((array) $command->getAliases())
 		->setDefinition(clone($command->getNativeDefinition()))
 		->setDescription($command->getDescription())
 		->setHelp($command->getHelp());
@@ -104,7 +110,7 @@ class MultiKernelCommand extends ContainerAwareCommand
 	{
 		foreach ($this->commands as $kernelName => $command) {
 			if ( ! $command->isEnabled()) {
-				if (OutputInterface::VERBOSITY_VERBOSE) {
+				if (in_array($output->getVerbosity(), [OutputInterface::VERBOSITY_VERBOSE, OutputInterface::VERBOSITY_VERY_VERBOSE, OutputInterface::VERBOSITY_DEBUG])) {
 					$output->writeln(sprintf('Skipping command on kernel <comment>%s</comment> (command disabled)', $kernelName));
 				}
 				
@@ -124,9 +130,7 @@ class MultiKernelCommand extends ContainerAwareCommand
 				}
 			}
 			
-			if ('boot' !== $kernelName) {
-				$command->getApplication()->getKernel()->shutdown();
-			}
+			$command->getApplication()->getKernel()->shutdown();
 		}
 	}
 	

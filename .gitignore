@@ -2,6 +2,8 @@
 /apps/
 /bin/
 /coverage/
+/fixtures/kernels/broken/var/
+/fixtures/kernels/working/var/
 /var/
 /vendor/
 composer.lock

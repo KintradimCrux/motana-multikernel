@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultiKernelBundle\Test;
+namespace Tests\Motana\Bundle\MultikernelBundle\Test;
 
-use Motana\Bundle\MultiKernelBundle\Console\MultiKernelApplication;
-use Motana\Bundle\MultiKernelBundle\Console\Application;
-use Motana\Bundle\MultiKernelBundle\Test\ApplicationTestCase;
-use Motana\Bundle\MultiKernelBundle\Test\KernelTestCase;
+use Motana\Bundle\MultikernelBundle\Console\MultiKernelApplication;
+use Motana\Bundle\MultikernelBundle\Console\Application;
+use Motana\Bundle\MultikernelBundle\Test\ApplicationTestCase;
+use Motana\Bundle\MultikernelBundle\Test\KernelTestCase;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultiKernelBundle\Test\ApplicationTestCase
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\Test\ApplicationTestCase
  */
 class ApplicationTestCaseTest extends KernelTestCase
 {
