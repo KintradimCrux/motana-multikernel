@@ -19,7 +19,7 @@ use Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\ExcludeClassesF
 
 /**
  * Bundle.
- * 
+ *
  * @author torr
  */
 class MotanaMultikernelBundle extends Bundle
@@ -32,6 +32,8 @@ class MotanaMultikernelBundle extends Bundle
 	{
 		parent::build($container);
 		
-		$container->addCompilerPass(new ExcludeClassesFromCachePass(), PassConfig::TYPE_OPTIMIZE);
+		if ('boot' !== $container->getParameter('kernel.name')) {
+			$container->addCompilerPass(new ExcludeClassesFromCachePass(), PassConfig::TYPE_OPTIMIZE);
+		}
 	}
 }

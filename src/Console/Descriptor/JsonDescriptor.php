@@ -118,7 +118,7 @@ class JsonDescriptor extends Descriptor
 	
 	/**
 	 * Returns data for an InputArgument instance.
-	 * 
+	 *
 	 * @param InputArgument $argument Argument to describe
 	 * @return array
 	 */
@@ -135,7 +135,7 @@ class JsonDescriptor extends Descriptor
 	
 	/**
 	 * Returns data for an InputOption instance.
-	 * 
+	 *
 	 * @param InputOption $option Option to describe
 	 * @return array
 	 */
@@ -154,7 +154,7 @@ class JsonDescriptor extends Descriptor
 	
 	/**
 	 * Returns data for an InputDefinition instance.
-	 * 
+	 *
 	 * @param InputDefinition $definition Definition to describe
 	 * @return array
 	 */
@@ -162,7 +162,7 @@ class JsonDescriptor extends Descriptor
 	{
 		$arguments = array();
 		foreach ($definition->getArguments() as $name => $argument) {
-			if ('command' !== $name) {
+			if ( ! in_array($name, ['kernel', 'command'])) {
 				$arguments[$name] = $this->getInputArgumentData($argument);
 			}
 		}
@@ -180,12 +180,15 @@ class JsonDescriptor extends Descriptor
 	
 	/**
 	 * Returns data for a Command instance.
-	 * 
+	 *
 	 * @param Command $command Command to describe
 	 * @return array
 	 */
 	private function getCommandData(Command $command, $addKernel = true)
 	{
+		$container = $command->getApplication()->getKernel()->getContainer();
+		$global = in_array($command->getName(), $container->getParameter('motana.multikernel.commands.global'));
+		
 		$kernel = $command->getApplication() instanceof MultikernelApplication ? null : $command->getApplication()->getKernel()->getName();
 		
 		$command->getSynopsis();
@@ -196,8 +199,10 @@ class JsonDescriptor extends Descriptor
 			$usages[] = $_SERVER['PHP_SELF'] . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $command->getSynopsis(true));
 		}
 		
-		foreach (array_merge(array($command->getSynopsis(true)), $command->getUsages(), $command->getAliases()) as $usage) {
-			$usages[] = $_SERVER['PHP_SELF'] . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage);
+		if ( ! $global) {
+			foreach (array_merge(array($command->getSynopsis(true)), $command->getUsages(), $command->getAliases()) as $usage) {
+				$usages[] = $_SERVER['PHP_SELF'] . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage);
+			}
 		}
 		
 		$data = array(
@@ -209,7 +214,7 @@ class JsonDescriptor extends Descriptor
 			'definition' => $this->getInputDefinitionData($command->getNativeDefinition()),
 		);
 		
-		if ( ! $command->getApplication() instanceof MultikernelApplication || ! $addKernel) {
+		if ( ! $global || ! $command->getApplication() instanceof MultikernelApplication || ! $addKernel) {
 			unset($data['kernels']);
 		}
 		
@@ -218,7 +223,7 @@ class JsonDescriptor extends Descriptor
 	
 	/**
 	 * Output data in JSON format.
-	 * 
+	 *
 	 * @param array $data Data to output
 	 * @param array $options Display options
 	 */

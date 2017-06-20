@@ -44,6 +44,9 @@ Commands:
   lint:xliff                   Lints a XLIFF file and outputs encountered errors
   lint:yaml                    Lints a file and outputs encountered errors
 
+ multikernel
+  multikernel:convert          Converts a project to a multikernel project
+
  server
   server:log                   Starts a log server that displays logs in real time
   server:run                   Runs a local web server

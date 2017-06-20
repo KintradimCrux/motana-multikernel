@@ -24,7 +24,7 @@ use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
 
 /**
  * A replacement for the Symfony Standard Edition text descriptor.
- * 
+ *
  * @author Jean-François Simon <contact@jfsimon.fr>
  * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
@@ -126,7 +126,7 @@ class TextDescriptor extends Descriptor
 				
 				$argWidth = $this->calculateTotalWidthForArguments($definition->getArguments());
 				foreach ($definition->getArguments() as $name => $argument) {
-					if ('command' !== $name) {
+					if ( ! in_array($name, ['kernel', 'command'])) {
 						$this->describeInputArgument($argument, array_merge($options, array(
 							'total_width' => $argWidth
 						)));
@@ -173,6 +173,9 @@ class TextDescriptor extends Descriptor
 	 */
 	protected function describeCommand(Command $command, array $options = array())
 	{
+		$container = $command->getApplication()->getKernel()->getContainer();
+		$global = in_array($command->getName(), $container->getParameter('motana.multikernel.commands.global'));
+		
 		$kernel = $command->getApplication() instanceof MultikernelApplication ? null : $command->getApplication()->getKernel()->getName();
 		
 		$command->getSynopsis(true);
@@ -190,14 +193,16 @@ class TextDescriptor extends Descriptor
 			$this->writeText('  '.$_SERVER['PHP_SELF'] . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $command->getSynopsis(true)));
 		}
 		
-		foreach (array_merge(array($command->getSynopsis(true)), $command->getAliases(), $command->getUsages()) as $usage) {
-			$this->writeText("\n");
-			$this->writeText('  '.$_SERVER['PHP_SELF'] . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage));
+		if ( ! $global) {
+			foreach (array_merge(array($command->getSynopsis(true)), $command->getAliases(), $command->getUsages()) as $usage) {
+				$this->writeText("\n");
+				$this->writeText('  '.$_SERVER['PHP_SELF'] . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage));
+			}
 		}
 
 		$this->writeText("\n");
 		
-		if ($command->getApplication() instanceof MultikernelApplication) {
+		if ( ! $global && $command->getApplication() instanceof MultikernelApplication) {
 			$this->writeText("\n");
 			$this->writeText("<comment>Kernels:</comment>\n");
 			foreach ($command->getApplication()->getKernel()->getKernels() as $kernel) {
@@ -331,7 +336,7 @@ class TextDescriptor extends Descriptor
 	
 	/**
 	 * Writes content to output.
-	 * 
+	 *
 	 * @param string $content Content to write
 	 * @param array $options Display options
 	 */
@@ -384,7 +389,7 @@ class TextDescriptor extends Descriptor
 	
 	/**
 	 * Returns the column width for command names.
-	 * 
+	 *
 	 * @param Command[] $commands An array of commands to process
 	 * @return int
 	 */
@@ -404,7 +409,7 @@ class TextDescriptor extends Descriptor
 	
 	/**
 	 * Calculate the total width for the arguments in the arguments list.
-	 * 
+	 *
 	 * @param InputArgument[] $arguments An array of arguments to process
 	 * @return int
 	 */

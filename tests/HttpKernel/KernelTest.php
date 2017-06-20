@@ -21,7 +21,7 @@ class KernelTest extends KernelTestCase
 {
 	/**
 	 * Data provider for testConstructor().
-	 * 
+	 *
 	 * @return array
 	 */
 	public function provide_testConstructor_data()
@@ -73,7 +73,7 @@ class KernelTest extends KernelTestCase
 	 */
 	public function testGetCacheDir()
 	{
-		$expected = dirname(dirname(self::$kernel->getRootDir())) . '/var/cache/test/app';
+		$expected = dirname(dirname(self::$kernel->getRootDir())) . '/var/cache/app/test';
 		
 		// Check that getCacheDir() returns the correct path
 		$this->assertEquals($expected, self::$kernel->getCacheDir());

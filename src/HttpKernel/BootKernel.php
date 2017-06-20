@@ -23,7 +23,7 @@ use Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle;
 /**
  * Abstract boot kernel base class for multi-kernel applications, which boots
  * one or more kernels. The first booted kernel is used to handle web requests.
- * 
+ *
  * @author torr
  */
 abstract class BootKernel extends Kernel
@@ -32,14 +32,14 @@ abstract class BootKernel extends Kernel
 	
 	/**
 	 * Kernel metadata.
-	 * 
+	 *
 	 * @var array
 	 */
 	private $kernels = array();
 	
 	/**
 	 * Kernel instances.
-	 * 
+	 *
 	 * @var array
 	 */
 	private $instances = array();
@@ -53,7 +53,7 @@ abstract class BootKernel extends Kernel
 	
 	/**
 	 * The delegated request.
-	 * 
+	 *
 	 * @var BootKernelRequest
 	 */
 	private $request;
@@ -77,7 +77,7 @@ abstract class BootKernel extends Kernel
 	public function getCacheDir()
 	{
 		if (null === $this->cacheDir) {
-			$this->cacheDir = dirname($this->getRootDir()) . '/var/cache/' . $this->getEnvironment() . '/' . $this->getName();
+			$this->cacheDir = dirname($this->getRootDir()) . '/var/cache/' . $this->getName() . '/' . $this->getEnvironment();
 		}
 		
 		return $this->cacheDir;
@@ -120,8 +120,18 @@ abstract class BootKernel extends Kernel
 		Request::setFactory(array($this, 'requestFactory'));
 		
 		if ($kernel = $this->loadKernel($this->getKernelFromRequest($request))) {
+			if ($this->debug) {
+				$kernel->startTime = $this->startTime;
+			}
+			
 			return $kernel->handle(Request::createFromGlobals(), $type, $catch);
-		} elseif ($kernel = $this->loadKernel($this->getContainer()->getParameter('motana.multikernel.default'))) {
+		}
+		
+		if ($kernel = $this->loadKernel($this->getContainer()->getParameter('motana.multikernel.default'))) {
+			if ($this->debug) {
+				$kernel->startTime = $this->startTime;
+			}
+			
 			return $kernel->handle(Request::createFromGlobals(), $type, $catch);
 		}
 		
@@ -257,7 +267,7 @@ abstract class BootKernel extends Kernel
 	
 	/**
 	 * Load and instantiate a kernel.
-	 * 
+	 *
 	 * @param string $kernelName A kernel name
 	 * @throws \RuntimeException
 	 * @return \Motana\Component\HttpKernel\Kernel
@@ -297,7 +307,6 @@ abstract class BootKernel extends Kernel
 			}
 			
 			$kernel = new $class($kernel);
-			Request::enableHttpMethodParameterOverride();
 			
 			return $this->instances[$kernelName] = $kernel;
 		}

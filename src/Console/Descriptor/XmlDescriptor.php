@@ -22,7 +22,7 @@ use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
 
 /**
  * A replacement for the Symfony Standard Edition xml descriptor.
- * 
+ *
  * @author Jean-François Simon <contact@jfsimon.fr>
  * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
@@ -80,7 +80,7 @@ class XmlDescriptor extends Descriptor
 	
 	/**
 	 * Returns the DOM document for an InputArgument instance.
-	 * 
+	 *
 	 * @param InputArgument $argument Argument to describe
 	 * @return \DOMDocument
 	 */
@@ -108,7 +108,7 @@ class XmlDescriptor extends Descriptor
 	
 	/**
 	 * Returns the DOM document for an InputOption instance.
-	 * 
+	 *
 	 * @param InputOption $option Option to describe
 	 * @return \DOMDocument
 	 */
@@ -150,7 +150,7 @@ class XmlDescriptor extends Descriptor
 	
 	/**
 	 * Returns the DOM document for an InputDefinition instance.
-	 * 
+	 *
 	 * @param InputDefinition $definition Definition to describe
 	 * @return \DOMDocument
 	 */
@@ -162,7 +162,7 @@ class XmlDescriptor extends Descriptor
 		
 		$definitionXML->appendChild($argumentsXML = $dom->createElement('arguments'));
 		foreach ($definition->getArguments() as $name => $argument) {
-			if ('command' !== $name) {
+			if ( ! in_array($name, ['kernel', 'command'])) {
 				$this->appendDocument($argumentsXML, $this->getInputArgumentDocument($argument));
 			}
 		}
@@ -177,13 +177,16 @@ class XmlDescriptor extends Descriptor
 	
 	/**
 	 * Returns the DOM document for a Command instance.
-	 * 
+	 *
 	 * @param Command $command Command to describe
 	 * @param boolean $addKernels Boolean indicating to add kernels
 	 * @return \DOMDocument
 	 */
 	private function getCommandDocument(Command $command, $addKernels = true)
 	{
+		$container = $command->getApplication()->getKernel()->getContainer();
+		$global = in_array($command->getName(), $container->getParameter('motana.multikernel.commands.global'));
+		
 		$kernel = $command->getApplication() instanceof MultikernelApplication ? null : $command->getApplication()->getKernel()->getName();
 		
 		$dom = new \DOMDocument('1.0', 'UTF-8');
@@ -197,11 +200,15 @@ class XmlDescriptor extends Descriptor
 		$commandXML->setAttribute('name', $command->getName());
 		
 		$commandXML->appendChild($usagesXML = $dom->createElement('usages'));
+		
 		if ( ! $kernel) {
 			$usagesXML->appendChild($dom->createElement('usage', $_SERVER['PHP_SELF'] . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $command->getSynopsis(true))));
 		}
-		foreach (array_merge(array($command->getSynopsis(true)), $command->getAliases(), $command->getUsages()) as $usage) {
-			$usagesXML->appendChild($dom->createElement('usage', $_SERVER['PHP_SELF'] . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage)));
+		
+		if ( ! $global) {
+			foreach (array_merge(array($command->getSynopsis(true)), $command->getAliases(), $command->getUsages()) as $usage) {
+				$usagesXML->appendChild($dom->createElement('usage', $_SERVER['PHP_SELF'] . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage)));
+			}
 		}
 		
 		$commandXML->appendChild($descriptionXML = $dom->createElement('description'));
@@ -210,7 +217,7 @@ class XmlDescriptor extends Descriptor
 		$commandXML->appendChild($helpXML = $dom->createElement('help'));
 		$helpXML->appendChild($dom->createTextNode(str_replace("\n", "\n ", $this->getProcessedHelp($command))));
 		
-		if ( ! $kernel && $addKernels) {
+		if ( ! $global && ! $kernel && $addKernels) {
 			$commandXML->appendChild($kernelsXML = $dom->createElement('kernels'));
 			foreach ($command->getApplication()->getKernel()->getKernels() as $kernelName => $kernel) {
 				$kernelsXML->appendChild($dom->createElement('kernel', $kernelName));
@@ -225,7 +232,7 @@ class XmlDescriptor extends Descriptor
 	
 	/**
 	 * Returns the DOM document for an Application instance.
-	 * 
+	 *
 	 * @param Application $application Application to describe
 	 * @param string $namespace Command namespace to show
 	 * @return \DOMDocument
@@ -299,7 +306,7 @@ class XmlDescriptor extends Descriptor
 
 	/**
 	 * Append document children to a parent node.
-	 * 
+	 *
 	 * @param \DOMNode $parentNode Parent node
 	 * @param \DOMNode $importedParent Node to import
 	 */
@@ -312,7 +319,7 @@ class XmlDescriptor extends Descriptor
 	
 	/**
 	 * Writes a DOM document.
-	 * 
+	 *
 	 * @param \DOMDocument $dom
 	 */
 	private function writeDocument(\DOMDocument $dom, array $options = array())

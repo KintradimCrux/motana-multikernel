@@ -51,7 +51,7 @@ class BootKernelTest extends KernelTestCase
 	 */
 	public function testGetCacheDir()
 	{
-		$expected = dirname(self::$kernel->getRootDir()) . '/var/cache/test/boot';
+		$expected = dirname(self::$kernel->getRootDir()) . '/var/cache/boot/test';
 		
 		// Check that getCacheDir() returns the correct path
 		$this->assertEquals($expected, self::$kernel->getCacheDir());
@@ -277,8 +277,11 @@ class BootKernelTest extends KernelTestCase
 		// Check that loadKernel() instantiates the cache class
 		$app = $this->callMethod(self::$kernel, 'loadKernel', 'app');
 		
-		// Check that loadKernel() enables HTTP method parameter override
-		$this->assertTrue(Request::getHttpMethodParameterOverride());
+		// Check that the kernel has been booted
+		$this->assertAttributeEquals(true, 'booted', self::$kernel);
+		
+		// Check that loadKernel() returns an instance of the correct class
+		$this->assertEquals('AppCache', get_class($app));
 		
 		unset($GLOBALS['BootKernelTest_loadKernel']);
 	}
@@ -534,9 +537,42 @@ class BootKernelTest extends KernelTestCase
 	
 	/**
 	 * @covers ::handle()
+	 * @depends testHandleThrowsException
+	 */
+	public function testHandleSetsStartTimeInDebugMode()
+	{
+		$this->setUp('working', null, 'test', true);
+		
+		$server = array(
+			'BASE' => '/web',
+			'PHP_SELF' => '/web/app.php',
+			'QUERY_STRING' => '',
+			'REQUEST_URI' => '/web/app/controller/action',
+			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
+			'SCRIPT_NAME' => '/web/app.php',
+		);
+		
+		// Check the kernel throws an exception because it has no routes
+		try { self::$kernel->handle(new Request($_GET, $_REQUEST, array(), array(), array(), $server)); }
+		catch (\Exception $e) { }
+		
+		// Check that calling handle() instantiated one kernel
+		$instances = $this->getObjectAttribute(self::$kernel, 'instances');
+		$this->assertEquals(1, count($instances));
+		
+		// Check the instantiated kernel is the correct one
+		$this->assertTrue(isset($instances['app']));
+		$this->assertEquals('AppKernel', get_class($instances['app']));
+		
+		// Check the boot kernel has the same start time the app kernel has
+		$this->assertEquals($this->readAttribute(self::$kernel, 'startTime'), $this->readAttribute($instances['app'], 'startTime'));
+	}
+	
+	/**
+	 * @covers ::handle()
 	 * @depends testHandle
 	 */
-	public function testHandleInvalidKernelName()
+	public function testHandleDefaultKernel()
 	{
 		$server = array(
 			'BASE' => '/web',
@@ -560,6 +596,39 @@ class BootKernelTest extends KernelTestCase
 		$this->assertEquals('AppKernel', get_class($instances['app']));
 	}
 
+	/**
+	 * @covers ::handle()
+	 * @depends testHandle
+	 */
+	public function testHandleDefaultKernelSetsStartTimeInDebugMode()
+	{
+		$this->setUp('working', null, 'test', true);
+		
+		$server = array(
+			'BASE' => '/web',
+			'PHP_SELF' => '/web/app.php',
+			'QUERY_STRING' => '',
+			'REQUEST_URI' => '/web/foobar/controller/action',
+			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
+			'SCRIPT_NAME' => '/web/app.php',
+		);
+		
+		// Check the kernel throws an exception because it has no routes
+		try { self::$kernel->handle(new Request($_GET, $_REQUEST, array(), array(), array(), $server)); }
+		catch (\Exception $e) { }
+		
+		// Check that calling handle() instantiated one kernel
+		$instances = $this->getObjectAttribute(self::$kernel, 'instances');
+		$this->assertEquals(1, count($instances));
+		
+		// Check the instantiated kernel is the correct one
+		$this->assertTrue(isset($instances['app']));
+		$this->assertEquals('AppKernel', get_class($instances['app']));
+		
+		// Check the boot kernel has the same start time the app kernel has
+		$this->assertEquals($this->readAttribute(self::$kernel, 'startTime'), $this->readAttribute($instances['app'], 'startTime'));
+	}
+	
 	/**
 	 * @covers ::handle()
 	 * @expectedException Symfony\Component\HttpKernel\Exception\NotFoundHttpException

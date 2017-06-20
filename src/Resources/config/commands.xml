@@ -14,7 +14,7 @@
     	<parameter key="motana.multikernel.commands.global" type="collection">
     		<parameter>lint:yaml</parameter>
 	    	<parameter>lint:xliff</parameter>
-	    	<parameter>multikernel:convert-project</parameter>
+	    	<parameter>multikernel:convert</parameter>
 	    	<parameter>multikernel:create-app</parameter>
 	    	<parameter>server:log</parameter>
     		<parameter>server:run</parameter>

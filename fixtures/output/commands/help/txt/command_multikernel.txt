@@ -9,7 +9,6 @@ Kernels:
   app
 
 Arguments:
-  kernel        The kernel to execute
   command_name  The command name [default: "help"]
 
 Options:

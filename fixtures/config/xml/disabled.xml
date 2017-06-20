@@ -18,7 +18,7 @@
 	    <motana-multikernel:class-cache>
 	
 	        <!-- prototype -->
-	        <!-- Classes to exclude from being cached in classes.php -->
+	        <!-- Classes to exclude from being cached in classes.php of app kernels -->
 	        <motana-multikernel:exclude/>
 	
 	    </motana-multikernel:class-cache>

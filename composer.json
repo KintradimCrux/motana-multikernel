@@ -1,6 +1,6 @@
 {
     "name": "motana/multikernel",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "type": "symfony-bundle",
     "description": "Motana Multi-Kernel Bundle",
     "keywords": [

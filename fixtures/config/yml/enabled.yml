@@ -1,4 +1,4 @@
-# Default configuration for "MotanaMultiKernelBundle"
+# Default configuration for "MotanaMultikernelBundle"
 motana_multikernel:
 
     # Default kernel the front controller should load when no kernel matches the URL
@@ -7,7 +7,7 @@ motana_multikernel:
     # Class cache configuration
     class_cache:
 
-        # Classes to exclude from being cached in classes.php
+        # Classes to exclude from being cached in classes.php of app kernels
         exclude:              []
 
     # Console commands configuration

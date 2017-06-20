@@ -46,7 +46,7 @@ class MultikernelApplicationTest extends ApplicationTestCase
 	
 	/**
 	 * Assert that an InputArgument has the specified properties.
-	 * 
+	 *
 	 * @param InputArgument $argument The argument to inspect
 	 * @param string $expectedClass Expected class name
 	 * @param string $argumentName Expected argument name
@@ -66,7 +66,7 @@ class MultikernelApplicationTest extends ApplicationTestCase
 	
 	/**
 	 * Assert that an Inputoption has the specified properties.
-	 * 
+	 *
 	 * @param InputOption $option The option to inspect
 	 * @param string $expectedClass Expected class name
 	 * @param string $optionName Expected option name
@@ -131,7 +131,7 @@ class MultikernelApplicationTest extends ApplicationTestCase
 	
 	/**
 	 * Data provider for testRemoveKernelArgument().
-	 * 
+	 *
 	 * @return array
 	 */
 	public function provide_testRemoveKernelArgument_data()
@@ -195,8 +195,6 @@ class MultikernelApplicationTest extends ApplicationTestCase
 			'debug:container' => 'boot:app',
 			'debug:event-dispatcher' => 'boot:app',
 			'debug:translation' => 'boot:app',
-			
-			'multikernel:create-app' => 'boot',
 			
 			'translation:update' => 'boot:app',
 		);
@@ -299,7 +297,7 @@ class MultikernelApplicationTest extends ApplicationTestCase
 	
 	/**
 	 * Data provider for testRegisteredCommands().
-	 * 
+	 *
 	 * @return array
 	 */
 	public function provide_testRegisteredCommands_data()

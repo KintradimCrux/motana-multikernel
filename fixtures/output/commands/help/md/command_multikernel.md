@@ -25,14 +25,6 @@ To display the list of available commands, please use the `list` command.
 
 ### Arguments:
 
-**kernel:**
-
-* Name: kernel
-* Is required: yes
-* Is array: no
-* Description: The kernel to execute
-* Default: `NULL`
-
 **command_name:**
 
 * Name: command_name

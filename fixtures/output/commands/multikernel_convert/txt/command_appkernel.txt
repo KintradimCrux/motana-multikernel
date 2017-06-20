@@ -1,0 +1,26 @@
+Converting the project
+
+Creating directory apps/ from skeleton
+Writing apps/BootKernel.php
+Writing apps/config/parameters.yml
+Copying directory app/ to apps/app/
+Updating apps/app/AppKernel.php
+Updating apps/app/config/config_test.yml
+Updating apps/app/config/services.yml
+Updating apps/app/config/parameters.yml
+Updating apps/app/config/config_prod.yml
+Updating apps/app/config/routing.yml
+Updating apps/app/config/routing_dev.yml
+Updating apps/app/config/config_dev.yml
+Updating apps/app/config/security.yml
+Updating apps/app/config/config.yml
+Updating bin/console
+Updating web/app.php
+Updating web/app_dev.php
+Updating composer.json
+Removing directory app/
+Removing directory var/cache/
+Removing directory var/logs/
+Removing directory var/sessions/
+
+Done copying files. Now you can run composer dump-autoload and composer symfony-scripts to finish converting your project.

@@ -763,7 +763,6 @@
     <command id="lint:xliff" name="lint:xliff">
       <usages>
         <usage>bin/console lint:xliff [options] [--] [&lt;filename&gt;]</usage>
-        <usage>bin/console &lt;kernel&gt; lint:xliff [options] [--] [&lt;filename&gt;]</usage>
       </usages>
       <description>Lints a XLIFF file and outputs encountered errors</description>
       <help>The &lt;info&gt;lint:xliff&lt;/info&gt; command lints a XLIFF file and outputs to STDOUT
@@ -833,7 +832,6 @@
     <command id="lint:yaml" name="lint:yaml">
       <usages>
         <usage>bin/console lint:yaml [options] [--] [&lt;filename&gt;]</usage>
-        <usage>bin/console &lt;kernel&gt; lint:yaml [options] [--] [&lt;filename&gt;]</usage>
       </usages>
       <description>Lints a file and outputs encountered errors</description>
       <help>The &lt;info&gt;lint:yaml&lt;/info&gt; command lints a YAML file and outputs to STDOUT
@@ -903,7 +901,6 @@
     <command id="multikernel:create-app" name="multikernel:create-app">
       <usages>
         <usage>bin/console multikernel:create-app [options]</usage>
-        <usage>bin/console &lt;kernel&gt; multikernel:create-app [options]</usage>
       </usages>
       <description>Create a new app</description>
       <help>Create a new app</help>
@@ -944,7 +941,6 @@
     <command id="server:log" name="server:log">
       <usages>
         <usage>bin/console server:log [options]</usage>
-        <usage>bin/console &lt;kernel&gt; server:log [options]</usage>
       </usages>
       <description>Starts a log server that displays logs in real time</description>
       <help>&lt;info&gt;server:log&lt;/info&gt; starts a log server to display in real time the log
@@ -1016,7 +1012,6 @@
     <command id="server:run" name="server:run">
       <usages>
         <usage>bin/console server:run [options] [--] [&lt;addressport&gt;]</usage>
-        <usage>bin/console &lt;kernel&gt; server:run [options] [--] [&lt;addressport&gt;]</usage>
       </usages>
       <description>Runs a local web server</description>
       <help>&lt;info&gt;server:run&lt;/info&gt; runs a local web server: By default, the server
@@ -1092,7 +1087,6 @@
     <command id="server:start" name="server:start">
       <usages>
         <usage>bin/console server:start [options] [--] [&lt;addressport&gt;]</usage>
-        <usage>bin/console &lt;kernel&gt; server:start [options] [--] [&lt;addressport&gt;]</usage>
       </usages>
       <description>Starts a local web server in the background</description>
       <help>&lt;info&gt;server:start&lt;/info&gt; runs a local web server: By default, the server
@@ -1171,7 +1165,6 @@
     <command id="server:status" name="server:status">
       <usages>
         <usage>bin/console server:status [options]</usage>
-        <usage>bin/console &lt;kernel&gt; server:status [options]</usage>
       </usages>
       <description>Outputs the status of the local web server for the given address</description>
       <help>&lt;info&gt;server:status&lt;/info&gt; shows the details of the given local web
@@ -1230,7 +1223,6 @@
     <command id="server:stop" name="server:stop">
       <usages>
         <usage>bin/console server:stop [options]</usage>
-        <usage>bin/console &lt;kernel&gt; server:stop [options]</usage>
       </usages>
       <description>Stops the local web server that was started with the server:start command</description>
       <help>&lt;info&gt;server:stop&lt;/info&gt; stops the local web server:

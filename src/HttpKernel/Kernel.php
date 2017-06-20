@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
 /**
  * Abstract base class for kernels.
- * 
+ *
  * @author torr
  */
 abstract class Kernel extends BaseKernel
@@ -61,7 +61,7 @@ abstract class Kernel extends BaseKernel
 	public function getCacheDir()
 	{
 		if (null === $this->cacheDir) {
-			$this->cacheDir = dirname(dirname($this->getRootDir())) . '/var/cache/' . $this->getEnvironment() . '/' . $this->getName();
+			$this->cacheDir = dirname(dirname($this->getRootDir())) . '/var/cache/' . $this->getName() . '/' . $this->getEnvironment();
 		}
 		
 		return $this->cacheDir;

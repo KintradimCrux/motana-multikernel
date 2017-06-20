@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * Extension for the Motana Multi-Kernel Bundle.
- * 
+ *
  * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
 class MotanaMultikernelExtension extends Extension
@@ -44,7 +44,7 @@ class MotanaMultikernelExtension extends Extension
 	
 	/**
 	 * Loads and merges the class cache configuration.
-	 * 
+	 *
 	 * @param array $config Configuration options
 	 * @param ContainerBuilder $container A ContainerBuilder instance
 	 * @param XmlFileLoader $loader A XmlFileLoader instance
@@ -60,7 +60,7 @@ class MotanaMultikernelExtension extends Extension
 	
 	/**
 	 * Loads and merges the console commands configuration.
-	 * 
+	 *
 	 * @param array $config Configuration options
 	 * @param ContainerBuilder $container A ContainerBuilder instance
 	 * @param XmlFileLoader $loader A XmlFileLoader instance
@@ -84,7 +84,7 @@ class MotanaMultikernelExtension extends Extension
 	
 	/**
 	 * Merge the content of a container parameter containing an array with additional values.
-	 * 
+	 *
 	 * @param ContainerBuilder $container A ContainerBuilder instance
 	 * @param string $parameterName Container parameter name
 	 * @param array $values Values to add

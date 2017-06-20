@@ -19,10 +19,6 @@
     <kernel>app</kernel>
   </kernels>
   <arguments>
-    <argument name="kernel" is_required="1" is_array="0">
-      <description>The kernel to execute</description>
-      <defaults/>
-    </argument>
     <argument name="command_name" is_required="0" is_array="0">
       <description>The command name</description>
       <defaults>

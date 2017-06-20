@@ -1368,9 +1368,7 @@
         },
         {
             "name": "lint:xliff",
-            "usage": [
-                "bin\/console app lint:xliff [options] [--] [<filename>]"
-            ],
+            "usage": [],
             "description": "Lints a XLIFF file and outputs encountered errors",
             "help": "The <info>lint:xliff<\/info> command lints a XLIFF file and outputs to STDOUT\nthe first encountered syntax error.\n\nYou can validates XLIFF contents passed from STDIN:\n\n  <info>cat filename | bin\/console lint:xliff<\/info>\n\nYou can also validate the syntax of a file:\n\n  <info>bin\/console lint:xliff filename<\/info>\n\nOr of a whole directory:\n\n  <info>bin\/console lint:xliff dirname<\/info>\n  <info>bin\/console lint:xliff dirname --format=json<\/info>\n\nOr find all files in a bundle:\n\n  <info>bin\/console lint:xliff @AcmeDemoBundle<\/info>",
             "definition": {
@@ -1479,9 +1477,7 @@
         },
         {
             "name": "lint:yaml",
-            "usage": [
-                "bin\/console app lint:yaml [options] [--] [<filename>]"
-            ],
+            "usage": [],
             "description": "Lints a file and outputs encountered errors",
             "help": "The <info>lint:yaml<\/info> command lints a YAML file and outputs to STDOUT\nthe first encountered syntax error.\n\nYou can validates YAML contents passed from STDIN:\n\n  <info>cat filename | bin\/console lint:yaml<\/info>\n\nYou can also validate the syntax of a file:\n\n  <info>bin\/console lint:yaml filename<\/info>\n\nOr of a whole directory:\n\n  <info>bin\/console lint:yaml dirname<\/info>\n  <info>bin\/console lint:yaml dirname --format=json<\/info>\n\nOr find all files in a bundle:\n\n  <info>bin\/console lint:yaml @AcmeDemoBundle<\/info>",
             "definition": {
@@ -1589,10 +1585,100 @@
             }
         },
         {
+            "name": "multikernel:convert",
+            "usage": [],
+            "description": "Converts a project to a multikernel project",
+            "help": "The <info>multikernel:convert<\/info> command changes the filesystem\nstructure of a Symfony Standard Edition project to a multikernel project.\n\nThe command is only available on a regular app kernel and is disabled\nafter conversion.\n\nTo convert your project to a multikernel project, run:\n\n  <info>bin\/console multikernel:convert<\/info>\n\nAfter converting the project filesystem structure, run:\n\n  <info>composer dump-autoload<\/info>\n  <info>composer symfony-scripts<\/info>",
+            "definition": {
+                "arguments": [],
+                "options": {
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
             "name": "server:log",
-            "usage": [
-                "bin\/console app server:log [options]"
-            ],
+            "usage": [],
             "description": "Starts a log server that displays logs in real time",
             "help": "<info>server:log<\/info> starts a log server to display in real time the log\nmessages generated by your application:\n\n  <info>bin\/console server:log<\/info>\n\nTo get the information as a machine readable format, use the\n<comment>--filter<\/> option:\n\n<info>bin\/console server:log --filter=port<\/info>",
             "definition": {
@@ -1720,9 +1806,7 @@
         },
         {
             "name": "server:run",
-            "usage": [
-                "bin\/console app server:run [options] [--] [<addressport>]"
-            ],
+            "usage": [],
             "description": "Runs a local web server",
             "help": "<info>server:run<\/info> runs a local web server: By default, the server\nlistens on <comment>127.0.0.1<\/> address and the port number is automatically selected\nas the first free port starting from <comment>8000<\/>:\n\n  <info>bin\/console server:run<\/info>\n\nThis command blocks the console. If you want to run other commands, stop it by\npressing <comment>Control+C<\/> or use the non-blocking <comment>server:start<\/>\ncommand instead.\n\nChange the default address and port by passing them as an argument:\n\n  <info>bin\/console server:run 127.0.0.1:8080<\/info>\n\nUse the <info>--docroot<\/info> option to change the default docroot directory:\n\n  <info>bin\/console server:run --docroot=htdocs\/<\/info>\n\nSpecify your own router script via the <info>--router<\/info> option:\n\n  <info>bin\/console server:run --router=app\/config\/router.php<\/info>\n\nSee also: http:\/\/www.php.net\/manual\/en\/features.commandline.webserver.php",
             "definition": {
@@ -1840,9 +1924,7 @@
         },
         {
             "name": "server:start",
-            "usage": [
-                "bin\/console app server:start [options] [--] [<addressport>]"
-            ],
+            "usage": [],
             "description": "Starts a local web server in the background",
             "help": "<info>server:start<\/info> runs a local web server: By default, the server\nlistens on <comment>127.0.0.1<\/> address and the port number is automatically selected\nas the first free port starting from <comment>8000<\/>:\n\n  <info>bin\/console server:start<\/info>\n\nThe server is run in the background and you can keep executing other commands.\nExecute <comment>server:stop<\/> to stop it.\n\nChange the default address and port by passing them as an argument:\n\n  <info>bin\/console server:start 127.0.0.1:8080<\/info>\n\nUse the <info>--docroot<\/info> option to change the default docroot directory:\n\n  <info>bin\/console server:start --docroot=htdocs\/<\/info>\n\nSpecify your own router script via the <info>--router<\/info> option:\n\n  <info>bin\/console server:start --router=app\/config\/router.php<\/info>\n\nSee also: http:\/\/www.php.net\/manual\/en\/features.commandline.webserver.php",
             "definition": {
@@ -1969,9 +2051,7 @@
         },
         {
             "name": "server:status",
-            "usage": [
-                "bin\/console app server:status [options]"
-            ],
+            "usage": [],
             "description": "Outputs the status of the local web server for the given address",
             "help": "<info>server:status<\/info> shows the details of the given local web\nserver, such as the address and port where it is listening to:\n\n  <info>bin\/console server:status<\/info>\n\nTo get the information as a machine readable format, use the\n<comment>--filter<\/> option:\n\n<info>bin\/console server:status --filter=port<\/info>\n\nSupported values are <comment>port<\/>, <comment>host<\/>, and <comment>address<\/>.",
             "definition": {
@@ -2081,9 +2161,7 @@
         },
         {
             "name": "server:stop",
-            "usage": [
-                "bin\/console app server:stop [options]"
-            ],
+            "usage": [],
             "description": "Stops the local web server that was started with the server:start command",
             "help": "<info>server:stop<\/info> stops the local web server:\n\n  <info>bin\/console server:stop<\/info>",
             "definition": {
@@ -2407,6 +2485,12 @@
             "commands": [
                 "lint:xliff",
                 "lint:yaml"
+            ]
+        },
+        {
+            "id": "multikernel",
+            "commands": [
+                "multikernel:convert"
             ]
         },
         {

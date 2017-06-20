@@ -45,7 +45,7 @@ class MultikernelCommandTest extends CommandTestCase
 	
 	/**
 	 * Adds a configured mock multikernel command including sub-commands.
-	 * 
+	 *
 	 * @param string $commandName Command name
 	 * @param array $configuration Mock configuration
 	 * @return MultiKernelCommand
@@ -69,7 +69,7 @@ class MultikernelCommandTest extends CommandTestCase
 	
 	/**
 	 * Create a configured mock command.
-	 * 
+	 *
 	 * @param string $commandName Command name
 	 * @param array $configuration Mock configuration
 	 * @param Application $application The application instance for the command
@@ -205,19 +205,22 @@ class MultikernelCommandTest extends CommandTestCase
 	
 	/**
 	 * Data provider for testExecute().
-	 * 
+	 *
 	 * @return array
 	 */
 	public function provide_testExecute_data()
 	{
 		return array(
 			array('working', null, 'command_multikernel', array()),
+			array('working', null, 'command_multikernel', array('--help' => true)),
+			array('working', null, 'command_multikernel', array('--help' => true, '--global' => true)),
 			array('working', null, 'command_multikernel', array('--verbose' => Output::VERBOSITY_QUIET)),
 			array('working', null, 'command_multikernel', array('--verbose' => Output::VERBOSITY_NORMAL)),
 			array('working', null, 'command_multikernel', array('--verbose' => Output::VERBOSITY_VERBOSE)),
 			array('working', null, 'command_multikernel', array('--verbose' => Output::VERBOSITY_VERY_VERBOSE)),
 			array('working', null, 'command_multikernel', array('--verbose' => Output::VERBOSITY_DEBUG)),
 			array('working', null, 'command_appkernel', array('kernel' => 'app')),
+			array('working', null, 'command_appkernel', array('kernel' => 'app', '--help' => true)),
 			array('working', null, 'command_appkernel', array('kernel' => 'app', '--verbose' => Output::VERBOSITY_QUIET)),
 			array('working', null, 'command_appkernel', array('kernel' => 'app', '--verbose' => Output::VERBOSITY_NORMAL)),
 			array('working', null, 'command_appkernel', array('kernel' => 'app', '--verbose' => Output::VERBOSITY_VERBOSE)),
@@ -243,7 +246,18 @@ class MultikernelCommandTest extends CommandTestCase
 			array_splice($_SERVER['argv'], 1, 0, array($parameters['kernel']));
 		}
 		
+		if (isset($parameters['--help'])) {
+			$_SERVER['argv'][] = '--help';
+		}
+		
 		$this->setUp($type, $app);
+		
+		if (isset($parameters['--global'])) {
+			$container = self::$application->getKernel()->getContainer();
+			$containerParameters = $this->readAttribute($container, 'parameters');
+			$containerParameters['motana.multikernel.commands.global'][] = 'debug:config';
+			$this->writeAttribute($container, 'parameters', $containerParameters);
+		}
 		
 		$format = isset($parameters['--format']) ? $parameters['--format'] : 'txt';
 		
@@ -439,6 +453,14 @@ class MultikernelCommandTest extends CommandTestCase
 			}
 		}
 		
+		if (isset($parameters['--help'])) {
+			$options['help'] = $parameters['--help'];
+		}
+		
+		if (isset($parameters['--global'])) {
+			$options['global'] = $parameters['--global'];
+		}
+		
 		return $options;
 	}
 	
@@ -449,6 +471,7 @@ class MultikernelCommandTest extends CommandTestCase
 	protected static function filterCommandParameters(array $parameters = array())
 	{
 		unset($parameters['--format']);
+		unset($parameters['--global']);
 		
 		return $parameters;
 	}

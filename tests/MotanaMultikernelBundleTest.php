@@ -26,9 +26,29 @@ class MotanaMultikernelBundleTest extends ApplicationTestCase
 	/**
 	 * @covers ::build()
 	 */
-	public function testBuild()
+	public function testBuildDoesNotAddCompilerPassOnBootKernel()
 	{
 		$container = new ContainerBuilder();
+		$container->setParameter('kernel.name', 'boot');
+		
+		$bundle = new MotanaMultiKernelBundle();
+		
+		$bundle->build($container);
+		
+		$passes = $container->getCompilerPassConfig()->getOptimizationPasses();
+		
+		// Check that the compiler pass has been added
+		$this->assertNotInstanceOf(ExcludeClassesFromCachePass::class, end($passes));
+	}
+
+	/**
+	 * @covers ::build()
+	 */
+	public function testBuildAddsCompilerPassOnAppKernels()
+	{
+		$container = new ContainerBuilder();
+		$container->setParameter('kernel.name', 'app');
+		
 		$bundle = new MotanaMultiKernelBundle();
 		
 		$bundle->build($container);
@@ -57,6 +77,7 @@ class MotanaMultikernelBundleTest extends ApplicationTestCase
 	 */
 	public function testRegisterCommandsThrowsException()
 	{
+		// Check the "app" kernel has no commands in the multi-kernel namespace
 		$app = $this->callMethod(self::$application, 'getApplication', 'app');
 		$app->find('multikernel:create-app');
 	}

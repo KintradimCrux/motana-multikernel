@@ -186,13 +186,14 @@ class ApplicationTest extends ApplicationTestCase
 			'debug:translation',
 			'lint:yaml',
 			'debug:event-dispatcher',
+			'multikernel:convert',
+			'list',
+			'help',
 			'server:log',
 			'server:run',
 			'server:start',
 			'server:stop',
 			'server:status',
-			'help',
-			'list',
 		), array_keys(self::$application->all()));
 	}
 	
@@ -236,12 +237,13 @@ class ApplicationTest extends ApplicationTestCase
 			'debug:translation',
 			'lint:yaml',
 			'debug:event-dispatcher',
+			'multikernel:convert',
+			'list',
 			'server:log',
 			'server:run',
 			'server:start',
 			'server:stop',
 			'server:status',
-			'list',
 		), array_keys(self::$application->all()));
 	}
 }

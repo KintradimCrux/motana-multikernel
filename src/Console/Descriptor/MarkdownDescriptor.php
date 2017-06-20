@@ -23,7 +23,7 @@ use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
 
 /**
  * A replacement for the Symfony Standard Edition markdown descriptor.
- * 
+ *
  * @author Jean-François Simon <contact@jfsimon.fr>
  * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
@@ -75,7 +75,7 @@ class MarkdownDescriptor extends Descriptor
 			$this->write('### Arguments:');
 			
 			foreach ($definition->getArguments() as $name => $argument) {
-				if ('command' !== $name) {
+				if ( ! in_array($name, ['kernel', 'command'])) {
 					$this->write("\n\n");
 					$this->describeInputArgument($argument, $options);
 				}
@@ -101,6 +101,9 @@ class MarkdownDescriptor extends Descriptor
 	 */
 	protected function describeCommand(Command $command, array $options = array())
 	{
+		$container = $command->getApplication()->getKernel()->getContainer();
+		$global = in_array($command->getName(), $container->getParameter('motana.multikernel.commands.global'));
+		
 		$kernel = $command->getApplication() instanceof MultikernelApplication ? null : $command->getApplication()->getKernel()->getName();
 		
 		$command->getSynopsis();
@@ -111,8 +114,10 @@ class MarkdownDescriptor extends Descriptor
 			$usages[] = str_replace(array(' <kernel>', ' <command>'), '', $command->getSynopsis(true));
 		}
 		
-		foreach (array_merge(array($command->getSynopsis(true)), $command->getUsages(), $command->getAliases()) as $usage) {
-			$usages[] = ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage);
+		if ( ! $global) {
+			foreach (array_merge(array($command->getSynopsis(true)), $command->getUsages(), $command->getAliases()) as $usage) {
+				$usages[] = ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage);
+			}
 		}
 		
 		$this->write(array(
@@ -132,7 +137,7 @@ class MarkdownDescriptor extends Descriptor
 		}
 
 		$application = $command->getApplication();
-		if ($application instanceof MultikernelApplication) {
+		if ( ! $global && $application instanceof MultikernelApplication) {
 			$this->write("\n\n");
 			$this->write(array(
 				'### Kernels:' . "\n",
@@ -227,7 +232,7 @@ class MarkdownDescriptor extends Descriptor
 	
 	/**
 	 * Format the description or processed help of a command for display in Markdown output.
-	 * 
+	 *
 	 * @param string $text Text to process
 	 * @return string
 	 */

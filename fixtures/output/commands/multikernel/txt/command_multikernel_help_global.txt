@@ -1,0 +1,33 @@
+Motana Multi-Kernel App Console - Symfony [symfony-version] (kernel: boot, env: test, debug: false)
+
+Usage:
+  bin/console debug:config [options] [--] [<name>] [<path>]
+
+Arguments:
+  name     The bundle name or the extension alias
+  path     The configuration option path
+
+Options:
+  -h         --help            Display this help message
+  -q         --quiet           Do not output any message
+  -V         --version         Display this application version
+             --ansi            Force ANSI output
+             --no-ansi         Disable ANSI output
+  -n         --no-interaction  Do not ask any interactive question
+  -e         --env=ENV         The environment name [default: "test"]
+             --no-debug        Switches off debug mode
+  -v|vv|vvv  --verbose         Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+
+Help:
+  The debug:config command dumps the current configuration for an
+  extension/bundle.
+  
+  Either the extension alias or bundle name can be used:
+  
+    bin/console debug:config framework
+    bin/console debug:config FrameworkBundle
+  
+  For dumping a specific option, add its path as second argument:
+  
+    bin/console debug:config framework serializer.enabled
+

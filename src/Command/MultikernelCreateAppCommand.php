@@ -2,7 +2,7 @@
 
 /**
  * need more of these:
- * 
+ *
  * multikernel:convert-project
  * multikernel:clone-app
  * multikernel:create-app
@@ -19,6 +19,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class MultikernelCreateAppCommand extends Command
 {
+	/**
+	 * {@inheritDoc}
+	 * @see \Symfony\Component\Console\Command\Command::isEnabled()
+	 */
+	public function isEnabled()
+	{
+		return 'boot' === $this->getApplication()->getKernel()->getName();
+	}
+	
 	protected function configure() {
 		$this->setName('multikernel:create-app')
 		->setDescription('Create a new app');
