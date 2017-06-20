@@ -11,7 +11,6 @@
 
 namespace Motana\Bundle\MultikernelBundle;
 
-use Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -34,18 +33,5 @@ class MotanaMultikernelBundle extends Bundle
 		parent::build($container);
 		
 		$container->addCompilerPass(new ExcludeClassesFromCachePass(), PassConfig::TYPE_OPTIMIZE);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @see \Symfony\Component\HttpKernel\Bundle\Bundle::registerCommands()
-	 */
-	public function registerCommands(Application $application)
-	{
-		if ('boot' !== $application->getKernel()->getName()) {
-			return;
-		}
-		
-		parent::registerCommands($application);
 	}
 }
