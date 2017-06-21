@@ -1,11 +1,19 @@
-# Information
+# Motana Multi-Kernel Bundle
+
+[![Build Status](https://travis-ci.org/KintradimCrux/motana-multikernel.svg?branch=master)](https://travis-ci.org/KintradimCrux/motana-multikernel)
+[![Coverage Status](https://coveralls.io/repos/github/KintradimCrux/motana-multikernel/badge.svg?branch=master)](https://coveralls.io/github/KintradimCrux/motana-multikernel?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/motana/multikernel/v/stable)](https://packagist.org/packages/motana/multikernel)
+[![Total Downloads](https://poser.pugx.org/motana/multikernel/downloads)](https://packagist.org/packages/motana/multikernel)
+[![Latest Unstable Version](https://poser.pugx.org/motana/multikernel/v/unstable)](https://packagist.org/packages/motana/multikernel)
+[![License](https://poser.pugx.org/motana/multikernel/license)](https://packagist.org/packages/motana/multikernel)
+[![composer.lock](https://poser.pugx.org/motana/multikernel/composerlock)](https://packagist.org/packages/motana/multikernel)
 
 MotanaMultikernelBundle extends a Symfony3 project by the ability to use multiple apps in the same project directory.
 This is done by adding a BootKernel that makes the front controller delegate requests to the other kernels. Routing within
-the apps will work as usual, which means every app has its own profiler. The bin/console has been extended to run commands
-on multiple kernels (i.e. cache:clear, assets:install).
+the apps will work as usual, which means every app has its own profiler (if using the WebProfilerBundle).
+The bin/console has been extended to run commands on multiple kernels (i.e. cache:clear, assets:install).
 
-Since the BootKernel is a modified Symfony Kernel, the penalty of having an extra kernel is rather small.
+Since the BootKernel is a modified Symfony Kernel with almost all features disabled, the penalty of having an extra kernel is rather small.
 
 # Installation
 

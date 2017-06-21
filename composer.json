@@ -1,6 +1,6 @@
 {
 	"name" : "motana/multikernel",
-	"version" : "1.2.1",
+	"version" : "1.2.2",
 	"type" : "symfony-bundle",
 	"description" : "Motana Multi-Kernel Bundle",
 	"keywords" : [
@@ -23,7 +23,7 @@
 	},
 	"require-dev" : {
 		"phpunit/phpunit" : "^5.7",
-		"satooshi/php-coveralls": "dev-master"
+		"satooshi/php-coveralls" : "dev-master"
 	},
 	"autoload" : {
 		"psr-4" : {
