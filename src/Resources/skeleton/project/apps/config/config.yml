@@ -3,7 +3,12 @@ imports:
 
 # Symfony configuration
 framework:
-    secret: '%kernel.secret%'
+    secret: "%kernel.secret%"
+    http_method_override: false
+    profiler:
+        collect: false
+    annotations:
+        enabled: false
 
 # MotanaMultikernelBundle configuration
 motana_multikernel:
