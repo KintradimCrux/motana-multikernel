@@ -56,12 +56,16 @@ class KernelTest extends KernelTestCase
 	 * @covers ::__construct()
 	 * @depends testConstructor
 	 */
-	public function testConstructorLoadClassCache()
+	public function testConstructorLoadsClassCache()
 	{
 		$this->setUp('working', 'app', 'prod', false);
 		
 		// Check the loadClassCache property has been initialized correctly
-		$this->assertAttributeEquals(array('classes','.php'), 'loadClassCache', self::$kernel);
+		if (PHP_VERSION_ID < 70000) {
+			$this->assertAttributeEquals(array('classes','.php'), 'loadClassCache', self::$kernel);
+		} else {
+			$this->assertAttributeEquals(null, 'loadClassCache', self::$kernel);
+		}
 	}
 	
 	/**
