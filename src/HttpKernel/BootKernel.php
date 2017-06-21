@@ -262,6 +262,9 @@ abstract class BootKernel extends Kernel
 			if (0 === strpos($pathInfo, '/' . $kernelName . '/')) {
 				return $kernelName;
 			}
+			if ($pathInfo === '/' . $kernelName) {
+				return $kernelName;
+			}
 		}
 	}
 	

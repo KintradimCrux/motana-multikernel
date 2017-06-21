@@ -14,7 +14,7 @@ framework:
 motana_multikernel:
 
     # Default kernel the front controller should load when no kernel matches the URL
-    default: '%kernel.default' # Example: "app" for the default AppKernel
+    default: '%kernel.default%' # Example: "app" for the default AppKernel
 
     # Class cache configuration
     class_cache:

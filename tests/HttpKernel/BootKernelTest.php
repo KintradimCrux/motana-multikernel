@@ -472,6 +472,29 @@ class BootKernelTest extends KernelTestCase
 	}
 	
 	/**
+	 * @covers ::getKernelFromRequest()
+	 * @depends testGetKernelFromRequest
+	 */
+	public function testGetKernelFromRequestWithoutTrailingSlash()
+	{
+		$server = array(
+			'BASE' => '/web',
+			'PHP_SELF' => '/web/app.php',
+			'QUERY_STRING' => '',
+			'REQUEST_URI' => '/web/app',
+			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
+			'SCRIPT_NAME' => '/web/app.php',
+		);
+		
+		// Check that getKernelFromRequest() returns the correct kernel name
+		$this->assertEquals('app', $this->callMethod(self::$kernel, 'getKernelFromRequest',
+			new Request($_GET, $_REQUEST, array(), array(), array(), $server)));
+		
+		// Check that getKernelFromRequest() booted the kernel
+		$this->assertAttributeEquals(true, 'booted', self::$kernel);
+	}
+	
+	/**
 	 * @covers ::handle()
 	 * @expectedException Symfony\Component\HttpKernel\Exception\NotFoundHttpException
 	 * @expectedExceptionMessage Unable to find the controller for path "/". The route is wrongly configured.
@@ -502,6 +525,34 @@ class BootKernelTest extends KernelTestCase
 			'PHP_SELF' => '/web/app.php',
 			'QUERY_STRING' => '',
 			'REQUEST_URI' => '/web/app/controller/action',
+			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
+			'SCRIPT_NAME' => '/web/app.php',
+		);
+		
+		// Check the kernel throws an exception because it has no routes
+		try { self::$kernel->handle(new Request($_GET, $_REQUEST, array(), array(), array(), $server)); }
+		catch (\Exception $e) { }
+		
+		// Check that calling handle() instantiated one kernel
+		$instances = $this->getObjectAttribute(self::$kernel, 'instances');
+		$this->assertEquals(1, count($instances));
+		
+		// Check the instantiated kernel is the correct one
+		$this->assertTrue(isset($instances['app']));
+		$this->assertEquals('AppKernel', get_class($instances['app']));
+	}
+	
+	/**
+	 * @covers ::handle()
+	 * @depends testHandle
+	 */
+	public function testHandleWithoutTrailingSlash()
+	{
+		$server = array(
+			'BASE' => '/web',
+			'PHP_SELF' => '/web/app.php',
+			'QUERY_STRING' => '',
+			'REQUEST_URI' => '/web/app',
 			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
 			'SCRIPT_NAME' => '/web/app.php',
 		);
