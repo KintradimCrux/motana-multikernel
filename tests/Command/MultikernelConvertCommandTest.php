@@ -267,9 +267,9 @@ EOF
 		$this->callMethod(self::$command, 'updateConfiguration', $dir);
 		
 		$this->assertEquals(<<<EOF
-Updating apps/app/config/services.yml
-Updating apps/app/config/config_dev.yml
 Updating apps/app/config/config.yml
+Updating apps/app/config/config_dev.yml
+Updating apps/app/config/services.yml
 
 EOF
 		, self::$output->fetch());
@@ -277,15 +277,15 @@ EOF
 		foreach ($files as $file) {
 			$content = file_get_contents($file);
 			switch (basename($file)) {
-				case 'config_dev.yml':
-					$this->assertNotContains('%kernel.project_dir%/app/config/routing_dev.yml', $content);
-					$this->assertContains('%kernel.project_dir%/apps/app/config/routing_dev.yml', $content);
-					break;
 				case 'config.yml':
 					$this->assertNotContains('%kernel.project_dir%/app/config/routing.yml', $content);
 					$this->assertContains('%kernel.project_dir%/apps/app/config/routing.yml', $content);
 					$this->assertNotContains('%kernel.project_dir%/var/sessions/%kernel.environment%', $content);
 					$this->assertContains('%kernel.project_dir%/var/sessions/%kernel.name%/%kernel.environment%', $content);
+					break;
+				case 'config_dev.yml':
+					$this->assertNotContains('%kernel.project_dir%/app/config/routing_dev.yml', $content);
+					$this->assertContains('%kernel.project_dir%/apps/app/config/routing_dev.yml', $content);
 					break;
 				case 'services.yml':
 					$this->assertNotContains("'../../src/", $content);

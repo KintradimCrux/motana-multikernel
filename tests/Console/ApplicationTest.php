@@ -172,29 +172,32 @@ class ApplicationTest extends ApplicationTestCase
 	{
 		$this->setUp('working', 'app');
 		
+		$commands = array_keys(self::$application->all());
+		sort($commands);
+		
 		$this->assertEquals(array(
+			'about',
+			'assets:install',
+			'cache:clear',
+			'cache:pool:clear',
 			'cache:warmup',
+			'config:dump-reference',
 			'debug:config',
 			'debug:container',
-			'config:dump-reference',
-			'lint:xliff',
-			'translation:update',
-			'about',
-			'cache:clear',
-			'assets:install',
-			'cache:pool:clear',
-			'debug:translation',
-			'lint:yaml',
 			'debug:event-dispatcher',
-			'multikernel:convert',
-			'list',
+			'debug:translation',
 			'help',
+			'lint:xliff',
+			'lint:yaml',
+			'list',
+			'multikernel:convert',
 			'server:log',
 			'server:run',
 			'server:start',
-			'server:stop',
 			'server:status',
-		), array_keys(self::$application->all()));
+			'server:stop',
+			'translation:update',
+		), $commands);
 	}
 	
 	/**
@@ -203,12 +206,15 @@ class ApplicationTest extends ApplicationTestCase
 	 */
 	public function testAllNamespace()
 	{
+		$commands = array_keys(self::$application->all('debug'));
+		sort($commands);
+		
 		$this->assertEquals(array(
 			'debug:config',
 			'debug:container',
-			'debug:translation',
 			'debug:event-dispatcher',
-		), array_keys(self::$application->all('debug')));
+			'debug:translation',
+		), $commands);
 	}
 	
 	/**
@@ -222,28 +228,31 @@ class ApplicationTest extends ApplicationTestCase
 		/** @var Command $command */
 		$command = self::$application->find('help');
 		$command->setHidden(true);
+
+		$commands = array_keys(self::$application->all());
+		sort($commands);
 		
 		$this->assertEquals(array(
+			'about',
+			'assets:install',
+			'cache:clear',
+			'cache:pool:clear',
 			'cache:warmup',
+			'config:dump-reference',
 			'debug:config',
 			'debug:container',
-			'config:dump-reference',
-			'lint:xliff',
-			'translation:update',
-			'about',
-			'cache:clear',
-			'assets:install',
-			'cache:pool:clear',
-			'debug:translation',
-			'lint:yaml',
 			'debug:event-dispatcher',
-			'multikernel:convert',
+			'debug:translation',
+			'lint:xliff',
+			'lint:yaml',
 			'list',
+			'multikernel:convert',
 			'server:log',
 			'server:run',
 			'server:start',
-			'server:stop',
 			'server:status',
-		), array_keys(self::$application->all()));
+			'server:stop',
+			'translation:update',
+		), $commands);
 	}
 }

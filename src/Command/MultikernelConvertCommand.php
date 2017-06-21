@@ -323,12 +323,19 @@ EOF;
 	{
 		$kernelName = basename(dirname($configDir));
 		
-		// Process all Yaml configuration files of the app
+		$files = array();
 		foreach (Finder::create()->files()->name('*.yml')->in($configDir) as $file) {
 			/** @var SplFileInfo $file */
-			$this->output->writeln(sprintf('Updating apps/%s/config/%s', $kernelName, $file->getBasename()));
+			$files[] = $file->getPathname();
+		}
+		
+		sort($files);
+		
+		// Process all Yaml configuration files of the app
+		foreach ($files as $file) {
+			$this->output->writeln(sprintf('Updating apps/%s/config/%s', $kernelName, basename($file)));
 			
-			$content = file_get_contents($file->getPathname());
+			$content = file_get_contents($file);
 			
 			// Correct relative paths to the src directory
 			// Update references to routing.yml
@@ -347,7 +354,7 @@ EOF;
 			), $content);
 			
 			// Replace the configuration file
-			$this->fs->dumpFile($file->getPathname(), $content);
+			$this->fs->dumpFile($file, $content);
 		}
 	}
 	
