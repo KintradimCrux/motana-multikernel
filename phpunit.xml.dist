@@ -8,6 +8,8 @@
          bootstrap="fixtures/autoload.php"
 >
     <php>
+    	<env name="COLUMNS" value="80"/>
+    	<env name="LINES" value="50"/>
         <ini name="error_reporting" value="-1" />
     </php>
 

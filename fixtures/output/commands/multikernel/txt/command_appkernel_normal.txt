@@ -11,9 +11,10 @@ Available registered bundles with their extension alias if available
   WebServerBundle           web_server          
  ------------------------- -------------------- 
 
- // Provide the name of a bundle as the first argument of this command to dump its configuration. (e.g.                 
- // debug:config FrameworkBundle)                                                                                       
+ // Provide the name of a bundle as the first argument of this command to dump  
+ // its configuration. (e.g. debug:config FrameworkBundle)                      
 
- // For dumping a specific option, add its path as the second argument of this command. (e.g. debug:config              
- // FrameworkBundle serializer to dump the framework.serializer configuration)                                          
+ // For dumping a specific option, add its path as the second argument of this  
+ // command. (e.g. debug:config FrameworkBundle serializer to                   
+ // dump the framework.serializer configuration)                                
 
