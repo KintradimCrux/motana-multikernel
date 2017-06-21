@@ -46,7 +46,7 @@ abstract class Kernel extends BaseKernel
 	{
 		parent::__construct($environment, $debug);
 		
-		if ((PHP_VERSION_ID < 70000 && 'cli' !== PHP_SAPI && ! in_array($environment, ['test', 'dev'])) || isset($GLOBALS['KernelTest_constructor'])) {
+		if (PHP_VERSION_ID < 70000 && ! in_array($environment, ['test', 'dev'])) {
 			$this->loadClassCache();
 		}
 	}

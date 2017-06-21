@@ -228,14 +228,9 @@ class BootKernelTest extends KernelTestCase
 	 */
 	public function testLoadKernelChecksKernelClass()
 	{
-		try {
-			$GLOBALS['BootKernelTest_loadKernel'] = 1;
-			$this->setUp('broken');
-			self::callMethod(self::$kernel, 'loadKernel', 'brokenKernel');
-		}
-		finally {
-			unset($GLOBALS['BootKernelTest_loadKernel']);
-		}
+		$this->setUp('broken');
+		
+		self::callMethod(self::$kernel, 'loadKernel', 'brokenKernel');
 	}
 	
 	/**
@@ -248,15 +243,10 @@ class BootKernelTest extends KernelTestCase
 	 */
 	public function testLoadKernelChecksCacheClass()
 	{
-		try {
-			$GLOBALS['BootKernelTest_loadKernel'] = 1;
-			$this->setUp('broken');
-			self::$kernel->useAppCache(true);
-			self::callMethod(self::$kernel, 'loadKernel', 'brokenCache');
-		}
-		finally {
-			unset($GLOBALS['BootKernelTest_loadKernel']);
-		}
+		$this->setUp('broken');
+		
+		self::$kernel->useAppCache(true);
+		self::callMethod(self::$kernel, 'loadKernel', 'brokenCache');
 	}
 	
 	/**
@@ -268,11 +258,7 @@ class BootKernelTest extends KernelTestCase
 	 */
 	public function testLoadKernelCache()
 	{
-		$GLOBALS['BootKernelTest_loadKernel'] = 1;
 		self::$kernel->useAppCache(true);
-		
-		// Make sure that HTTP method parameter override is disabled
-		$this->writeAttribute(Request::class, 'httpMethodParameterOverride', false);
 		
 		// Check that loadKernel() instantiates the cache class
 		$app = $this->callMethod(self::$kernel, 'loadKernel', 'app');
@@ -282,8 +268,6 @@ class BootKernelTest extends KernelTestCase
 		
 		// Check that loadKernel() returns an instance of the correct class
 		$this->assertEquals('AppCache', get_class($app));
-		
-		unset($GLOBALS['BootKernelTest_loadKernel']);
 	}
 	
 	/**

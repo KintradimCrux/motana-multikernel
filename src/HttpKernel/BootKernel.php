@@ -298,7 +298,7 @@ abstract class BootKernel extends Kernel
 			
 			$kernel = new $class($this->environment, $this->debug);
 			
-			if ((false === $data['cache'] || 'cli' === PHP_SAPI || ! $this->useAppCache) && ! isset($GLOBALS['BootKernelTest_loadKernel'])) {
+			if ((false === $data['cache'] || ! $this->useAppCache)) {
 				return $this->instances[$kernelName] = $kernel;
 			}
 

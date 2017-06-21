@@ -245,13 +245,7 @@ EOF;
 	 */
 	protected function generateRandomSecret()
 	{
-		if (function_exists('openssl_random_pseudo_bytes')) {
-			return hash('sha1', openssl_random_pseudo_bytes(23));
-		}
-		
-		// @codeCoverageIgnoreStart
-		return hash('sha1', uniqid(mt_rand(), true));
-		// @codeCoverageIgnoreEnd
+		return hash('sha1', function_exists('openssl_random_pseudo_bytes') ? openssl_random_pseudo_bytes(23) : uniqid(mt_rand(), true));
 	}
 	
 	/**
