@@ -16,13 +16,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
- * @coversDefaultClass Motana\Bundle\MultikernelBundle\DependencyInjection\MotanaMultiKernelExtension
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\DependencyInjection\MotanaMultikernelExtension
  */
 class YamlMotanaMultikernelExtensionTest extends GenericMotanaMultikernelExtensionTest
 {
 	/**
 	 * {@inheritDoc}
-	 * @see \Tests\Motana\Bundle\MultikernelBundle\GenericMotanaMultiKernelExtensionTest::loadConfiguration()
+	 * @see \Tests\Motana\Bundle\MultikernelBundle\GenericMotanaMultikernelExtensionTest::loadConfiguration()
 	 */
 	protected function loadConfiguration(ContainerBuilder $container, $resource)
 	{

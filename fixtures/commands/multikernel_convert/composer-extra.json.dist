@@ -1,6 +1,6 @@
 {
-    "name": "torr/motana_symfony",
-    "license": "proprietary",
+    "name": "test/project",
+    "license": "none",
     "type": "project",
     "autoload": {
         "psr-4": {

@@ -15,9 +15,9 @@ The bin/console has been extended to run commands on multiple kernels (i.e. cach
 
 Since the BootKernel is a modified Symfony Kernel with almost all features disabled, the penalty of having an extra kernel is rather small.
 
-# Installation
+## Installation
 
-## Get the bundle
+### Get the bundle
 
 Let composer download and install the bundle by running
 
@@ -27,7 +27,7 @@ composer require motana/multikernel ~1.0
 
 in a shell.
 
-## Enable the bundle
+### Enable the bundle
 
 ```php
 // in app/AppKernel.php
@@ -40,7 +40,7 @@ public function registerBundles() {
 }
 ```
 
-## Convert your project
+### Convert your project
 
 After enabling the bundle, run the following command on the shell to convert your project directory:
 
@@ -80,7 +80,7 @@ composer symfony-scripts
 The SensioDistributionBundle will run the cache:clear and assets:install commands on both the BootKernel and your AppKernel.
 
 
-# Configuration
+## Configuration
 
 The following settings can be used in apps/config/config.yml to configure the BootKernel:
 
@@ -110,3 +110,13 @@ motana_multikernel:
         hidden:               []
 
 ```
+
+## Credits
+
+Portions of this bundle are based on work of [Fabien Potencier &lt;fabien@symfony.com&gt;](mailto:fabien@symfony.com) and
+[Jean-François Simon &lt;contact@jfsimon.fr&gt;](mailto:contact@jfsimon.fr).
+
+## License
+
+This bundle is licensed under the MIT license - see the [LICENSE](LICENSE) file for details.
+

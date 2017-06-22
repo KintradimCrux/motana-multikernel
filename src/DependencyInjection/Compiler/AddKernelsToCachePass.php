@@ -20,21 +20,21 @@ use Motana\Bundle\MultikernelBundle\HttpKernel\BootKernel;
 
 /**
  * Add kernel data for the BootKernel to cache.
- * 
- * @author torr
+ *
+ * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
 class AddKernelsToCachePass implements CompilerPassInterface
 {
 	/**
 	 * The DelegateKernel to process.
-	 * 
+	 *
 	 * @var BootKernel
 	 */
 	private $kernel;
 	
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param BootKernel $kernel A BootKernel instance
 	 */
 	public function __construct(BootKernel $kernel)

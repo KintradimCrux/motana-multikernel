@@ -14,7 +14,7 @@ namespace Tests\Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\ExcludeClassesFromCachePass;
-use Motana\Bundle\MultikernelBundle\MotanaMultiKernelBundle;
+use Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle;
 use Motana\Bundle\MultikernelBundle\Test\KernelTestCase;
 
 /**
@@ -46,7 +46,7 @@ class ExcludeClassesFromCachePassTest extends KernelTestCase
 	protected function getExcludedClasses()
 	{
 		$classes = array();
-		$bundle = new MotanaMultiKernelBundle();
+		$bundle = new MotanaMultikernelBundle();
 		
 		if (is_file($file = $bundle->getPath() . '/Resources/config/class_cache.xml')) {
 			$xml = new \SimpleXMLElement($file, LIBXML_NOCDATA, true);
@@ -68,12 +68,14 @@ class ExcludeClassesFromCachePassTest extends KernelTestCase
 		$container = $this->callMethod(self::$kernel, 'buildContainer');
 		/** @var ContainerBuilder $container */
 		
-		$passes = $container->getCompilerPassConfig()->getOptimizationPasses();
+		$passes = array_map(function($e) {
+			return get_class($e);
+		}, $container->getCompilerPassConfig()->getOptimizationPasses());
 		
 		// Check the AddKernelsToCachePass has been added
-		$this->assertInstanceOf(ExcludeClassesFromCachePass::class, end($passes));
+		$this->assertTrue(in_array(ExcludeClassesFromCachePass::class, $passes));
 		
-		$container = $this->callMethod(self::$kernel, 'buildContainer');
+		#$container = $this->callMethod(self::$kernel, 'buildContainer');
 		$container->compile();
 		
 		// Check the AddKernelsToCachePass has done its work

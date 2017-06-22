@@ -11,21 +11,23 @@
 
 namespace Tests\Motana\Bundle\MultikernelBundle\DependencyInjection;
 
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use Motana\Bundle\MultikernelBundle\DependencyInjection\MotanaMultiKernelExtension;
-use Motana\Bundle\MultikernelBundle\MotanaMultiKernelBundle;
+use Motana\Bundle\MultikernelBundle\DependencyInjection\MotanaMultikernelExtension;
+use Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle;
 use Motana\Bundle\MultikernelBundle\Test\TestCase;
+use Symfony\Bundle\FrameworkBundle\DependencyInjection\FrameworkExtension;
 
 /**
  * Abstract base class for extension tests.
- * 
- * @coversDefaultClass Motana\Bundle\MultikernelBundle\DependencyInjection\MotanaMultiKernelExtension
+ *
+ * @coversDefaultClass Motana\Bundle\MultikernelBundle\DependencyInjection\MotanaMultikernelExtension
  */
 abstract class GenericMotanaMultikernelExtensionTest extends TestCase
 {
 	/**
-	 * @var MotanaMultiKernelExtension
+	 * @var MotanaMultikernelExtension
 	 */
 	protected static $extension;
 	
@@ -50,9 +52,22 @@ abstract class GenericMotanaMultikernelExtensionTest extends TestCase
 	 */
 	protected function setUp()
 	{
-		self::$extension = new MotanaMultiKernelExtension();
+		$bundles = array(
+			'FrameworkBundle' => FrameworkBundle::class,
+			'MotanaMultikernelBundle' => MotanaMultikernelBundle::class,
+		);
+		
+		self::$extension = new MotanaMultikernelExtension();
 		
 		self::$container = new ContainerBuilder();
+		self::$container->setParameter('kernel.bundles', $bundles);
+		self::$container->setParameter('kernel.cache_dir', __DIR__ . '/../../fixtures/kernels/working/var/cache');
+		self::$container->setParameter('kernel.charset', 'UTF-8');
+		self::$container->setParameter('kernel.debug', false);
+		self::$container->setParameter('kernel.root_dir', __DIR__ . '/../../fixtures/kernels/working/apps');
+		self::$container->setParameter('kernel.secret', 'ThisTokenIsNotSoSecretChangeIt');
+		
+		self::$container->registerExtension(new FrameworkExtension());
 		self::$container->registerExtension(self::$extension);
 		
 		self::$classes = $this->getDefaultClassCacheSettings();
@@ -67,7 +82,7 @@ abstract class GenericMotanaMultikernelExtensionTest extends TestCase
 	protected function getDefaultClassCacheSettings()
 	{
 		$classes = array();
-		$bundle = new MotanaMultiKernelBundle();
+		$bundle = new MotanaMultikernelBundle();
 		
 		if (is_file($file = $bundle->getPath() . '/Resources/config/class_cache.xml')) {
 			$xml = new \SimpleXMLElement($file, LIBXML_NOCDATA, true);
@@ -90,7 +105,7 @@ abstract class GenericMotanaMultikernelExtensionTest extends TestCase
 	protected function getDefaultCommands()
 	{
 		$commands= array();
-		$bundle = new MotanaMultiKernelBundle();
+		$bundle = new MotanaMultikernelBundle();
 		
 		if (is_file($file = $bundle->getPath() . '/Resources/config/commands.xml')) {
 			$xml = new \SimpleXMLElement($file, LIBXML_NOCDATA, true);
@@ -109,7 +124,7 @@ abstract class GenericMotanaMultikernelExtensionTest extends TestCase
 	
 	/**
 	 * Loads the extension configuration.
-	 * 
+	 *
 	 * @param ContainerBuilder $container
 	 * @param string $resource
 	 */
@@ -129,6 +144,124 @@ abstract class GenericMotanaMultikernelExtensionTest extends TestCase
 		
 		// Check the parameter contains the merged array
 		$this->assertEquals(array('one', 'two', 'three', 'four', 'five', 'six'), $container->getParameter('test_parameter'));
+	}
+	
+	/**
+	 * @covers ::prepend()
+	 */
+	public function testPrependAssetsGlobal()
+	{
+		self::$extension->prepend(self::$container);
+		
+		// Check that prepend() added the assets.base_path setting
+		$this->assertEquals(array(
+			array(
+				'assets' => array(
+					'base_path' => '..',
+				),
+			)
+		), self::$container->getExtensionConfig('framework'));
+	}
+	
+	/**
+	 * @covers ::prepend()
+	 * @depends testPrependAssetsGlobal
+	 */
+	public function testPrependAssetsGlobalWithBaseUrl()
+	{
+		self::$container->prependExtensionConfig('framework', array(
+			'assets' => array(
+				'base_url' => '//localhost/web'
+			)
+		));
+		
+		self::$extension->prepend(self::$container);
+		
+		$this->assertEquals(array(array(
+			'assets' => array(
+				'base_url' => '//localhost/web'
+			)
+		)), self::$container->getExtensionConfig('framework'));
+	}
+	
+	/**
+	 * @covers ::prepend()
+	 * @depends testPrependAssetsGlobalWithBaseUrl
+	 */
+	public function testPrependAssetsPackages()
+	{
+		self::$container->prependExtensionConfig('framework', array(
+			'assets' => array(
+				'packages' => array(
+					'default' => array(
+						
+					)
+				),
+			)
+		));
+		
+		self::$extension->prepend(self::$container);
+		
+		$this->assertEquals(array(
+			array(
+				'assets' => array(
+					'packages' => array(
+						'default' => array(
+							'base_path' => '..',
+						),
+					),
+				),
+			),
+			array(
+				'assets' => array(
+					'base_path' => '..',
+				),
+			),
+			array(
+				'assets' => array(
+					'packages' => array(
+						'default' => array(
+						),
+					),
+				),
+			)
+		), self::$container->getExtensionConfig('framework'));
+	}
+	
+	/**
+	 * @covers ::prepend()
+	 * @depends testPrependAssetsPackages
+	 */
+	public function testPrependAssetsPackagesWithBaseUrl()
+	{
+		self::$container->prependExtensionConfig('framework', array(
+			'assets' => array(
+				'packages' => array(
+					'default' => array(
+						'base_url' => '//localhost/web'
+					)
+				),
+			)
+		));
+		
+		self::$extension->prepend(self::$container);
+
+		$this->assertEquals(array(
+			array(
+				'assets' => array(
+					'base_path' => '..',
+				),
+			),
+			array(
+				'assets' => array(
+					'packages' => array(
+						'default' => array(
+							'base_url' => '//localhost/web'
+						)
+					),
+				)
+			)
+		), self::$container->getExtensionConfig('framework'));
 	}
 	
 	/**

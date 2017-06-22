@@ -13,6 +13,7 @@ namespace Motana\Bundle\MultikernelBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -21,9 +22,50 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
-class MotanaMultikernelExtension extends Extension
+class MotanaMultikernelExtension extends Extension implements PrependExtensionInterface
 {
 	// {{{ Method overrides
+	
+	/**
+	 * {@inheritDoc}
+	 * @see \Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface::prepend()
+	 */
+	public function prepend(ContainerBuilder $container)
+	{
+		$bundles = $container->getParameter('kernel.bundles');
+		
+		// Set the base_path of assets to '..' on all packages
+		if (isset($bundles['FrameworkBundle'])) {
+			$config = $container->getExtensionConfig('framework');
+			if ( ! empty($config)) {
+				$config = call_user_func_array('array_merge', $container->getExtensionConfig('framework'));
+			}
+
+			if ( ! isset($config['assets']['base_url'])) {
+				$container->prependExtensionConfig('framework', array(
+					'assets' => array(
+						'base_path' => '..',
+					)
+				));
+			}
+			
+			if (isset($config['assets']['packages'])) {
+				foreach ($config['assets']['packages'] as $packageName => $package) {
+					if ( ! isset($package['base_url'])) {
+						$container->prependExtensionConfig('framework', array(
+							'assets' => array(
+								'packages' => array(
+									$packageName => array(
+										'base_path' => '..',
+									)
+								)
+							)
+						));
+					}
+				}
+			}
+		}
+	}
 	
 	/**
 	 * {@inheritDoc}

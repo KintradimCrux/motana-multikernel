@@ -24,7 +24,7 @@ use Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle;
  * Abstract boot kernel base class for multi-kernel applications, which boots
  * one or more kernels. The first booted kernel is used to handle web requests.
  *
- * @author torr
+ * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
 abstract class BootKernel extends Kernel
 {

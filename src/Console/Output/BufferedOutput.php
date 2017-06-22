@@ -16,8 +16,8 @@ use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * A buffered output that replaces the Symfony version number with a placeholder.
- * 
- * @author torr
+ *
+ * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  *
  */
 class BufferedOutput extends Output

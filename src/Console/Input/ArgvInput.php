@@ -3,6 +3,7 @@
 /*
  * This file is part of the Motana package.
  *
+ * (c) Fabien Potencier <fabien@symfony.com>
  * (c) Wenzel Jonas <mail@ramihyn.sytes.net>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -17,12 +18,12 @@ use Symfony\Component\Console\Input\InputDefinition;
 /**
  * A more advanced version of the Symfony ArgvInput that is able to handle
  * {@link ConditionalArgument}s.
- * 
+ *
  * This class would extend the original ArgvInput class, if it was possible to
- * override the parseArgument() method. I used a copy since the declaration is 'private'. 
- * 
+ * override the parseArgument() method. I used a copy since the declaration is 'private'.
+ *
  * The parseArgument() method has been modified to handle a {@link ConditionalArgument} correctly.
- * 
+ *
  * The methods hasParameterOption() and getParameterOption() have been changed to handle the -eprod option notation correctly.
  *
  * @author Fabien Potencier <fabien@symfony.com>
@@ -34,14 +35,14 @@ class ArgvInput extends Input
 	
 	/**
 	 * Tokens to parse.
-	 * 
+	 *
 	 * @var array
 	 */
 	private $tokens = array();
 	
 	/**
 	 * Stack for tokens left to parse.
-	 * 
+	 *
 	 * @var array
 	 */
 	private $parsed = array();
@@ -51,7 +52,7 @@ class ArgvInput extends Input
 	
 	/**
 	 * Constructor.
-	 *  
+	 *
 	 * @param array $argv Array of parameters from the CLI (in $_SERVER['argv'] format)
 	 * @param InputDefinition $definition Input definition
 	 */
@@ -170,7 +171,7 @@ class ArgvInput extends Input
 						} else {
 							return $default;
 						}
-					} 
+					}
 					
 					return $token;
 				} elseif (0 === strpos($token, $value)) {
@@ -207,7 +208,7 @@ class ArgvInput extends Input
 	
 	/**
 	 * Returns the string representation of the parsed commandline.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function __toString()

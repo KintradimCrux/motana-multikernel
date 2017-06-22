@@ -16,11 +16,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 use Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\ExcludeClassesFromCachePass;
+use Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\OverrideAssetsPathPackageServicePass;
 
 /**
- * Bundle.
+ * MotanaMultikernelBundle.
  *
- * @author torr
+ * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
 class MotanaMultikernelBundle extends Bundle
 {
@@ -34,6 +35,7 @@ class MotanaMultikernelBundle extends Bundle
 		
 		if ('boot' !== $container->getParameter('kernel.name')) {
 			$container->addCompilerPass(new ExcludeClassesFromCachePass(), PassConfig::TYPE_OPTIMIZE);
+			$container->addCompilerPass(new OverrideAssetsPathPackageServicePass(), PassConfig::TYPE_BEFORE_OPTIMIZATION);
 		}
 	}
 }

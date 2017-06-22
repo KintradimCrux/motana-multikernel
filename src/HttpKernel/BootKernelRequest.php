@@ -15,8 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * A request that appends the kernel name to the base path.
- *  
- * @author torr
+ *
+ * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
 class BootKernelRequest extends Request
 {
