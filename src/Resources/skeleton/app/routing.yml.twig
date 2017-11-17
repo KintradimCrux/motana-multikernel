@@ -1,0 +1,7 @@
+{% block app %}
+{% if bundle and bundles['SensioFrameworkExtraBundle'] %}
+{{ kernel_name }}:
+    resource: '@{{ bundle }}/Controller/'
+    type: annotation
+{% endif %}
+{% endblock app %}

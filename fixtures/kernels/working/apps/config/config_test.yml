@@ -1,4 +1,0 @@
-imports:
-    - { resource: config.yml }
-
-# Put parameters here that don't need to change for each app

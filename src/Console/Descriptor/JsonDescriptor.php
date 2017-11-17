@@ -1,16 +1,17 @@
 <?php
 
 /*
- * This file is part of the Motana package.
+ * This file is part of the Motana Multi-Kernel Bundle, which is licensed
+ * under the MIT license. For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
  *
  * (c) Jean-François Simon <contact@jfsimon.fr>
  * (c) Wenzel Jonas <mail@ramihyn.sytes.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
 namespace Motana\Bundle\MultikernelBundle\Console\Descriptor;
+
+use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -18,8 +19,6 @@ use Symfony\Component\Console\Descriptor\ApplicationDescription;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
-
-use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
 
 /**
  * A replacement for the Symfony Standard Edition json descriptor.
@@ -29,13 +28,11 @@ use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
  */
 class JsonDescriptor extends Descriptor
 {
-	// {{{ Method overrides
-	
 	/**
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Descriptor\Descriptor::describeInputArgument()
 	 */
-	protected function describeInputArgument(InputArgument $argument, array $options = array())
+	protected function describeInputArgument(InputArgument $argument, array $options = [])
 	{
 		$this->writeData($this->getInputArgumentData($argument), $options);
 	}
@@ -44,7 +41,7 @@ class JsonDescriptor extends Descriptor
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Descriptor\Descriptor::describeInputOption()
 	 */
-	protected function describeInputOption(InputOption $option, array $options = array())
+	protected function describeInputOption(InputOption $option, array $options = [])
 	{
 		$this->writeData($this->getInputOptionData($option), $options);
 	}
@@ -53,7 +50,7 @@ class JsonDescriptor extends Descriptor
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Descriptor\Descriptor::describeInputDefinition()
 	 */
-	protected function describeInputDefinition(InputDefinition $definition, array $options = array())
+	protected function describeInputDefinition(InputDefinition $definition, array $options = [])
 	{
 		$this->writeData($this->getInputDefinitionData($definition), $options);
 	}
@@ -62,7 +59,7 @@ class JsonDescriptor extends Descriptor
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Descriptor\Descriptor::describeCommand()
 	 */
-	protected function describeCommand(Command $command, array $options = array())
+	protected function describeCommand(Command $command, array $options = [])
 	{
 		$this->writeData($this->getCommandData($command), $options);
 	}
@@ -71,7 +68,7 @@ class JsonDescriptor extends Descriptor
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Descriptor\Descriptor::describeApplication()
 	 */
-	protected function describeApplication(Application $application, array $options = array())
+	protected function describeApplication(Application $application, array $options = [])
 	{
 		$describedNamespace = isset($options['namespace']) ? $options['namespace'] : null;
 		$description = new ApplicationDescription($application, $describedNamespace);
@@ -96,26 +93,23 @@ class JsonDescriptor extends Descriptor
 			}
 		}
 		
-		$commandData = array();
+		$commandData = [];
 		foreach ($description->getCommands() as $command) {
 			$commandData[] = $this->getCommandData($command, false);
 		}
 		
 		if ($application instanceof MultikernelApplication) {
 			$data = $describedNamespace
-			? array('kernels' => $kernels, 'commands' => $commandData, 'namespace' => $describedNamespace)
-			: array('kernels' => $kernels, 'commands' => $commandData, 'namespaces' => array_values($namespaces));
+			? [ 'kernels' => $kernels, 'commands' => $commandData, 'namespace' => $describedNamespace ]
+			: [ 'kernels' => $kernels, 'commands' => $commandData, 'namespaces' => array_values($namespaces) ];
 		} else {
 			$data = $describedNamespace
-			? array('commands' => $commandData, 'namespace' => $describedNamespace)
-			: array('commands' => $commandData, 'namespaces' => array_values($namespaces));
+			? [ 'commands' => $commandData, 'namespace' => $describedNamespace ]
+			: [ 'commands' => $commandData, 'namespaces' => array_values($namespaces) ];
 		}
 		
 		$this->writeData($data, $options);
 	}
-	
-	// }}}
-	// {{{ Helper methods
 	
 	/**
 	 * Returns data for an InputArgument instance.
@@ -125,13 +119,13 @@ class JsonDescriptor extends Descriptor
 	 */
 	private function getInputArgumentData(InputArgument $argument)
 	{
-		return array(
+		return [
 			'name' => $argument->getName(),
 			'is_required' => $argument->isRequired(),
 			'is_array' => $argument->isArray(),
 			'description' => preg_replace('#\s*[\r\n]\s*#',' ', $argument->getDescription()),
 			'default' => $argument->getDefault(),
-		);
+		];
 	}
 	
 	/**
@@ -142,7 +136,7 @@ class JsonDescriptor extends Descriptor
 	 */
 	private function getInputOptionData(InputOption $option)
 	{
-		return array(
+		return [
 			'name' => '--' . $option->getName(),
 			'shortcut' => $option->getShortcut() ? '-' . implode('|-', explode('|', $option->getShortcut())) : '',
 			'accept_value' => $option->acceptValue(),
@@ -150,7 +144,7 @@ class JsonDescriptor extends Descriptor
 			'is_multiple' => $option->isArray(),
 			'description' => preg_replace('#\s*[\r\n]\s*#',' ', $option->getDescription()),
 			'default' => $option->getDefault(),
-		);
+		];
 	}
 	
 	/**
@@ -161,22 +155,22 @@ class JsonDescriptor extends Descriptor
 	 */
 	private function getInputDefinitionData(InputDefinition $definition)
 	{
-		$arguments = array();
+		$arguments = [];
 		foreach ($definition->getArguments() as $name => $argument) {
 			if ( ! in_array($name, ['kernel', 'command'])) {
 				$arguments[$name] = $this->getInputArgumentData($argument);
 			}
 		}
 		
-		$options = array();
+		$options = [];
 		foreach ($definition->getOptions() as $name => $option) {
 			$options[$name] = $this->getInputOptionData($option);
 		}
 		
-		return array(
+		return [
 			'arguments' => $arguments,
 			'options' => $options,
-		);
+		];
 	}
 	
 	/**
@@ -195,25 +189,25 @@ class JsonDescriptor extends Descriptor
 		$command->getSynopsis();
 		$command->mergeApplicationDefinition(false);
 		
-		$usages = array();
+		$usages = [];
 		if ( ! $kernel) {
-			$usages[] = $_SERVER['PHP_SELF'] . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $command->getSynopsis(true));
+			$usages[] = $this->makePathRelative($_SERVER['PHP_SELF']) . ' ' . str_replace([' <kernel>', ' <command>' ], '', $command->getSynopsis(true));
 		}
 		
 		if ( ! $global) {
-			foreach (array_merge(array($command->getSynopsis(true)), $command->getUsages(), $command->getAliases()) as $usage) {
-				$usages[] = $_SERVER['PHP_SELF'] . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage);
+			foreach (array_merge([ $command->getSynopsis(true) ], $command->getUsages(), $command->getAliases()) as $usage) {
+				$usages[] = $this->makePathRelative($_SERVER['PHP_SELF']) . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace([ ' <kernel>', ' <command>' ], '', $usage);
 			}
 		}
 		
-		$data = array(
+		$data = [
 			'name' => $command->getName(),
 			'usage' => $usages,
 			'description' => $command->getDescription(),
 			'help' => $this->getProcessedHelp($command),
 			'kernels' => $command->getApplication() instanceof MultikernelApplication ? array_keys($command->getApplication()->getKernel()->getKernels()) : null,
-			'definition' => $this->getInputDefinitionData($command->getNativeDefinition()),
-		);
+			'definition' => $this->getInputDefinitionData($command->getDefinition()),
+		];
 		
 		if ( ! $global || ! $command->getApplication() instanceof MultikernelApplication || ! $addKernel) {
 			unset($data['kernels']);
@@ -228,10 +222,8 @@ class JsonDescriptor extends Descriptor
 	 * @param array $data Data to output
 	 * @param array $options Display options
 	 */
-	private function writeData(array $data, array $options = array())
+	private function writeData(array $data, array $options = [])
 	{
 		$this->write(json_encode($data, JSON_PRETTY_PRINT) . "\n");
 	}
-	
-	// }}}
 }

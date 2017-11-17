@@ -1,16 +1,18 @@
 <?php
 
 /*
- * This file is part of the Motana package.
+ * This file is part of the Motana Multi-Kernel Bundle, which is licensed
+ * under the MIT license. For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
  *
  * (c) Jean-François Simon <contact@jfsimon.fr>
  * (c) Wenzel Jonas <mail@ramihyn.sytes.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
 namespace Motana\Bundle\MultikernelBundle\Console\Descriptor;
+
+use Motana\Bundle\MultikernelBundle\Command\MultikernelCommand;
+use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -21,8 +23,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
-use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
-
 /**
  * A replacement for the Symfony Standard Edition text descriptor.
  *
@@ -31,13 +31,11 @@ use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
  */
 class TextDescriptor extends Descriptor
 {
-	// {{{ Method overrides
-	
 	/**
 	 * {@inheritDoc}
 	 * @see Symfony\Component\Console\Descriptor\Descriptor::describeInputArgument()
 	 */
-	protected function describeInputArgument(InputArgument $argument, array $options = array())
+	protected function describeInputArgument(InputArgument $argument, array $options = [])
 	{
 		if (null !== $argument->getDefault() && ( ! is_array($argument->getDefault()) || count($argument->getDefault()))) {
 			$default = sprintf('<comment> [default: %s]</comment>', $this->formatDefaultValue($argument->getDefault()));
@@ -48,7 +46,7 @@ class TextDescriptor extends Descriptor
 		$totalWidth = isset($options['total_width']) ? $options['total_width'] : Helper::strlen($argument->getName());
 		$spacingWidth = $totalWidth - strlen($argument->getName());
 		
-		$this->writeText(sprintf('  <info>%s</info>  %s%s%s',
+		$this->writeText(sprintf('   <info>%s</info>  %s%s%s',
 			$argument->getName(),
 			str_repeat(' ', $spacingWidth),
 			// + 4 = 2 spaces before <info>, 2 spaces after </info>
@@ -61,7 +59,7 @@ class TextDescriptor extends Descriptor
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Descriptor\Descriptor::describeInputOption()
 	 */
-	protected function describeInputOption(InputOption $option, array $options = array())
+	protected function describeInputOption(InputOption $option, array $options = [])
 	{
 		if ($option->acceptValue() && null !== $option->getDefault() && ( ! is_array($option->getDefault()) || count($option->getDefault()))) {
 			$default = sprintf('<comment> [default: %s]</comment>', $this->formatDefaultValue($option->getDefault()));
@@ -77,8 +75,8 @@ class TextDescriptor extends Descriptor
 			}
 		}
 		
-		$totalWidth = isset($options['total_width']) ? $options['total_width'] : $this->calculateTotalWidthForOptions(array($option));
-		$shortcutWidth = isset($options['shortcut_width']) ? $options['shortcut_width'] : $this->calculateTotalWidthForShortcuts(array($option));
+		$totalWidth = isset($options['total_width']) ? $options['total_width'] : $this->calculateTotalWidthForOptions([ $option ]);
+		$shortcutWidth = isset($options['shortcut_width']) ? $options['shortcut_width'] : $this->calculateTotalWidthForShortcuts([ $option ]);
 		$shortcutWidth = $shortcutWidth > 0 ? $shortcutWidth - Helper::strlen($option->getShortcut()) - 1 : 0;
 		
 		$synopsis = sprintf('%s%s%s',
@@ -89,7 +87,7 @@ class TextDescriptor extends Descriptor
 		
 		$spacingWidth = $totalWidth - Helper::strlen($synopsis);
 		
-		$this->writeText(sprintf('  <info>%s</info>%s%s%s%s',
+		$this->writeText(sprintf('   <info>%s</info>%s%s%s%s',
 			$synopsis,
 			str_repeat(' ', $spacingWidth),
 			// + 17 = 2 spaces + <info> + </info> + 2 spaces
@@ -103,7 +101,7 @@ class TextDescriptor extends Descriptor
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Descriptor\Descriptor::describeInputDefinition()
 	 */
-	protected function describeInputDefinition(InputDefinition $definition, array $options = array())
+	protected function describeInputDefinition(InputDefinition $definition, array $options = [])
 	{
 		$totalWidth = isset($options['total_width']) ? $options['total_width'] : $this->calculateTotalWidthForOptions($definition->getOptions());
 		
@@ -128,9 +126,9 @@ class TextDescriptor extends Descriptor
 				$argWidth = $this->calculateTotalWidthForArguments($definition->getArguments());
 				foreach ($definition->getArguments() as $name => $argument) {
 					if ( ! in_array($name, ['kernel', 'command'])) {
-						$this->describeInputArgument($argument, array_merge($options, array(
+						$this->describeInputArgument($argument, array_merge($options, [
 							'total_width' => $argWidth
-						)));
+						]));
 						$this->writeText("\n");
 					}
 				}
@@ -144,7 +142,7 @@ class TextDescriptor extends Descriptor
 		if ($definition->getOptions()) {
 			$this->writeText('<comment>Options:</comment>', $options);
 			
-			$laterOptions = array();
+			$laterOptions = [];
 			foreach ($definition->getOptions() as $option) {
 				if (strlen($option->getShortcut()) > 1) {
 					$laterOptions[] = $option;
@@ -152,18 +150,18 @@ class TextDescriptor extends Descriptor
 				}
 				
 				$this->writeText("\n");
-				$this->describeInputOption($option, array_merge($options, array(
+				$this->describeInputOption($option, array_merge($options, [
 					'total_width' => $totalWidth,
 					'shortcut_width' => $shortcutWidth,
-				)));
+				]));
 			}
 			
 			foreach ($laterOptions as $option) {
 				$this->writeText("\n");
-				$this->describeInputOption($option, array_merge($options, array(
+				$this->describeInputOption($option, array_merge($options, [
 					'total_width' => $totalWidth,
 					'shortcut_width' => $shortcutWidth,
-				)));
+				]));
 			}
 		}
 	}
@@ -172,7 +170,7 @@ class TextDescriptor extends Descriptor
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Descriptor\Descriptor::describeCommand()
 	 */
-	protected function describeCommand(Command $command, array $options = array())
+	protected function describeCommand(Command $command, array $options = [])
 	{
 		$container = $command->getApplication()->getKernel()->getContainer();
 		$global = in_array($command->getName(), $container->getParameter('motana.multikernel.commands.global'));
@@ -191,13 +189,13 @@ class TextDescriptor extends Descriptor
 		
 		if ( ! $kernel) {
 			$this->writeText("\n");
-			$this->writeText('  '.$_SERVER['PHP_SELF'] . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $command->getSynopsis(true)));
+			$this->writeText('   ' . $this->makePathRelative($_SERVER['PHP_SELF']) . ' ' . str_replace([ ' <kernel>', ' <command>' ], '', $command->getSynopsis(true)));
 		}
 		
 		if ( ! $global) {
-			foreach (array_merge(array($command->getSynopsis(true)), $command->getAliases(), $command->getUsages()) as $usage) {
+			foreach (array_merge([ $command->getSynopsis(true) ], $command->getAliases(), $command->getUsages()) as $usage) {
 				$this->writeText("\n");
-				$this->writeText('  '.$_SERVER['PHP_SELF'] . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage));
+				$this->writeText('   ' . $this->makePathRelative($_SERVER['PHP_SELF']) . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace([ ' <kernel>', ' <command>' ], '', $usage));
 			}
 		}
 
@@ -205,14 +203,14 @@ class TextDescriptor extends Descriptor
 		
 		if ( ! $global && $command->getApplication() instanceof MultikernelApplication) {
 			$this->writeText("\n");
-			$this->writeText("<comment>Kernels:</comment>\n");
+			$this->writeText("<comment>Kernels:</comment>\n", $options);
 			foreach ($command->getApplication()->getKernel()->getKernels() as $kernel) {
-				$this->writeText('  '.$kernel->getName(), $options);
+				$this->writeText('   '.$kernel->getName(), $options);
 				$this->writeText("\n");
 			}
 		}
 		
-		$definition = $command->getNativeDefinition();
+		$definition = $command->getDefinition();
 		if ($definition->getOptions() || $definition->getArguments()) {
 			$this->writeText("\n");
 			$this->describeInputDefinition($definition, $options);
@@ -233,7 +231,7 @@ class TextDescriptor extends Descriptor
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Descriptor\Descriptor::describeApplication()
 	 */
-	protected function describeApplication(Application $application, array $options = array())
+	protected function describeApplication(Application $application, array $options = [])
 	{
 		$describedNamespace = isset($options['namespace']) ? $options['namespace'] : null;
 		$description = new ApplicationDescription($application, $describedNamespace);
@@ -247,35 +245,36 @@ class TextDescriptor extends Descriptor
 		$kernel = $application instanceof MultikernelApplication ? null : $application->getKernel()->getName();
 		
 		if ($application instanceof MultikernelApplication) {
-			$this->writeText("  ".$_SERVER['PHP_SELF']."\n", $options);
-			$this->writeText("    <info>To display the list of kernels and commands available on all kernels</info>", $options);
-			$this->writeText("\n\n");
+			$this->writeText('  ' . $this->makePathRelative($_SERVER['PHP_SELF']) . "\n");
+			$this->writeText("     <info>To display the list of kernels and commands available on all kernels</info>\n", $options);
+			$this->writeText("\n");
 		}
 		
-		$this->writeText("  ".$_SERVER['PHP_SELF']." ".($kernel ? $kernel : '<kernel>')."\n", $options);
+		$this->writeText('  ' . $this->makePathRelative($_SERVER['PHP_SELF']) . ' ' . ($kernel ? $kernel : '<kernel>') . "\n");
 		if ($kernel) {
-			$this->writeText("    <info>To display the list of commands available on the <comment>{$kernel}</comment> kernel</info>", $options);
+			$this->writeText("     <info>To display the list of commands available on the <comment>{$kernel}</comment> kernel</info>\n", $options);
 		} else {
-			$this->writeText("    <info>To display the list of commands available on a kernel</info>", $options);
+			$this->writeText("     <info>To display the list of commands available on a kernel</info>\n", $options);
 		}
-		$this->writeText("\n\n");
+		$this->writeText("\n");
 		
 		if ($application instanceof MultikernelApplication) {
-			$this->writeText("  ".$_SERVER['PHP_SELF']." <command> [options] [--] [arguments]\n", $options);
-			$this->writeText("    <info>To run a command for all kernels</info>", $options);
-			$this->writeText("\n\n");
+			$this->writeText('  ' . $this->makePathRelative($_SERVER['PHP_SELF']) . " <command> [options] [--] [arguments]\n");
+			$this->writeText("     <info>To run a command for all kernels supporting it</info>\n", $options);
+			$this->writeText("     <info>Commands available for multiple kernels are marked with</info> *\n", $options);
+			$this->writeText("\n");
 		}
 		
-		$this->writeText("  ".$_SERVER['PHP_SELF']." ".($kernel ? $kernel : '<kernel>')." <command> [options] [--] [arguments]\n", $options);
+		$this->writeText('  ' . $this->makePathRelative($_SERVER['PHP_SELF']) . ' ' . ($kernel ? $kernel : '<kernel>') . " <command> [options] [--] [arguments]\n");
 		if ($kernel) {
-			$this->writeText("    <info>To run a command on the <comment>{$kernel}</comment> kernel</info>", $options);
+			$this->writeText("     <info>To run a command on the <comment>{$kernel}</comment> kernel</info>\n", $options);
 		} else {
-			$this->writeText("    <info>To run a command on the on a kernel</info>", $options);
+			$this->writeText("     <info>To run a command on the on a kernel</info>\n", $options);
 		}
-		$this->writeText("\n\n");
+		$this->writeText("\n");
 	
 		if ($application instanceof MultikernelApplication) {
-			$this->writeText("<comment>Kernels:</comment>\n");
+			$this->writeText("<comment>Kernels:</comment>\n", $options);
 			foreach ($application->getKernel()->getKernels() as $kernel) {
 				$this->writeText('  '.$kernel->getName(), $options);
 				$this->writeText("\n");
@@ -285,9 +284,9 @@ class TextDescriptor extends Descriptor
 
 		$width = max($this->getColumnWidth($description->getCommands()), $this->calculateTotalWidthForOptions($application->getDefinition()->getOptions()));
 		
-		$this->describeInputDefinition(new InputDefinition($application->getDefinition()->getOptions()), array_merge($options, array(
+		$this->describeInputDefinition(new InputDefinition($application->getDefinition()->getOptions()), array_merge($options, [
 			'total_width' => $width,
-		)));
+		]));
 		$this->writeText("\n\n");
 		
 
@@ -324,7 +323,8 @@ class TextDescriptor extends Descriptor
 					$spacingWidth = $width - Helper::strlen($name);
 					$command = $commands[$name];
 					$commandAliases = $this->getCommandAliasesText($command);
-					$this->writeText(sprintf('  <info>%s</info>%s%s', $name, str_repeat(' ', $spacingWidth), $commandAliases.$command->getDescription()), $options);
+					$marker = $command instanceof MultikernelCommand ? '*' : ' ';
+					$this->writeText(sprintf('  %s<info>%s</info>%s%s', $marker, $name, str_repeat(' ', $spacingWidth), $commandAliases.$command->getDescription()), $options);
 				}
 			}
 		}
@@ -332,16 +332,13 @@ class TextDescriptor extends Descriptor
 		$this->writeText("\n\n");
 	}
 	
-	// }}}
-	// {{{ Helper methods
-	
 	/**
 	 * Writes content to output.
 	 *
 	 * @param string $content Content to write
 	 * @param array $options Display options
 	 */
-	private function writeText($content, array $options = array())
+	private function writeText($content, array $options = [])
 	{
 		$this->write(
 			isset($options['raw_text']) && $options['raw_text'] ? strip_tags($content) : $content,
@@ -396,7 +393,7 @@ class TextDescriptor extends Descriptor
 	 */
 	private function getColumnWidth(array $commands)
 	{
-		$widths = array();
+		$widths = [];
 		
 		foreach ($commands as $command) {
 			$widths[] = Helper::strlen($command->getName());
@@ -416,7 +413,7 @@ class TextDescriptor extends Descriptor
 	 */
 	private function calculateTotalWidthForArguments(array $arguments)
 	{
-		$widths = array();
+		$widths = [];
 		
 		foreach ($arguments as $argument) {
 			$widths[] = Helper::strlen($argument->getName());
@@ -469,6 +466,4 @@ class TextDescriptor extends Descriptor
 		
 		return $totalWidth;
 	}
-	
-	// }}}
 }

@@ -1,24 +1,24 @@
 <?php
 
 /*
- * This file is part of the Motana package.
+ * This file is part of the Motana Multi-Kernel Bundle, which is licensed
+ * under the MIT license. For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
  *
  * (c) Wenzel Jonas <mail@ramihyn.sytes.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler;
-
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+namespace Motana\Bundle\MultikernelBundle\Tests\DependencyInjection\Compiler;
 
 use Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\ExcludeClassesFromCachePass;
 use Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle;
-use Motana\Bundle\MultikernelBundle\Test\KernelTestCase;
+use Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\KernelTestCase;
+
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @coversDefaultClass Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\ExcludeClassesFromCachePass
+ * @testdox Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\ExcludeClassesFromCachePass
  */
 class ExcludeClassesFromCachePassTest extends KernelTestCase
 {
@@ -29,11 +29,11 @@ class ExcludeClassesFromCachePassTest extends KernelTestCase
 	
 	/**
 	 * {@inheritDoc}
-	 * @see PHPUnit_Framework_TestCase::setUp()
+	 * @see \PHPUnit_Framework_TestCase::setUp()
 	 */
-	protected function setUp($type = 'working', $app = 'app', $environment = 'test', $debug = false)
+	protected function setUp($app = 'app', $environment = 'test', $debug = false)
 	{
-		parent::setUp($type, $app, $environment, $debug);
+		parent::setUp($app, $environment, $debug);
 		
 		$this->classes = $this->getExcludedClasses();
 	}
@@ -45,7 +45,7 @@ class ExcludeClassesFromCachePassTest extends KernelTestCase
 	 */
 	protected function getExcludedClasses()
 	{
-		$classes = array();
+		$classes = [];
 		$bundle = new MotanaMultikernelBundle();
 		
 		if (is_file($file = $bundle->getPath() . '/Resources/config/class_cache.xml')) {
@@ -60,8 +60,9 @@ class ExcludeClassesFromCachePassTest extends KernelTestCase
 	
 	/**
 	 * @covers ::process()
+	 * @testdox process() adds classes to class cache exclude list
 	 */
-	public function testProcess()
+	public function test_process()
 	{
 		$this->callMethod(self::$kernel, 'initializeBundles');
 		
@@ -72,18 +73,20 @@ class ExcludeClassesFromCachePassTest extends KernelTestCase
 			return get_class($e);
 		}, $container->getCompilerPassConfig()->getOptimizationPasses());
 		
-		// Check the AddKernelsToCachePass has been added
+			// Check the ExcludeClassesFromCachePass has been added
 		$this->assertTrue(in_array(ExcludeClassesFromCachePass::class, $passes));
 		
-		#$container = $this->callMethod(self::$kernel, 'buildContainer');
+		// Compile the container
 		$container->compile();
 		
-		// Check the AddKernelsToCachePass has done its work
+		// Check the ExcludeClassesFromCachePass has done its work
 		$this->assertTrue($container->hasDefinition('kernel.class_cache.cache_warmer'));
 		$definition = $container->getDefinition('kernel.class_cache.cache_warmer');
 		
+		// Get the first argument (an array of class names to add to cache)
 		$classes = $definition->getArgument(0);
 		
+		// Check the array contains the class names the compiler pass should add
 		foreach ($this->classes as $class) {
 			$this->assertContains($class, $classes);
 		}

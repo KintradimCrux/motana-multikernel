@@ -1,4 +1,4 @@
-# Motana Multi-Kernel Bundle
+# MotanaMultikernelBundle
 
 [![Build Status](https://travis-ci.org/KintradimCrux/motana-multikernel.svg?branch=master)](https://travis-ci.org/KintradimCrux/motana-multikernel)
 [![Coverage Status](https://coveralls.io/repos/github/KintradimCrux/motana-multikernel/badge.svg?branch=master)](https://coveralls.io/github/KintradimCrux/motana-multikernel?branch=master)
@@ -8,77 +8,97 @@
 [![License](https://poser.pugx.org/motana/multikernel/license)](https://packagist.org/packages/motana/multikernel)
 [![composer.lock](https://poser.pugx.org/motana/multikernel/composerlock)](https://packagist.org/packages/motana/multikernel)
 
-MotanaMultikernelBundle extends a Symfony3 project by the ability to use multiple apps in the same project directory.
-This is done by adding a BootKernel that makes the front controller delegate requests to the other kernels. Routing within
-the apps will work as usual, which means every app has its own profiler (if using the WebProfilerBundle).
-The bin/console has been extended to run commands on multiple kernels (i.e. cache:clear, assets:install).
+This bundle extends a Symfony3 project by the ability to use multiple apps in the same project directory,
+all running with the same front controller and ***bin/console***.
 
-Since the BootKernel is a modified Symfony Kernel with almost all features disabled, the penalty of having an extra kernel is rather small.
+Routing within the apps will work as usual, which means already existing routes will continue to work.
+Each app will be made available with its kernel name as URL prefix by the front controller. The ***bin/console***
+replacement is able to run commands like ***cache:clear***, ***cache:pool:clear*** and ***assets:install*** for
+all apps in one run, which will make the SensioDistributionBundle run those commands for all apps when running
+***composer install*** or ***composer update***.
+
+Since the BootKernel is a modified Symfony Kernel with almost all features disabled, the penalty of having a
+prefixed extra kernel is rather small.
 
 ## Installation
 
-### Get the bundle
+### Step 1: Download the bundle
 
-Let composer download and install the bundle by running
+Open a command console, enter your project directory and execute the following
+command to download the latest stable version of this bundle:
 
 ```shell
-composer require motana/multikernel ~1.0
+$ composer require motana/multikernel
 ```
 
 in a shell.
 
-### Enable the bundle
+### Step 2: Enable the bundle
+
+Enable the bundle by adding it to the list of registered bundles in the
+***app/AppKernel.php*** file of your project. Make sure it is registered
+after the ``SensioGeneratorBundle``:
 
 ```php
-// in app/AppKernel.php
-public function registerBundles() {
-	$bundles = array(
-		// ...
-		new Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle(),
-	);
-	// ...
-}
+
+    // app/AppKernel.php
+
+    // ...
+    class AppKernel extends Kernel
+    {    
+        // ...
+        public function registerBundles()
+        {
+	        // ...
+            $bundles[] = new Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle();
+            
+            return $bundles;
+        }
+        // ...
+    }
 ```
 
-### Convert your project
+### Step 3: Use the commands of the bundle to convert your project
 
-After enabling the bundle, run the following command on the shell to convert your project directory:
+Open a command console, enter your project directory and execute the following
+command to convert your project:
 
 ```shell
-bin/console multikernel:convert
+$ bin/console multikernel:convert
 ```
 
-This will make the following changes to your project:
-* Create the apps/ directory from a skeleton
-* Create apps/BootKernel.php
-* Move the directory app/ to apps/app/
-* Change apps/app/AppKernel.php to run with the BootKernel
-* Update settings in apps/app/config/*.yml
-* Replace bin/console
-* Replace web/app.php and web/app_dev.php
-* Remove the app/ directory and also var/cache/, var/logs/ and var/sessions/. 
+### How the filesystem structure is changed
 
+Running the ``multikernel:convert`` command will make the following changes to the
+filesystem structure of the project:
 
-The following changes will be made to your AppKernel to make it work with the changed directory structure:
+* A boot kernel skeleton will be created into the ``apps/`` subdirectory of your project
+* All found apps will be copied to ``apps/<DIR_NAME>``
+* The kernel of every app are be modified to run with the BootKernel
+* Configuration of the apps are modified to reflect the filesystem structure changes
+* The front controller and bin/console are replaced
+
+After all modifications have taken place, the original app directories and also all
+files and directories under ``var/cache/``, ``var/logs`` and ``var/sessions`` are
+removed. 
+
+The command makes the following changes to each app kernel to make it work in a multikernel
+environment:
+
 * Use clauses are replaced to use classes from the MotanaMultikernelBundle
-* The methods getCacheDir(), getLogDir() and registerContainerConfiguration() are removed
+* The methods getCacheDir(), getLogDir() and registerContainerConfiguration are removed
 
+The command changes the configuration of each app for a changed directory scheme under ``var/``:
 
-The following changes are made to the directory structure in var/:
-* Caches for each kernel are stored in var/cache/**kernel**/**environment**/
-* Logs for each kernel are stored in var/logs/**kernel**/**environment**.log
-* Sessions for each kernel are stored in var/sessions/**kernel**/
+* Caches for each kernel are stored in ``var/cache/<KERNEL_NAME>/<ENVIRONMENT_NAME>/``
+* Logs for each kernel are stored in ``var/logs/<KERNEL_NAME>/<ENVIRONMENT_NAME>.log``
+* Sessions for each kernel are stored in ``var/sessions/<KERNEL_NAME>/``
 
-
-When finished, run the following commands on the shell to reset your project directory to a working state:
+After running the ``multikernel:convert`` command, run the following commands on a shell:
 
 ```shell
-composer dump-autoload
-composer symfony-scripts
+    $ composer dump-autoload
 ```
-
-The SensioDistributionBundle will run the cache:clear and assets:install commands on both the BootKernel and your AppKernel.
-
 
 ## Configuration
 
@@ -110,6 +130,21 @@ motana_multikernel:
         hidden:               []
 
 ```
+
+## Testing your project
+
+To reflect the changes in the filesystem structure and routing, your ``phpunit.xml`` needs to be updated as follows:
+
+Change the ``KERNEL_DIR`` setting to ``apps/``
+
+```xml
+
+        <server name="KERNEL_DIR" value="apps/" />
+
+```
+
+To select a kernel in your tests extending ``Symfony\Bundle\FrameworkBundle\Test\WebTestCase`` simply prefix the kernel
+name to the URL used in the test.
 
 ## Credits
 

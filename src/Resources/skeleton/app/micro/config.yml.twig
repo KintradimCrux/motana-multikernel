@@ -1,0 +1,14 @@
+{% block parameters %}
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    secret: {{ secret }}
+{% endblock parameters %}
+
+{% block framework %}
+framework:
+    secret: '%secret%'
+    templating:
+        engines: ['twig']
+    profiler: { only_exceptions: false }
+{% endblock framework %}

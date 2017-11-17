@@ -1,77 +1,82 @@
 <?php
 
 /*
- * This file is part of the Motana package.
+ * This file is part of the Motana Multi-Kernel Bundle, which is licensed
+ * under the MIT license. For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
  *
  * (c) Wenzel Jonas <mail@ramihyn.sytes.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultikernelBundle\HttpKernel;
+namespace Motana\Bundle\MultikernelBundle\Tests\HttpKernel;
 
-use Motana\Bundle\MultikernelBundle\Test\KernelTestCase;
+use Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\KernelTestCase;
 use Motana\Component\HttpKernel\Kernel;
+
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * @coversDefaultClass Motana\Bundle\MultikernelBundle\HttpKernel\Kernel
+ * @testdox Motana\Bundle\MultikernelBundle\HttpKernel\Kernel
  */
 class KernelTest extends KernelTestCase
 {
 	/**
-	 * Data provider for testConstructor().
-	 *
-	 * @return array
+	 * @covers ::__construct()
+	 * @testdox __construct() sets up properties correctly
 	 */
-	public function provide_testConstructor_data()
+	public function test_constructor()
 	{
-		return array(
-			array(null, 'cacheDir'),
-			array(null, 'logDir'),
-			array(array(), 'bundles'),
-			array(null, 'bundleMap'),
-			array(null, 'container'),
-			array(dirname(dirname(__DIR__)) . '/fixtures/kernels/working/apps/app', 'rootDir'),
-			array('test', 'environment'),
-			array(false, 'debug'),
-			array(false, 'booted'),
-			array('app', 'name'),
-			array(null, 'loadClassCache'),
-		);
+		// Get the fixture directory
+		$env = getenv('__MULTIKERNEL_FIXTURE_DIR');
+		
+		// Check the attributes are initialized correctly
+		$this->assertAttributeEquals(null, 'cacheDir', self::$kernel);
+		$this->assertAttributeEquals(null, 'logDir', self::$kernel);
+		$this->assertAttributeEquals([], 'bundles', self::$kernel);
+		$this->assertAttributeEquals(null, 'bundleMap', self::$kernel);
+		$this->assertAttributeEquals(null, 'container', self::$kernel);
+		$this->assertAttributeEquals($env . '/default/apps/app', 'rootDir', self::$kernel);
+		$this->assertAttributeEquals('test', 'environment', self::$kernel);
+		$this->assertAttributeEquals(false, 'debug', self::$kernel);
+		$this->assertAttributeEquals(false, 'booted', self::$kernel);
+		$this->assertAttributeEquals('app', 'name', self::$kernel);
+		$this->assertAttributeEquals(null, 'loadClassCache', self::$kernel);
 	}
 	
 	/**
 	 * @covers ::__construct()
-	 * @dataProvider provide_testConstructor_data
-	 * @param mixed $expected Expected property value
-	 * @param string $property Property name
+	 * @kernelEnvironment prod
+	 * @requires PHP < 7.0
+	 * @testdox __construct() loads class cache for PHP version 5.x
 	 */
-	public function testConstructor($expected, $property)
+	public function test_constructor_with_php_5()
 	{
-		$this->assertAttributeEquals($expected, $property, self::$kernel);
-	}
-	
-	/**
-	 * @covers ::__construct()
-	 * @depends testConstructor
-	 */
-	public function testConstructorLoadsClassCache()
-	{
-		$this->setUp('working', 'app', 'prod', false);
+		$this->setUp('app', 'prod', false);
 		
 		// Check the loadClassCache property has been initialized correctly
-		if (PHP_VERSION_ID < 70000) {
-			$this->assertAttributeEquals(array('classes','.php'), 'loadClassCache', self::$kernel);
-		} else {
-			$this->assertAttributeEquals(null, 'loadClassCache', self::$kernel);
-		}
+		$this->assertAttributeEquals([ 'classes','.php' ], 'loadClassCache', self::$kernel);
+	}
+	
+	/**
+	 * @covers ::__construct()
+	 * @kernelEnvironment prod
+	 * @requires PHP 7.0
+	 * @testdox __construct() does not load class cache for PHP version 7.x
+	 */
+	public function test_constructor_with_php_7()
+	{
+		$this->setUp('app', 'prod', false);
+		
+		// Check the loadClassCache property has been initialized correctly
+		$this->assertAttributeEquals(null, 'loadClassCache', self::$kernel);
 	}
 	
 	/**
 	 * @covers ::getCacheDir()
+	 * @testdox getCacheDir() returns correct path
 	 */
-	public function testGetCacheDir()
+	public function test_getCacheDir()
 	{
 		$expected = dirname(dirname(self::$kernel->getRootDir())) . '/var/cache/app/test';
 		
@@ -84,8 +89,9 @@ class KernelTest extends KernelTestCase
 	
 	/**
 	 * @covers ::getLogDir()
+	 * @testdox getLogDir() returns correct path
 	 */
-	public function testGetLogDir()
+	public function test_getLogDir()
 	{
 		$expected = dirname(dirname(self::$kernel->getRootDir())) . '/var/logs/app';
 		
@@ -95,28 +101,49 @@ class KernelTest extends KernelTestCase
 		// Check that getLogDir() sets the cacheDir property
 		$this->assertAttributeEquals($expected, 'logDir', self::$kernel);
 	}
-	
-	/**
-	 * @covers ::registerContainerConfiguration()
-	 */
-	public function testRegisterContainerConfiguration()
-	{
-		self::$kernel->boot();
-		$container = self::$kernel->getContainer();
-		
-		// Check the container has the kernel.secret parameter
-		$this->assertEquals('ThisTokenIsNotSoSecretChangeIt', $container->getParameter('kernel.secret'));
-	}
 
 	/**
 	 * @covers ::registerContainerConfiguration()
-	 * @expectedException Symfony\Component\Config\Exception\FileLocatorFileNotFoundException
-	 * @expectedExceptionMessageRegExp |^The file "(.*)/fixtures/kernels/working/apps/app/config/config_invalid.yml" does not exist.$|
+	 * @testdox registerContainerConfiguration() loads configuration
 	 */
-	public function testRegisterContainerConfigurationThrowsException()
+	public function test_registerContainerConfiguration()
+	{
+		$this->callMethod(self::$kernel, 'initializeBundles');
+		$container = $this->callMethod(self::$kernel, 'buildContainer');
+		
+		// Check the container has the kernel.secret parameter
+		$this->assertRegExp('|^[0-9a-f]{40}$|', $container->getParameter('secret'));
+	}
+	
+	/**
+	 * @covers ::registerContainerConfiguration()
+	 * @expectedException Symfony\Component\Config\Exception\FileLocatorFileNotFoundException
+	 * @expectedExceptionMessageRegExp |^The file "(.*)/apps/app/config/config_invalid.yml" does not exist.$|
+	 * @testdox registerContainerConfiguration() throws FileLocatorFileNotFoundException for invalid environment
+	 */
+	public function test_registerContainerConfiguration_with_invalid_environment()
 	{
 		$this->writeAttribute(self::$kernel, 'environment', 'invalid');
 		
+		// Check an exception is thrown when trying to boot the kernel with an invalid environment
 		self::$kernel->boot();
+	}
+	
+	/**
+	 * @covers ::getContainerClass()
+	 * @testdox getContainerClass() returns container class name built from camelized kernel name
+	 */
+	public function test_getContainerClass()
+	{
+		// Get the kernel name, environment and debug flag
+		$kernelName = self::$kernel->getName();
+		$kernelEnvironment = self::$kernel->getEnvironment();
+		$kernelDebug = self::$kernel->isDebug();
+		
+		// Generate the expected container class name
+		$expected = lcfirst(Container::camelize($kernelName)).ucfirst($kernelEnvironment).($kernelDebug ? 'Debug' : '').'ProjectContainer';
+		
+		// Check the kernel returns the correct container classname
+		$this->assertEquals($expected, $this->callMethod(self::$kernel, 'getContainerClass'));
 	}
 }

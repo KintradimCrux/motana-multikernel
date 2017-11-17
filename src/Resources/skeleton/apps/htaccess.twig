@@ -1,0 +1,12 @@
+{% block mod_authz_core %}
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+{% endblock mod_authz_core %}
+
+{% block not_mod_authz_core %}
+<IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+</IfModule>
+{% endblock not_mod_authz_core %}

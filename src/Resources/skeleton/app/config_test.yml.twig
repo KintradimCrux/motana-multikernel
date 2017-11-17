@@ -1,0 +1,26 @@
+{% block imports %}
+imports:
+    - { resource: config_dev.yml }
+{% endblock imports %}
+
+{% block framework %}
+framework:
+    test: ~
+    session:
+        storage_id: session.storage.mock_file
+    profiler:
+        collect: false
+{% endblock framework %}
+
+{% block web_profiler %}
+web_profiler:
+    toolbar: false
+    intercept_redirects: false
+{% endblock web_profiler %}
+
+{% block swiftmailer %}
+{% if bundles['SwiftmailerBundle'] %}
+swiftmailer:
+    disable_delivery: true
+{% endif %}
+{% endblock swiftmailer %}

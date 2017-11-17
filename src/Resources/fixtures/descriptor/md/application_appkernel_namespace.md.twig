@@ -1,0 +1,980 @@
+Motana Multi-Kernel App Console - Symfony `{{ kernel_version }}` (kernel: app, env: test, debug: false)
+=========================================================================================
+
+Commands in namespace "debug"
+-----------------------------
+
+**debug:**
+
+* debug:config
+* debug:container
+* debug:event-dispatcher
+* debug:router
+* debug:translation
+* debug:twig
+
+Command "debug:config"
+----------------------
+
+* Description: Dumps the current configuration for an extension
+* Usage:
+
+  * `./bin/console {{ kernel_name }} debug:config [options] [--] [<name>] [<path>]`
+
+The `debug:config` command dumps the current configuration for an
+extension/bundle.
+
+Either the extension alias or bundle name can be used:
+
+  `./bin/console debug:config framework`
+  `./bin/console debug:config FrameworkBundle`
+
+For dumping a specific option, add its path as second argument:
+
+  `./bin/console debug:config framework serializer.enabled`
+
+### Arguments:
+
+**name:**
+
+* Name: name
+* Is required: no
+* Is array: no
+* Description: The bundle name or the extension alias
+* Default: `NULL`
+
+**path:**
+
+* Name: path
+* Is required: no
+* Is array: no
+* Description: The configuration option path
+* Default: `NULL`
+
+### Options:
+
+**help:**
+
+* Name: `--help`
+* Shortcut: `-h`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this help message
+* Default: `false`
+
+**quiet:**
+
+* Name: `--quiet`
+* Shortcut: `-q`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not output any message
+* Default: `false`
+
+**verbose:**
+
+* Name: `--verbose`
+* Shortcut: `-v|-vv|-vvv`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+* Default: `false`
+
+**version:**
+
+* Name: `--version`
+* Shortcut: `-V`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this application version
+* Default: `false`
+
+**ansi:**
+
+* Name: `--ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Force ANSI output
+* Default: `false`
+
+**no-ansi:**
+
+* Name: `--no-ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Disable ANSI output
+* Default: `false`
+
+**no-interaction:**
+
+* Name: `--no-interaction`
+* Shortcut: `-n`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not ask any interactive question
+* Default: `false`
+
+**env:**
+
+* Name: `--env`
+* Shortcut: `-e`
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The environment name
+* Default: `'test'`
+
+**no-debug:**
+
+* Name: `--no-debug`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Switches off debug mode
+* Default: `false`
+
+Command "debug:container"
+-------------------------
+
+* Description: Displays current services for an application
+* Usage:
+
+  * `./bin/console {{ kernel_name }} debug:container [options] [--] [<name>]`
+
+The `debug:container` command displays all configured public services:
+
+  `./bin/console debug:container`
+
+To get specific information about a service, specify its name:
+
+  `./bin/console debug:container validator`
+
+To see available types that can be used for autowiring, use the `--types` flag:
+
+  `./bin/console debug:container --types`
+
+By default, private services are hidden. You can display all services by
+using the `--show-private` flag:
+
+  `./bin/console debug:container --show-private`
+
+Use the --tags option to display tagged public services grouped by tag:
+
+  `./bin/console debug:container --tags`
+
+Find all services with a specific tag by specifying the tag name with the `--tag` option:
+
+  `./bin/console debug:container --tag=form.type`
+
+Use the `--parameters` option to display all parameters:
+
+  `./bin/console debug:container --parameters`
+
+Display a specific parameter by specifying its name with the `--parameter` option:
+
+  `./bin/console debug:container --parameter=kernel.debug`
+
+### Arguments:
+
+**name:**
+
+* Name: name
+* Is required: no
+* Is array: no
+* Description: A service name (foo)
+* Default: `NULL`
+
+### Options:
+
+**show-private:**
+
+* Name: `--show-private`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Used to show public *and* private services
+* Default: `false`
+
+**show-arguments:**
+
+* Name: `--show-arguments`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Used to show arguments in services
+* Default: `false`
+
+**tag:**
+
+* Name: `--tag`
+* Shortcut: <none>
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: Shows all services with a specific tag
+* Default: `NULL`
+
+**tags:**
+
+* Name: `--tags`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Displays tagged services for an application
+* Default: `false`
+
+**parameter:**
+
+* Name: `--parameter`
+* Shortcut: <none>
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: Displays a specific parameter for an application
+* Default: `NULL`
+
+**parameters:**
+
+* Name: `--parameters`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Displays parameters for an application
+* Default: `false`
+
+**types:**
+
+* Name: `--types`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Displays types (classes/interfaces) available in the container
+* Default: `false`
+
+**format:**
+
+* Name: `--format`
+* Shortcut: <none>
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The output format (txt, xml, json, or md)
+* Default: `'txt'`
+
+**raw:**
+
+* Name: `--raw`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: To output raw description
+* Default: `false`
+
+**help:**
+
+* Name: `--help`
+* Shortcut: `-h`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this help message
+* Default: `false`
+
+**quiet:**
+
+* Name: `--quiet`
+* Shortcut: `-q`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not output any message
+* Default: `false`
+
+**verbose:**
+
+* Name: `--verbose`
+* Shortcut: `-v|-vv|-vvv`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+* Default: `false`
+
+**version:**
+
+* Name: `--version`
+* Shortcut: `-V`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this application version
+* Default: `false`
+
+**ansi:**
+
+* Name: `--ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Force ANSI output
+* Default: `false`
+
+**no-ansi:**
+
+* Name: `--no-ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Disable ANSI output
+* Default: `false`
+
+**no-interaction:**
+
+* Name: `--no-interaction`
+* Shortcut: `-n`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not ask any interactive question
+* Default: `false`
+
+**env:**
+
+* Name: `--env`
+* Shortcut: `-e`
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The environment name
+* Default: `'test'`
+
+**no-debug:**
+
+* Name: `--no-debug`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Switches off debug mode
+* Default: `false`
+
+Command "debug:event-dispatcher"
+--------------------------------
+
+* Description: Displays configured listeners for an application
+* Usage:
+
+  * `./bin/console {{ kernel_name }} debug:event-dispatcher [options] [--] [<event>]`
+
+The `debug:event-dispatcher` command displays all configured listeners:
+
+  `./bin/console debug:event-dispatcher`
+
+To get specific listeners for an event, specify its name:
+
+  `./bin/console debug:event-dispatcher kernel.request`
+
+### Arguments:
+
+**event:**
+
+* Name: event
+* Is required: no
+* Is array: no
+* Description: An event name
+* Default: `NULL`
+
+### Options:
+
+**format:**
+
+* Name: `--format`
+* Shortcut: <none>
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The output format  (txt, xml, json, or md)
+* Default: `'txt'`
+
+**raw:**
+
+* Name: `--raw`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: To output raw description
+* Default: `false`
+
+**help:**
+
+* Name: `--help`
+* Shortcut: `-h`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this help message
+* Default: `false`
+
+**quiet:**
+
+* Name: `--quiet`
+* Shortcut: `-q`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not output any message
+* Default: `false`
+
+**verbose:**
+
+* Name: `--verbose`
+* Shortcut: `-v|-vv|-vvv`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+* Default: `false`
+
+**version:**
+
+* Name: `--version`
+* Shortcut: `-V`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this application version
+* Default: `false`
+
+**ansi:**
+
+* Name: `--ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Force ANSI output
+* Default: `false`
+
+**no-ansi:**
+
+* Name: `--no-ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Disable ANSI output
+* Default: `false`
+
+**no-interaction:**
+
+* Name: `--no-interaction`
+* Shortcut: `-n`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not ask any interactive question
+* Default: `false`
+
+**env:**
+
+* Name: `--env`
+* Shortcut: `-e`
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The environment name
+* Default: `'test'`
+
+**no-debug:**
+
+* Name: `--no-debug`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Switches off debug mode
+* Default: `false`
+
+Command "debug:router"
+----------------------
+
+* Description: Displays current routes for an application
+* Usage:
+
+  * `./bin/console {{ kernel_name }} debug:router [options] [--] [<name>]`
+
+The `debug:router` displays the configured routes:
+
+  `./bin/console debug:router`
+
+### Arguments:
+
+**name:**
+
+* Name: name
+* Is required: no
+* Is array: no
+* Description: A route name
+* Default: `NULL`
+
+### Options:
+
+**show-controllers:**
+
+* Name: `--show-controllers`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Show assigned controllers in overview
+* Default: `false`
+
+**format:**
+
+* Name: `--format`
+* Shortcut: <none>
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The output format (txt, xml, json, or md)
+* Default: `'txt'`
+
+**raw:**
+
+* Name: `--raw`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: To output raw route(s)
+* Default: `false`
+
+**help:**
+
+* Name: `--help`
+* Shortcut: `-h`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this help message
+* Default: `false`
+
+**quiet:**
+
+* Name: `--quiet`
+* Shortcut: `-q`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not output any message
+* Default: `false`
+
+**verbose:**
+
+* Name: `--verbose`
+* Shortcut: `-v|-vv|-vvv`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+* Default: `false`
+
+**version:**
+
+* Name: `--version`
+* Shortcut: `-V`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this application version
+* Default: `false`
+
+**ansi:**
+
+* Name: `--ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Force ANSI output
+* Default: `false`
+
+**no-ansi:**
+
+* Name: `--no-ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Disable ANSI output
+* Default: `false`
+
+**no-interaction:**
+
+* Name: `--no-interaction`
+* Shortcut: `-n`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not ask any interactive question
+* Default: `false`
+
+**env:**
+
+* Name: `--env`
+* Shortcut: `-e`
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The environment name
+* Default: `'test'`
+
+**no-debug:**
+
+* Name: `--no-debug`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Switches off debug mode
+* Default: `false`
+
+Command "debug:translation"
+---------------------------
+
+* Description: Displays translation messages information
+* Usage:
+
+  * `./bin/console {{ kernel_name }} debug:translation [options] [--] <locale> [<bundle>]`
+
+The `debug:translation` command helps finding unused or missing translation
+messages and comparing them with the fallback ones by inspecting the
+templates and translation files of a given bundle or the app folder.
+
+You can display information about bundle translations in a specific locale:
+
+  `./bin/console debug:translation en AcmeDemoBundle`
+
+You can also specify a translation domain for the search:
+
+  `./bin/console debug:translation --domain=messages en AcmeDemoBundle`
+
+You can only display missing messages:
+
+  `./bin/console debug:translation --only-missing en AcmeDemoBundle`
+
+You can only display unused messages:
+
+  `./bin/console debug:translation --only-unused en AcmeDemoBundle`
+
+You can display information about app translations in a specific locale:
+
+  `./bin/console debug:translation en`
+
+You can display information about translations in all registered bundles in a specific locale:
+
+  `./bin/console debug:translation --all en`
+
+### Arguments:
+
+**locale:**
+
+* Name: locale
+* Is required: yes
+* Is array: no
+* Description: The locale
+* Default: `NULL`
+
+**bundle:**
+
+* Name: bundle
+* Is required: no
+* Is array: no
+* Description: The bundle name or directory where to load the messages, defaults to app/Resources folder
+* Default: `NULL`
+
+### Options:
+
+**domain:**
+
+* Name: `--domain`
+* Shortcut: <none>
+* Accepts value: yes
+* Is value required: no
+* Is multiple: no
+* Description: The messages domain
+* Default: `NULL`
+
+**only-missing:**
+
+* Name: `--only-missing`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Displays only missing messages
+* Default: `false`
+
+**only-unused:**
+
+* Name: `--only-unused`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Displays only unused messages
+* Default: `false`
+
+**all:**
+
+* Name: `--all`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Load messages from all registered bundles
+* Default: `false`
+
+**help:**
+
+* Name: `--help`
+* Shortcut: `-h`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this help message
+* Default: `false`
+
+**quiet:**
+
+* Name: `--quiet`
+* Shortcut: `-q`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not output any message
+* Default: `false`
+
+**verbose:**
+
+* Name: `--verbose`
+* Shortcut: `-v|-vv|-vvv`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+* Default: `false`
+
+**version:**
+
+* Name: `--version`
+* Shortcut: `-V`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this application version
+* Default: `false`
+
+**ansi:**
+
+* Name: `--ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Force ANSI output
+* Default: `false`
+
+**no-ansi:**
+
+* Name: `--no-ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Disable ANSI output
+* Default: `false`
+
+**no-interaction:**
+
+* Name: `--no-interaction`
+* Shortcut: `-n`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not ask any interactive question
+* Default: `false`
+
+**env:**
+
+* Name: `--env`
+* Shortcut: `-e`
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The environment name
+* Default: `'test'`
+
+**no-debug:**
+
+* Name: `--no-debug`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Switches off debug mode
+* Default: `false`
+
+Command "debug:twig"
+--------------------
+
+* Description: Shows a list of twig functions, filters, globals and tests
+* Usage:
+
+  * `./bin/console {{ kernel_name }} debug:twig [options] [--] [<filter>]`
+
+The `debug:twig` command outputs a list of twig functions,
+filters, globals and tests. Output can be filtered with an optional argument.
+
+  `./bin/console debug:twig`
+
+The command lists all functions, filters, etc.
+
+  `./bin/console debug:twig date`
+
+The command lists everything that contains the word date.
+
+  `./bin/console debug:twig --format=json`
+
+The command lists everything in a machine readable json format.
+
+### Arguments:
+
+**filter:**
+
+* Name: filter
+* Is required: no
+* Is array: no
+* Description: Show details for all entries matching this filter
+* Default: `NULL`
+
+### Options:
+
+**format:**
+
+* Name: `--format`
+* Shortcut: <none>
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The output format (text or json)
+* Default: `'text'`
+
+**help:**
+
+* Name: `--help`
+* Shortcut: `-h`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this help message
+* Default: `false`
+
+**quiet:**
+
+* Name: `--quiet`
+* Shortcut: `-q`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not output any message
+* Default: `false`
+
+**verbose:**
+
+* Name: `--verbose`
+* Shortcut: `-v|-vv|-vvv`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+* Default: `false`
+
+**version:**
+
+* Name: `--version`
+* Shortcut: `-V`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this application version
+* Default: `false`
+
+**ansi:**
+
+* Name: `--ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Force ANSI output
+* Default: `false`
+
+**no-ansi:**
+
+* Name: `--no-ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Disable ANSI output
+* Default: `false`
+
+**no-interaction:**
+
+* Name: `--no-interaction`
+* Shortcut: `-n`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not ask any interactive question
+* Default: `false`
+
+**env:**
+
+* Name: `--env`
+* Shortcut: `-e`
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The environment name
+* Default: `'test'`
+
+**no-debug:**
+
+* Name: `--no-debug`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Switches off debug mode
+* Default: `false`

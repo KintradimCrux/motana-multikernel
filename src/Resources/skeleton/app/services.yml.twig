@@ -1,0 +1,57 @@
+{% block parameters %}
+# Learn more about services, parameters and containers at
+# https://symfony.com/doc/current/service_container.html
+parameters:
+    #parameter_name: value
+{% endblock parameters %}
+
+{% block services %}
+{% if bundle %}
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        # automatically injects dependencies in your services
+        autowire: true
+        # automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: true
+        # this means you cannot fetch services directly from the container via $container->get()
+        # if you need to do this, you can override this setting on individual services
+        public: false
+
+{% if bundles['MotanaMultikernelBundle'] %}
+    # makes classes in {{ bundle_path }} available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    {{ namespace }}\:
+        resource: '%kernel.project_dir%/{{ bundle_path }}/*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+        exclude: '%kernel.project_dir%/{{ bundle_path }}/{Entity,Repository,Resources,Tests}'
+
+    # controllers are imported separately to make sure they're public
+    # and have a tag that allows actions to type-hint services
+    {{ namespace }}\Controller\:
+        resource: '%kernel.project_dir%/{{ bundle_path }}/Controller'
+        public: true
+        tags: ['controller.service_arguments']
+{% else %}
+    # makes classes in {{ bundle_path }} available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    {{ namespace }}\:
+        resource: '../../{{ bundle_path }}/*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+        exclude: '../../{{ bundle_path }}/{Entity,Repository,Resources,Tests}'
+
+    # controllers are imported separately to make sure they're public
+    # and have a tag that allows actions to type-hint services
+    {{ namespace }}\Controller\:
+        resource: '../../{{ bundle_path }}/Controller'
+        public: true
+        tags: ['controller.service_arguments']
+{% endif %}
+    # add more services, or override services that need manual wiring
+    # AppBundle\Service\ExampleService:
+    #     arguments:
+    #         $someArgument: 'some_value'
+{% endif %}
+{% endblock services %}

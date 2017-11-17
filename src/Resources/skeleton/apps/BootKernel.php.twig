@@ -1,0 +1,17 @@
+<?php
+
+{% block use_statements %}
+use {{ kernel_base_class }} as {{ kernel_base_class_alias }};
+{% endblock use_statements %}
+
+{% block class_definition %}
+class {{ kernel_class_name }} extends {{ kernel_base_class_alias }}
+{% endblock class_definition %}
+{
+{% block class_body %}
+	public function getRootDir()
+	{
+		return $this->rootDir = __DIR__;
+	}
+{% endblock class_body %}
+}

@@ -1,46 +1,144 @@
 <?php
 
 /*
- * This file is part of the Motana package.
+ * This file is part of the Motana Multi-Kernel Bundle, which is licensed
+ * under the MIT license. For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
  *
  * (c) Wenzel Jonas <mail@ramihyn.sytes.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultikernelBundle\HttpKernel;
+namespace Motana\Bundle\MultikernelBundle\Tests\HttpKernel;
 
-use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
-use Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\AddKernelsToCachePass;
+use Motana\Bundle\MultikernelBundle\Generator\Model\App;
 use Motana\Bundle\MultikernelBundle\HttpKernel\BootKernel;
 use Motana\Bundle\MultikernelBundle\HttpKernel\BootKernelRequest;
 use Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle;
-use Motana\Bundle\MultikernelBundle\Test\KernelTestCase;
+use Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\KernelTestCase;
+
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\TwigBundle\TwigBundle;
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * @coversDefaultClass Motana\Bundle\MultikernelBundle\HttpKernel\BootKernel
+ * @testdox Motana\Bundle\MultikernelBundle\HttpKernel\BootKernel
  */
 class BootKernelTest extends KernelTestCase
 {
 	/**
-	 * {@inheritDoc}
-	 * @see \Motana\Bundle\MultikernelBundle\Test\KernelTestCase::setUp()
+	 * Array containing the kernel names onKernelTerminate() was called for.
+	 *
+	 * @var boolean
 	 */
-	protected function setUp($type = 'working', $app = null, $environment = 'test', $debug = false)
+	protected static $onKernelTerminateCalled = [];
+	
+	/**
+	 * {@inheritDoc}
+	 * @see \Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\KernelTestCase::setUp()
+	 */
+	protected function setUp($app = null, $environment = 'test', $debug = false)
 	{
-		parent::setUp($type, $app, $environment, $debug);
+		parent::setUp($app, $environment, $debug);
+	}
+	
+	/**
+	 * Data provider for test_sanitizeKernelName().
+	 *
+	 * @return array
+	 */
+	public function provide_test_sanitizeKernelName_data()
+	{
+		return [
+			'\'foo\'' => [
+				'foo',
+				'foo',
+				null
+			],
+			'\'foo_bar\'' => [
+				'foo_bar',
+				'foo_bar',
+				null
+			],
+			'\'1foo_bar\'' => [
+				'_1foo_bar',
+				'1foo_bar',
+				null
+			],
+			'\'$foo_bar\'' => [
+				'foo_bar',
+				'$foo_bar',
+				null
+			],
+		];
+	}
+	
+	/**
+	 * @covers ::sanitizeKernelName()
+	 * @dataProvider provide_test_sanitizeKernelName_data
+	 * @param string $expected Expected sanitized kernel name
+	 * @param string $kernelName Input kernel name
+	 * @testdox sanitizeKernelName() returns correctly sanitized kernel name for
+	 */
+	public function test_sanitizeKernelName($expected, $kernelName)
+	{
+		$this->assertEquals($expected, BootKernel::sanitizeKernelName($kernelName));
+	}
+
+	/**
+	 * Data provider for test_camelizeKernelName().
+	 *
+	 * @return array
+	 */
+	public function provide_test_camelizeKernelName_data()
+	{
+		return [
+			'\'foo\'' => [
+				'Foo',
+				'foo',
+				null
+			],
+			'\'foo_bar\'' => [
+				'FooBar',
+				'foo_bar',
+				null
+			],
+			'\'1foo_bar\'' => [
+				'_1fooBar',
+				'1foo_bar',
+				null
+			],
+			'\'$foo_bar\'' => [
+				'FooBar',
+				'$foo_bar',
+				null
+			],
+		];
+	}
+	
+	/**
+	 * @covers ::camelizeKernelName()
+	 * @dataProvider provide_test_camelizeKernelName_data
+	 * @param string $expected Expected camelized kernel name
+	 * @param string $kernelName Input kernel name
+	 * @testdox camelizeKernelName() returns correctly camelized kernel name for
+	 */
+	public function test_camelizeKernelName($expected, $kernelName)
+	{
+		$this->assertEquals($expected, BootKernel::camelizeKernelName($kernelName));
 	}
 	
 	/**
 	 * @covers ::getName()
+	 * @testdox getName() returns the correct kernel name
 	 */
-	public function testGetName()
+	public function test_getName()
 	{
 		// Check that getName() returns 'boot'
 		$this->assertEquals('boot', self::$kernel->getName());
@@ -48,8 +146,9 @@ class BootKernelTest extends KernelTestCase
 	
 	/**
 	 * @covers ::getCacheDir()
+	 * @testdox getCacheDir() returns the correct path
 	 */
-	public function testGetCacheDir()
+	public function test_getCacheDir()
 	{
 		$expected = dirname(self::$kernel->getRootDir()) . '/var/cache/boot/test';
 		
@@ -62,8 +161,9 @@ class BootKernelTest extends KernelTestCase
 	
 	/**
 	 * @covers ::getLogDir()
+	 * @testdox getLogDir() returns the correct path
 	 */
-	public function testGetLogDir()
+	public function test_getLogDir()
 	{
 		$expected = dirname(self::$kernel->getRootDir()) . '/var/logs/boot';
 		
@@ -75,45 +175,28 @@ class BootKernelTest extends KernelTestCase
 	}
 	
 	/**
-	 * @covers ::buildContainer()
-	 */
-	public function testBuildContainer()
-	{
-		$this->callMethod(self::$kernel, 'initializeBundles');
-		
-		$container = $this->callMethod(self::$kernel, 'buildContainer');
-		/** @var ContainerBuilder $container */
-		$passes = $container->getCompilerPassConfig()->getBeforeOptimizationPasses();
-		
-		// Check the AddKernelsToCachePass has been added
-		$this->assertInstanceOf(AddKernelsToCachePass::class, end($passes));
-	}
-	
-	/**
 	 * @covers ::registerBundles()
+	 * @testdox registerBundles() returns the correct bundles
 	 */
-	public function testRegisterBundles()
+	public function test_registerBundles()
 	{
+		// Get registered bundles
 		$bundles = self::$kernel->registerBundles();
 		
-		$expectedCount = 2 + (int) class_exists('Symfony\\Bundle\\WebServerBundle\\WebServerBundle');
-		
-		// Check that registerBundles() returned 2 bundles
-		$this->assertEquals($expectedCount, count($bundles));
+		// Check that registerBundles() returned the correct number of bundles
+		$this->assertEquals(3, count($bundles));
 		
 		// Check the returned bundles are instances of the correct classes
 		$this->assertEquals(FrameworkBundle::class, get_class($bundles[0]));
 		$this->assertEquals(MotanaMultikernelBundle::class, get_class($bundles[1]));
-		
-		if (class_exists('Symfony\\Bundle\\WebServerBundle\\WebServerBundle')) {
-			$this->assertEquals('Symfony\\Bundle\\WebServerBundle\\WebServerBundle', get_class($bundles[2]));
-		}
+		$this->assertEquals(TwigBundle::class, get_class($bundles[2]));
 	}
-	
+
 	/**
 	 * @covers ::useAppCache()
+	 * @testdox useAppCache() sets the useAppCache property
 	 */
-	public function testUseAppCache()
+	public function test_useAppCache()
 	{
 		// Check the appCache property is initialized as null
 		$this->assertAttributeEquals(null, 'useAppCache', self::$kernel);
@@ -128,61 +211,55 @@ class BootKernelTest extends KernelTestCase
 	}
 	
 	/**
-	 * @covers ::setKernelData()
-	 */
-	public function testSetKernelData()
-	{
-		$data = array(
-			'app' => array(
-				'kernel' => 'app/AppKernel.php',
-				'cache' => 'app/AppCache.php',
-			),
-		);
-		
-		$this->getFs()->mkdir(self::$kernel->getCacheDir());
-		self::$kernel->setKernelData($data);
-		
-		// Check the cache file has the correct content
-		$this->assertEquals(sprintf('<?php return %s;', var_export($data, true)),
-			file_get_contents(self::$kernel->getCacheDir() . '/kernels.php'));
-	}
-	
-	/**
 	 * @covers ::loadKernelData()
-	 * @depends testSetKernelData
+	 * @testdox loadKernelData() loads kernel data
 	 */
-	public function testLoadKernelData()
+	public function test_loadKernelData()
 	{
-		$data = array(
-			'app' => array(
+		$data = [
+			'app' => [
 				'kernel' => 'app/AppKernel.php',
 				'cache' => 'app/AppCache.php',
-			),
-		);
+			],
+		];
 		
 		$this->getFs()->mkdir(self::$kernel->getCacheDir());
-		self::$kernel->setKernelData($data);
 		
 		// Check the kernels property contains an empty array before loading kernel data
-		$this->assertAttributeEquals(array(), 'kernels', self::$kernel);
+		$this->assertAttributeEquals([], 'kernels', self::$kernel);
 		
 		// Check the kernels property contains correct data after loading
 		$this->callMethod(self::$kernel, 'loadKernelData');
 		$this->assertAttributeEquals($data, 'kernels', self::$kernel);
+		
+		// Touch the kernel cache file
+		$class = new \ReflectionClass(self::$kernel);
+		self::getFs()->touch($file = self::$kernel->getCacheDir() . '/kernels.php', $time = time() - 3600);
+		clearstatcache();
+		
+		// Reset the kernels property
+		$this->writeAttribute(self::$kernel, 'kernels', []);
+		
+		// Check the kernels property contains correct data after loading
+		$this->callMethod(self::$kernel, 'loadKernelData');
+		$this->assertAttributeEquals($data, 'kernels', self::$kernel);
+		
+		// Check the kernel cache file has been updated
+		$this->assertGreaterThan($time, filemtime($file));
 	}
 	
 	/**
 	 * @covers ::getKernelData()
-	 * @depends testLoadKernelData
+	 * @testdox getKernelData() returns data for a kernel
 	 */
-	public function testGetKernelData()
+	public function test_getKernelData()
 	{
-		$data = array(
-			'app' => array(
+		$data = [
+			'app' => [
 				'kernel' => 'app/AppKernel.php',
 				'cache' => 'app/AppCache.php',
-			),
-		);
+			],
+		];
 		
 		$this->writeAttribute(self::$kernel, 'kernels', $data);
 		
@@ -195,9 +272,9 @@ class BootKernelTest extends KernelTestCase
 	
 	/**
 	 * @covers ::loadKernel()
-	 * @depends testGetKernelData
+	 * @testdox loadKernel() loads existing kernels
 	 */
-	public function testLoadKernel()
+	public function test_loadKernel()
 	{
 		// Check that loadKernel() returns null for invalid kernel names
 		$this->assertNull($this->callMethod(self::$kernel, 'loadKernel', 'invalid'));
@@ -219,44 +296,9 @@ class BootKernelTest extends KernelTestCase
 	
 	/**
 	 * @covers ::loadKernel()
-	 * @depends testUseAppCache
-	 * @depends testLoadKernel
-	 * @expectedException RuntimeException
-	 * @expectedExceptionMessage Kernel class "BrokenKernelKernel" does not exist. Did you name your kernel class correctly?
-	 * @preserveGlobalState disabled
-	 * @runInSeparateProcess
+	 * @testdox loadKernel() returns a HttpCache instance when useAppCache is TRUE
 	 */
-	public function testLoadKernelChecksKernelClass()
-	{
-		$this->setUp('broken');
-		
-		self::callMethod(self::$kernel, 'loadKernel', 'brokenKernel');
-	}
-	
-	/**
-	 * @covers ::loadKernel()
-	 * @depends testLoadKernelChecksKernelClass
-	 * @expectedException RuntimeException
-	 * @expectedExceptionMessage Cache class "BrokenCacheCache" does not exist. Did you name your cache class correctly?
-	 * @preserveGlobalState disabled
-	 * @runInSeparateProcess
-	 */
-	public function testLoadKernelChecksCacheClass()
-	{
-		$this->setUp('broken');
-		
-		self::$kernel->useAppCache(true);
-		self::callMethod(self::$kernel, 'loadKernel', 'brokenCache');
-	}
-	
-	/**
-	 * @covers ::loadKernel()
-	 * @depends testUseAppCache
-	 * @depends testLoadKernelChecksCacheClass
-	 * @runInSeparateProcess
-	 * @preserveGlobalState disabled
-	 */
-	public function testLoadKernelCache()
+	public function test_loadKernel_with_AppCache()
 	{
 		self::$kernel->useAppCache(true);
 		
@@ -272,9 +314,9 @@ class BootKernelTest extends KernelTestCase
 	
 	/**
 	 * @covers ::getKernels()
-	 * @depends testLoadKernel
+	 * @testdox getKernels() returns correct kernels
 	 */
-	public function testGetKernels()
+	public function test_getKernels()
 	{
 		$kernels = self::$kernel->getKernels();
 		
@@ -282,7 +324,7 @@ class BootKernelTest extends KernelTestCase
 		$this->assertAttributeEquals(true, 'booted', self::$kernel);
 		
 		// Check that getKernels() returns the correct array keys
-		$this->assertEquals(array('boot', 'app'), array_keys($kernels));
+		$this->assertEquals([ 'boot', 'app' ], array_keys($kernels));
 		
 		// Check the kernels are instances of the correct classes
 		$this->assertEquals('BootKernel', get_class($kernels['boot']));
@@ -291,9 +333,9 @@ class BootKernelTest extends KernelTestCase
 	
 	/**
 	 * @covers ::getKernel()
-	 * @depends testLoadKernel
+	 * @testdox getKernel() returns correct kernels
 	 */
-	public function testGetKernel()
+	public function test_getKernel()
 	{
 		// Check that getKernel() returns the boot kernel when asked for it
 		$this->assertEquals('BootKernel', get_class(self::$kernel->getKernel('boot')));
@@ -306,69 +348,69 @@ class BootKernelTest extends KernelTestCase
 	 * @covers ::requestFactory()
 	 * @expectedException RuntimeException
 	 * @expectedExceptionMessage A kernel must be loaded before BootKernel::requestFactory can be used.
+	 * @testdox requestFactory() throws RuntimeException when no kernel is loaded
 	 */
-	public function testRequestFactoryThrowsException()
+	public function test_requestFactory_error()
 	{
-		$server = array(
+		$server = [
 			'BASE' => '/web',
 			'PHP_SELF' => '/web/app.php',
 			'QUERY_STRING' => '',
 			'REQUEST_URI' => '/web/boot/controller/action',
 			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
 			'SCRIPT_NAME' => '/web/app.php',
-		);
+		];
 		
 		// Check that requestFactory throws an exception before loadKernel() has been called
-		self::$kernel->requestFactory($_GET, $_REQUEST, array(), array(), array(), $server);
+		self::$kernel->requestFactory($_GET, $_REQUEST, [], [], [], $server);
 	}
 	
 	/**
-	 * @covers ::requestFactory
-	 * @depends testRequestFactoryThrowsException
+	 * @covers ::requestFactory()
+	 * @testdox requestFactory() creates a BootKernelRequest instance
 	 */
-	public function testRequestFactory()
+	public function test_requestFactory()
 	{
-		$server = array(
+		$server = [
 			'BASE' => '/web',
 			'PHP_SELF' => '/web/app.php',
 			'QUERY_STRING' => '',
-			'REQUEST_URI' => '/web/boot/controller/action',
+			'REQUEST_URI' => '/web/app/controller/action',
 			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
 			'SCRIPT_NAME' => '/web/app.php',
-		);
+		];
 		
 		self::$kernel->getKernel('boot');
-		$request = self::$kernel->requestFactory($_GET, $_REQUEST, array(), array(), array(), $server);
+		$request = self::$kernel->requestFactory($_GET, $_REQUEST, [], [], [], $server);
 
 		// Check the returned request is an instance of the correct class
 		$this->assertInstanceOf(BootKernelRequest::class, $request);
 		
 		// Check that getBaseUrl() returns the correct path
-		$this->assertEquals('/web/boot', $request->getBaseUrl());
+		$this->assertEquals('/web', $request->getBaseUrl());
 	}
 	
 	/**
 	 * @covers ::requestFactory()
-	 * @depends testUseAppCache
-	 * @depends testRequestFactory
+	 * @testdox requestFactory() creates a BootKernelRequest instance with AppCache
 	 */
-	public function testRequestFactoryWithAppCache()
+	public function test_requestFactory_with_AppCache()
 	{
 		$GLOBALS['BootKernelTest_loadKernel'] = 1;
 		self::$kernel->useAppCache(true);
 		
 		$kernel = self::$kernel;
-		$server = array(
+		$server = [
 			'BASE' => '/web',
 			'PHP_SELF' => '/web/app.php',
 			'QUERY_STRING' => '',
 			'REQUEST_URI' => '/web/boot/controller/action',
 			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
 			'SCRIPT_NAME' => '/web/app.php',
-		);
+		];
 		
 		self::$kernel->getKernel('app');
-		$request = self::$kernel->requestFactory($_GET, $_REQUEST, array(), array(), array(), $server);
+		$request = self::$kernel->requestFactory($_GET, $_REQUEST, [], [], [], $server);
 		
 		// Check the returned request is an instance of the correct class
 		$this->assertInstanceOf(BootKernelRequest::class, $request);
@@ -381,24 +423,25 @@ class BootKernelTest extends KernelTestCase
 	
 	/**
 	 * @covers ::getRequest()
+	 * @testdox getRequest() returns the correct request
 	 */
-	public function testGetRequest()
+	public function test_getRequest()
 	{
 		$kernel = self::$kernel;
-		$server = array(
+		$server = [
 			'BASE' => '/web',
 			'PHP_SELF' => '/web/app.php',
 			'QUERY_STRING' => '',
 			'REQUEST_URI' => '/web/boot/controller/action',
 			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
 			'SCRIPT_NAME' => '/web/app.php',
-		);
+		];
 		
 		// Check that getRequest() returns null before getKernel() is called
 		$this->assertNull(self::$kernel->getRequest());
 		
 		self::$kernel->getKernel('app');
-		$kernel->requestFactory($_GET, $_REQUEST, array(), array(), array(), $server);
+		$kernel->requestFactory($_GET, $_REQUEST, [], [], [], $server);
 		
 		// Check that getRequest() returns the correct request
 		$request = self::$kernel->getRequest();
@@ -410,25 +453,26 @@ class BootKernelTest extends KernelTestCase
 	
 	/**
 	 * @covers ::boot()
+	 * @testdox boot() actually boots the kernel
 	 */
-	public function testBoot()
+	public function test_boot()
 	{
-		$data = array(
-			'app' => array(
+		$data = [
+			'app' => [
 				'kernel' => 'app/AppKernel.php',
 				'cache' => 'app/AppCache.php',
-			),
-		);
+			],
+		];
 		
 		// Check the kernels property is an empty array
-		$this->assertAttributeEquals(array(), 'kernels', self::$kernel);
+		$this->assertAttributeEquals([], 'kernels', self::$kernel);
 		
 		// Check that boot() just returns when the booted property is true
 		$this->writeAttribute(self::$kernel, 'booted', true);
 		self::$kernel->boot();
 		
 		// Check the kernels property is still an empty array
-		$this->assertAttributeEquals(array(), 'kernels', self::$kernel);
+		$this->assertAttributeEquals([], 'kernels', self::$kernel);
 		
 		// Now reset the booted property and propertly boot the kernel
 		$this->writeAttribute(self::$kernel, 'booted', false);
@@ -443,52 +487,52 @@ class BootKernelTest extends KernelTestCase
 	
 	/**
 	 * @covers ::getKernelFromRequest()
-	 * @depends testBoot
+	 * @testdox getKernelFromRequest() returns correct matches
 	 */
-	public function testGetKernelFromRequest()
+	public function test_getKernelFromRequest()
 	{
-		$server = array(
+		$server = [
 			'BASE' => '/web',
 			'PHP_SELF' => '/web/app.php',
 			'QUERY_STRING' => '',
 			'REQUEST_URI' => '/web/app/controller/action',
 			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
 			'SCRIPT_NAME' => '/web/app.php',
-		);
+		];
 		
 		// Check that getKernelFromRequest() returns the correct kernel name
 		$this->assertEquals('app', $this->callMethod(self::$kernel, 'getKernelFromRequest',
-			new Request($_GET, $_REQUEST, array(), array(), array(), $server)));
+			new Request($_GET, $_REQUEST, [], [], [], $server)));
 		
 		// Check that getKernelFromRequest() booted the kernel
 		$this->assertAttributeEquals(true, 'booted', self::$kernel);
 		
 		// Check that getKernelFromRequest() returns NULL when no match is found
 		$this->assertNull($this->callMethod(self::$kernel, 'getKernelFromRequest',
-			new Request($_GET, $_REQUEST, array(), array(), array(), array_merge($server,array(
+			new Request($_GET, $_REQUEST, [], [], [], array_merge($server, [
 				'REQUEST_URI' => '/web/foobar/controller/action',
-			)))
+			]))
 		));
 	}
 	
 	/**
 	 * @covers ::getKernelFromRequest()
-	 * @depends testGetKernelFromRequest
+	 * @testdox getKernelFromRequest() returns correct matches for an URL without trailing slash
 	 */
-	public function testGetKernelFromRequestWithoutTrailingSlash()
+	public function test_getKernelFromRequest_without_trailing_slash()
 	{
-		$server = array(
+		$server = [
 			'BASE' => '/web',
 			'PHP_SELF' => '/web/app.php',
 			'QUERY_STRING' => '',
 			'REQUEST_URI' => '/web/app',
 			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
 			'SCRIPT_NAME' => '/web/app.php',
-		);
+		];
 		
 		// Check that getKernelFromRequest() returns the correct kernel name
 		$this->assertEquals('app', $this->callMethod(self::$kernel, 'getKernelFromRequest',
-			new Request($_GET, $_REQUEST, array(), array(), array(), $server)));
+			new Request($_GET, $_REQUEST, [], [], [], $server)));
 		
 		// Check that getKernelFromRequest() booted the kernel
 		$this->assertAttributeEquals(true, 'booted', self::$kernel);
@@ -497,69 +541,41 @@ class BootKernelTest extends KernelTestCase
 	/**
 	 * @covers ::handle()
 	 * @expectedException Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-	 * @expectedExceptionMessage Unable to find the controller for path "/". The route is wrongly configured.
+	 * @expectedExceptionMessage No route found for "GET /controller/action"
+	 * @testdox handle() throws NotFoundHttpException when no route is found
 	 */
-	public function testHandleThrowsException()
+	public function test_handle_with_no_route_found()
 	{
-		$server = array(
+		$_SERVER = array_merge($_SERVER, [
 			'BASE' => '/web',
 			'PHP_SELF' => '/web/app.php',
 			'QUERY_STRING' => '',
 			'REQUEST_URI' => '/web/app/controller/action',
 			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
 			'SCRIPT_NAME' => '/web/app.php',
-		);
+		]);
 		
 		// Check the kernel throws an exception because it has no routes
-		self::$kernel->handle(new Request($_GET, $_REQUEST, array(), array(), array(), $server));
+		$response = self::$kernel->handle(new Request($_GET, $_REQUEST, [], [], [], $_SERVER), HttpKernelInterface::MASTER_REQUEST, false);
 	}
 	
 	/**
 	 * @covers ::handle()
-	 * @depends testHandleThrowsException
+	 * @testdox handle() delegates requests to kernels
 	 */
-	public function testHandle()
+	public function test_handle_delegation()
 	{
-		$server = array(
-			'BASE' => '/web',
-			'PHP_SELF' => '/web/app.php',
-			'QUERY_STRING' => '',
-			'REQUEST_URI' => '/web/app/controller/action',
-			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
-			'SCRIPT_NAME' => '/web/app.php',
-		);
-		
-		// Check the kernel throws an exception because it has no routes
-		try { self::$kernel->handle(new Request($_GET, $_REQUEST, array(), array(), array(), $server)); }
-		catch (\Exception $e) { }
-		
-		// Check that calling handle() instantiated one kernel
-		$instances = $this->getObjectAttribute(self::$kernel, 'instances');
-		$this->assertEquals(1, count($instances));
-		
-		// Check the instantiated kernel is the correct one
-		$this->assertTrue(isset($instances['app']));
-		$this->assertEquals('AppKernel', get_class($instances['app']));
-	}
-	
-	/**
-	 * @covers ::handle()
-	 * @depends testHandle
-	 */
-	public function testHandleWithoutTrailingSlash()
-	{
-		$server = array(
+		$_SERVER = array_merge($_SERVER, [
 			'BASE' => '/web',
 			'PHP_SELF' => '/web/app.php',
 			'QUERY_STRING' => '',
 			'REQUEST_URI' => '/web/app',
 			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
 			'SCRIPT_NAME' => '/web/app.php',
-		);
+		]);
 		
 		// Check the kernel throws an exception because it has no routes
-		try { self::$kernel->handle(new Request($_GET, $_REQUEST, array(), array(), array(), $server)); }
-		catch (\Exception $e) { }
+		self::$kernel->handle(new Request($_GET, $_REQUEST, [], [], [], $_SERVER));
 		
 		// Check that calling handle() instantiated one kernel
 		$instances = $this->getObjectAttribute(self::$kernel, 'instances');
@@ -572,24 +588,54 @@ class BootKernelTest extends KernelTestCase
 	
 	/**
 	 * @covers ::handle()
-	 * @depends testHandleThrowsException
+	 * @testdox handle() delegates requests to kernels for an URL without trailing slash
 	 */
-	public function testHandleSetsStartTimeInDebugMode()
+	public function test_handle_delegation_without_trailing_slash()
 	{
-		$this->setUp('working', null, 'test', true);
+		$_SERVER = array_merge($_SERVER, [
+			'BASE' => '/web',
+			'PHP_SELF' => '/web/app.php',
+			'QUERY_STRING' => '',
+			'REQUEST_URI' => '/web/app',
+			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
+			'SCRIPT_NAME' => '/web/app.php',
+		]);
 		
-		$server = array(
+		// Check the kernel throws an exception because it has no routes
+		self::$kernel->handle(new Request($_GET, $_REQUEST, [], [], [], $_SERVER));
+		
+		// Check that calling handle() instantiated one kernel
+		$instances = $this->getObjectAttribute(self::$kernel, 'instances');
+		$this->assertEquals(1, count($instances));
+		
+		// Check the instantiated kernel is the correct one
+		$this->assertTrue(isset($instances['app']));
+		$this->assertEquals('AppKernel', get_class($instances['app']));
+	}
+	
+	/**
+	 * @covers ::handle()
+	 * @kernelDebug true
+	 * @kernelRebuild true
+	 * @preserveGlobalState disabled
+	 * @runInSeparateProcess
+	 * @testdox handle() sets startTime property in debug mode
+	 */
+	public function test_handle_sets_startTime()
+	{
+		$this->setUp(null, 'test', true);
+		
+		$_SERVER = array_merge($_SERVER, [
 			'BASE' => '/web',
 			'PHP_SELF' => '/web/app.php',
 			'QUERY_STRING' => '',
 			'REQUEST_URI' => '/web/app/controller/action',
 			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
 			'SCRIPT_NAME' => '/web/app.php',
-		);
+		]);
 		
 		// Check the kernel throws an exception because it has no routes
-		try { self::$kernel->handle(new Request($_GET, $_REQUEST, array(), array(), array(), $server)); }
-		catch (\Exception $e) { }
+		self::$kernel->handle(new Request($_GET, $_REQUEST, [], [], [], $_SERVER));
 		
 		// Check that calling handle() instantiated one kernel
 		$instances = $this->getObjectAttribute(self::$kernel, 'instances');
@@ -605,22 +651,21 @@ class BootKernelTest extends KernelTestCase
 	
 	/**
 	 * @covers ::handle()
-	 * @depends testHandle
+	 * @testdox handle() delegates requests to default kernel
 	 */
-	public function testHandleDefaultKernel()
+	public function test_handle_delegation_with_default_kernel()
 	{
-		$server = array(
+		$_SERVER = array_merge($_SERVER, [
 			'BASE' => '/web',
 			'PHP_SELF' => '/web/app.php',
 			'QUERY_STRING' => '',
 			'REQUEST_URI' => '/web/foobar/controller/action',
 			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
 			'SCRIPT_NAME' => '/web/app.php',
-		);
+		]);
 		
 		// Check the kernel throws an exception because it has no routes
-		try { self::$kernel->handle(new Request($_GET, $_REQUEST, array(), array(), array(), $server)); }
-		catch (\Exception $e) { }
+		self::$kernel->handle(new Request($_GET, $_REQUEST, [], [], [], $_SERVER));
 		
 		// Check that calling handle() instantiated one kernel
 		$instances = $this->getObjectAttribute(self::$kernel, 'instances');
@@ -633,24 +678,24 @@ class BootKernelTest extends KernelTestCase
 
 	/**
 	 * @covers ::handle()
-	 * @depends testHandle
+	 * @kernelDebug true
+	 * @testdox handle() delegates requests to default kernel and sets startTime property in debug mode
 	 */
-	public function testHandleDefaultKernelSetsStartTimeInDebugMode()
+	public function test_handle_delegation_with_default_kernel_in_debug_mode()
 	{
-		$this->setUp('working', null, 'test', true);
+		$this->setUp(null, 'test', true);
 		
-		$server = array(
+		$_SERVER = array_merge($_SERVER, [
 			'BASE' => '/web',
 			'PHP_SELF' => '/web/app.php',
 			'QUERY_STRING' => '',
 			'REQUEST_URI' => '/web/foobar/controller/action',
 			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
 			'SCRIPT_NAME' => '/web/app.php',
-		);
+		]);
 		
 		// Check the kernel throws an exception because it has no routes
-		try { self::$kernel->handle(new Request($_GET, $_REQUEST, array(), array(), array(), $server)); }
-		catch (\Exception $e) { }
+		self::$kernel->handle(new Request($_GET, $_REQUEST, [], [], [], $_SERVER));
 		
 		// Check that calling handle() instantiated one kernel
 		$instances = $this->getObjectAttribute(self::$kernel, 'instances');
@@ -668,75 +713,127 @@ class BootKernelTest extends KernelTestCase
 	 * @covers ::handle()
 	 * @expectedException Symfony\Component\HttpKernel\Exception\NotFoundHttpException
 	 * @expectedExceptionMessage Unable to load the default kernel. Did you forget to set the motana_multikernel.default in config.yml?
+	 * @testdox handle() throws NotFoundHttpException when a non-existing default kernel is configured
 	 */
-	public function testHandleNoDefaultKernel()
+	public function test_handle_not_existing_default_kernel()
 	{
+		// Boot the kernel
 		self::$kernel->boot();
 		$container = self::$kernel->getContainer();
 		
-		$parameters = array_merge($this->getObjectAttribute($container, 'parameters'), array(
+		// Change the motana.multikernel.default parameter to an invalid kernel name
+		$parameters = array_merge($this->getObjectAttribute($container, 'parameters'), [
 			'motana.multikernel.default' => 'invalid',
-		));
+		]);
 		$this->writeAttribute($container, 'parameters', $parameters);
 		
-		$server = array(
+		// Check the kernel throws an exception when no default kernel is available
+		$_SERVER = array_merge($_SERVER, [
 			'BASE' => '/web',
 			'PHP_SELF' => '/web/app.php',
 			'QUERY_STRING' => '',
 			'REQUEST_URI' => '/web/foobar/controller/action',
 			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
 			'SCRIPT_NAME' => '/web/app.php',
-		);
+		]);
+		self::$kernel->handle(new Request($_GET, $_REQUEST, [], [], [], $_SERVER));
+	}
+	
+	/**
+	 * @covers ::handle()
+	 * @expectedException Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+	 * @expectedExceptionMessage Unable to load the default kernel. Did you forget to set the motana_multikernel.default in config.yml?
+	 * @testdox handle() throws NotFoundHttpException when no default kernel is configured
+	 */
+	public function test_handle_no_default_kernel()
+	{
+		// Boot the kernel
+		self::$kernel->boot();
+		$container = self::$kernel->getContainer();
+		
+		// Change the motana.multikernel.default parameter to an invalid kernel name
+		$parameters = array_merge($this->getObjectAttribute($container, 'parameters'), [
+			'motana.multikernel.default' => null,
+		]);
+		$this->writeAttribute($container, 'parameters', $parameters);
 		
 		// Check the kernel throws an exception when no default kernel is available
-		self::$kernel->handle(new Request($_GET, $_REQUEST, array(), array(), array(), $server));
+		$_SERVER = array_merge($_SERVER, [
+			'BASE' => '/web',
+			'PHP_SELF' => '/web/app.php',
+			'QUERY_STRING' => '',
+			'REQUEST_URI' => '/web/foobar/controller/action',
+			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
+			'SCRIPT_NAME' => '/web/app.php',
+		]);
+		self::$kernel->handle(new Request($_GET, $_REQUEST, [], [], [], $_SERVER));
 	}
 	
 	/**
 	 * @covers ::terminate()
+	 * @testdox terminate() sends the Console::TERMINATE event to all kernels
 	 */
-	public function testTerminate()
+	public function test_terminate()
 	{
-		$kernel = self::$kernel;
-		$request = new Request($_GET, $_REQUEST, array(), array(), array(), array(
+		// Create a request and response for the test
+		$request = new Request($_GET, $_REQUEST, [], [], [], [
 			'BASE' => '/web',
 			'PHP_SELF' => '/web/app.php',
 			'QUERY_STRING' => '',
 			'REQUEST_URI' => '/web/foobar/controller/action',
 			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
 			'SCRIPT_NAME' => '/web/app.php',
-		));
+		]);
 		$response = new Response();
 		
 		// Check that terminate() just returns when the kernel is not booted
-		$this->writeAttribute(self::$kernel, 'instances', array(
-			'foo' => new \stdClass(),
-		));
 		self::$kernel->terminate($request, $response);
+		$this->assertEmpty(self::$onKernelTerminateCalled);
+
+		// Add an event listener for the KernelEvents::TERMINATE event on the boot kernel
+		self::$kernel->boot();
+		$container = self::$kernel->getContainer();
+		$container->get('event_dispatcher')->addListener(KernelEvents::TERMINATE, [ $this, 'onBootKernelTerminate' ]);
+		
+		// Add an event listener for the KernelEvents::TERMINATE event on the app kernel
+		$appKernel = self::$kernel->getKernel('app');
+		$appKernel->boot();
+		$container = $appKernel->getContainer();
+		$container->get('event_dispatcher')->addListener(KernelEvents::TERMINATE, [ $this, 'onAppKernelTerminate' ]);
 		
 		// Check that terminate() just returns when there are no kernel instances
-		$this->writeAttribute(self::$kernel, 'instances', array());
-		self::$kernel->boot();
+		$this->writeAttribute(self::$kernel, 'instances', []);
 		self::$kernel->terminate($request, $response);
+		$this->assertEmpty(self::$onKernelTerminateCalled);
 		
-		$kernels = self::$kernel->getKernels();
-		foreach ($kernels as $kernel) {
-			$kernel->boot();
-		}
+		// Add an event listener for the KernelEvents::TERMINATE event on the app kernel
+		self::$kernel->getKernel('boot');
+		$appKernel = self::$kernel->getKernel('app');
+		$appKernel->boot();
+		$container = $appKernel->getContainer();
+		$container->get('event_dispatcher')->addListener(KernelEvents::TERMINATE, [ $this, 'onAppKernelTerminate' ]);
 		
-		// Check that terminate() uses the request parameter before requestFactory() was called
+		// Check that terminate() dispatches the KernelEvents::TERMINATE event to all kernels
 		self::$kernel->terminate($request, $response);
-		
-		// Check that terminate() uses the request generated by requestFactory()
-		self::$kernel->getKernel('app');
-		self::$kernel->requestFactory($_GET, $_REQUEST, array(), array(), array(), array(
-			'BASE' => '/web',
-			'PHP_SELF' => '/web/app.php',
-			'QUERY_STRING' => '',
-			'REQUEST_URI' => '/web/foobar/controller/action',
-			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
-			'SCRIPT_NAME' => '/web/app.php',
-		));
-		self::$kernel->terminate($request, $response);
+		$this->assertEquals([
+			'boot',
+			'app',
+		], self::$onKernelTerminateCalled);
+	}
+	
+	/**
+	 * Event listener for the KernelEvents::TERMINATE event.
+	 */
+	public function onBootKernelTerminate(Event $event, $eventName, EventDispatcherInterface $dispatcher)
+	{
+		self::$onKernelTerminateCalled[] = 'boot';
+	}
+	
+	/**
+	 * Event listener for the KernelEvents::TERMINATE event.
+	 */
+	public function onAppKernelTerminate(Event $event, $eventName, EventDispatcherInterface $dispatcher)
+	{
+		self::$onKernelTerminateCalled[] = 'app';
 	}
 }

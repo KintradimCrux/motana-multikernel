@@ -1,0 +1,15 @@
+<?php
+
+{% block use_statements %}
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Composer\Autoload\ClassLoader;
+{% endblock use_statements %}
+
+{% block autoloader %}
+/** @var ClassLoader $loader */
+$loader = require __DIR__.'/../vendor/autoload.php';
+
+AnnotationRegistry::registerLoader([$loader, 'loadClass']);
+
+return $loader;
+{% endblock autoloader %}

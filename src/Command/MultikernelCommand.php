@@ -1,12 +1,11 @@
 <?php
 
 /*
- * This file is part of the Motana package.
+ * This file is part of the Motana Multi-Kernel Bundle, which is licensed
+ * under the MIT license. For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
  *
  * (c) Wenzel Jonas <mail@ramihyn.sytes.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
 namespace Motana\Bundle\MultikernelBundle\Command;
@@ -15,7 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -27,8 +25,6 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 class MultikernelCommand extends ContainerAwareCommand
 {
-	// {{{ Properties
-	
 	/**
 	 * Wrapped commands.
 	 *
@@ -36,8 +32,12 @@ class MultikernelCommand extends ContainerAwareCommand
 	 */
 	private $commands;
 	
-	// }}}
-	// {{{ Constructor
+	/**
+	 * Kernel name currently executing a command for.
+	 *
+	 * @var string
+	 */
+	private $kernelName;
 	
 	/**
 	 * Constructor.
@@ -45,15 +45,34 @@ class MultikernelCommand extends ContainerAwareCommand
 	 * @param string $name Command name
 	 * @param Command[] $commands An array of Command instances
 	 */
-	public function __construct($name, array $commands = array())
+	public function __construct($name, array $commands = [])
 	{
 		$this->commands = $commands;
 		
 		parent::__construct($name);
 	}
 	
-	// }}}
-	// {{{ Method overrides
+	/**
+	 * Returns the command for a kernel name.
+	 *
+	 * @param string $kernelName Kernel name
+	 * @return NULL|\Symfony\Component\Console\Command\Command
+	 */
+	public function getCommandForKernel($kernelName)
+	{
+		return isset($this->commands[$kernelName]) ? $this->commands[$kernelName] : null;
+	}
+	
+	/**
+	 * Returns the kernel name currently executing a command for.
+	 * This is used in error processing.
+	 *
+	 * @return string
+	 */
+	public function getKernelName()
+	{
+		return $this->kernelName;
+	}
 	
 	/**
 	 * {@inheritDoc}
@@ -109,30 +128,24 @@ class MultikernelCommand extends ContainerAwareCommand
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		foreach ($this->commands as $kernelName => $command) {
-			if ( ! $command->isEnabled()) {
-				if (in_array($output->getVerbosity(), [OutputInterface::VERBOSITY_VERBOSE, OutputInterface::VERBOSITY_VERY_VERBOSE, OutputInterface::VERBOSITY_DEBUG])) {
+			if ( ! $command->isEnabled()
+				|| $command->isHidden()) {
+				if (OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
 					$output->writeln(sprintf('Skipping command on kernel <comment>%s</comment> (command disabled)', $kernelName));
 				}
 				
 				continue;
 			}
 			
+			$this->kernelName = $kernelName;
+			
 			$output->writeln(sprintf('Executing command on kernel <comment>%s</comment>...', $kernelName));
 			
-			try {
-				$command->getApplication()->doRun($input, $output);
-			}
-			catch (\Exception $e) {
-				if ($output instanceof ConsoleOutputInterface) {
-					$command->getApplication()->renderException($e, $output->getErrorOutput());
-				} else {
-					$command->getApplication()->renderException($e, $output);
-				}
-			}
+			$command->getApplication()->doRun($input, $output);
 			
 			$command->getApplication()->getKernel()->shutdown();
 		}
+		
+		$this->kernelName = null;
 	}
-	
-	// }}}
 }

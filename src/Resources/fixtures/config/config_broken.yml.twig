@@ -1,0 +1,13 @@
+{% block imports %}
+imports:
+    - { resource: config_dev.yml }
+{% endblock imports %}
+
+{% block framework %}
+framework:
+    test: ~
+    session:
+        storage_id: session.storage.mock_file
+    profiler:
+        collect: false
+{% endblock framework %}

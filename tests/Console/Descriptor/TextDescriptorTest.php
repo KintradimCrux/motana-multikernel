@@ -1,64 +1,92 @@
 <?php
 
 /*
- * This file is part of the Motana package.
+ * This file is part of the Motana Multi-Kernel Bundle, which is licensed
+ * under the MIT license. For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
  *
  * (c) Wenzel Jonas <mail@ramihyn.sytes.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultikernelBundle\Console\Descriptor;
+namespace Motana\Bundle\MultikernelBundle\Tests\Console\Descriptor;
+
+use Motana\Bundle\MultikernelBundle\Console\Descriptor\TextDescriptor;
+use Motana\Bundle\MultikernelBundle\Generator\FixtureGenerator;
+use Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\ApplicationTestCase;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-
-use Motana\Bundle\MultikernelBundle\Console\Descriptor\TextDescriptor;
-use Motana\Bundle\MultikernelBundle\Console\Output\BufferedOutput;
-use Motana\Bundle\MultikernelBundle\Test\ApplicationTestCase;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @coversDefaultClass Motana\Bundle\MultikernelBundle\Console\Descriptor\TextDescriptor
+ * @testdox Motana\Bundle\MultikernelBundle\Console\Descriptor\TextDescriptor
  */
 class TextDescriptorTest extends ApplicationTestCase
 {
 	/**
+	 * The project directory.
+	 *
+	 * @var string
+	 */
+	protected static $projectDir;
+	
+	/**
+	 * Descriptor to test.
+	 *
 	 * @var TextDescriptor
 	 */
 	protected static $descriptor;
 	
 	/**
+	 * Descriptor output.
+	 *
 	 * @var BufferedOutput
 	 */
 	protected static $output;
 	
 	/**
+	 * Command to test with.
+	 *
 	 * @var Command
 	 */
 	protected static $command;
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \Motana\Bundle\MultikernelBundle\Test\ApplicationTestCase::setUp()
+	 * @see \Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\ApplicationTestCase::setUp()
 	 */
-	protected function setUp($type = null, $app = null, $environment = 'test', $debug = false)
+	protected function setUp($fake = true, $app = null, $environment = 'test', $debug = false)
 	{
-		if (null !== $type) {
-			parent::setUp($type, $app, $environment, $debug);
-		} else {
-			self::$application = null;
+		if (null === self::$projectDir) {
+			$dir = __DIR__;
+			while ( ! is_file($dir . '/composer.json')) {
+				$dir = dirname($dir);
+			}
+			self::$projectDir = $dir;
 		}
 		
 		self::$descriptor = new TextDescriptor();
+		
+		if (false === $fake) {
+			parent::setUp($app, $environment, $debug);
+			self::$application->getKernel()->boot();
+			self::$descriptor->setContainer(self::$application->getKernel()->getContainer());
+		} else {
+			self::$application = null;
+			$container = new ContainerBuilder();
+			$container->setParameter('kernel.project_dir', self::$projectDir);
+			self::$descriptor->setContainer($container);
+		}
 		
 		self::$output = new BufferedOutput();
 		
 		$this->writeAttribute(self::$descriptor, 'output', self::$output);
 		
-		if (null !== $type) {
+		if (false === $fake) {
 			self::$command = self::$application->find('help');
 		} else {
 			self::$command = new Command('test');
@@ -70,81 +98,127 @@ Tests the TextDescriptor.
 php %command.full_name%
 EOH
 					);
-			self::$command->setDefinition(array(
+			self::$command->setDefinition([
 				new InputArgument('method', InputArgument::OPTIONAL, $description = 'Test method'),
 				new InputOption('--all', '-a', InputOption::VALUE_NONE, 'Run all tests'),
 				new InputOption('--file', '-f', InputOption::VALUE_OPTIONAL, 'File to process'),
 				new InputOption('--verbose', '-v|vv|vvv', InputOption::VALUE_NONE, 'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug'),
-			));
+			]);
 		}
 	}
 	
 	/**
 	 * @covers ::writeText()
+	 * @testdox writeText() returns correct output
 	 */
-	public function testWriteText()
+	public function test_writeText()
 	{
-		$this->callMethod(self::$descriptor, 'writeText', '<info>test</info>', array('raw_output' => true));
+		// Output formatted text
+		$this->callMethod(self::$descriptor, 'writeText', '<info>test</info>', [ 'raw_output' => true ]);
 		
+		// Check the output is correct
 		$this->assertEquals('<info>test</info>', self::$output->fetch());
 		
-		$this->callMethod(self::$descriptor, 'writeText', '<info>test</info>', array('raw_text' => true, 'raw_output' => true));
+		// Output raw text
+		$this->callMethod(self::$descriptor, 'writeText', '<info>test</info>', [ 'raw_text' => true, 'raw_output' => true ]);
 		
+		// Check the output is correct
 		$this->assertEquals('test', self::$output->fetch());
 	}
 	
 	/**
 	 * @covers ::getCommandAliasesText()
+	 * @testdox getCommandAliasesText() returns correct output
 	 */
-	public function testGetCommandAliasesText()
+	public function test_getCommandAliasesText()
 	{
-		self::$command->setAliases(array('dummy:test','alias:test'));
+		// Add aliases to the command
+		self::$command->setAliases([ 'dummy:test', 'alias:test' ]);
 		
+		// Check the correct text is returned
 		$this->assertEquals('[dummy:test|alias:test] ', $this->callMethod(self::$descriptor, 'getCommandAliasesText', self::$command));
 	}
 	
 	/**
-	 * Data provider for testFormatDefaultValue().
-	 * 
+	 * Data provider for test_formatDefaultValue().
+	 *
 	 * @return array
 	 */
-	public function provide_testFormatDefaultValue_data()
+	public function provide_test_formatDefaultValue_data()
 	{
-		return array(
-			array('null', null),
-			array('1', 1),
-			array('false', false),
-			array('"test"', 'test'),
-			array('"Test string that ends with backslash<<"', "Test string that ends with backslash\\"),
-			array('[1,2,3]', array(1, 2, 3)),
-			array('["one","two","three"]', array('one', 'two', 'three')),
-			array('{}', new \stdClass()),
-		);
+		return [
+			'a NULL value' => [
+				'null',
+				null
+			],
+			'an Integer' => [
+				'1',
+				1
+			],
+			'a Boolean' => [
+				'false',
+				false
+			],
+			'a String' => [
+				'"test"',
+				'test'
+			],
+			'a String ending with a backslash' => [
+				'"Test string that ends with backslash\u0000"',
+				"Test string that ends with backslash\\"
+			],
+			'an Array of Integers' => [
+				'[1,2,3]',
+				[
+					1,
+					2,
+					3
+				]
+			],
+			'an Array of Strings' => [
+				'["one","two","three"]',
+				[
+					'one',
+					'two',
+					'three'
+				]
+			],
+			'an Object' => [
+				'{}',
+				new \stdClass()
+			],
+		];
 	}
 	
 	/**
 	 * @covers ::formatDefaultValue()
-	 * @dataProvider provide_testFormatDefaultValue_data
+	 * @dataProvider provide_test_formatDefaultValue_data
+	 * @testdox formatDefaultValue() returns correct output for
 	 */
-	public function testFormatDefaultValue($expectedResult, $value)
+	public function test_formatDefaultValue($expectedResult, $value)
 	{
+		// Check the expected value is returned
 		$this->assertEquals($expectedResult, $this->callMethod(self::$descriptor, 'formatDefaultValue', $value));
 	}
 	
 	/**
 	 * @covers ::getColumnWidth()
+	 * @testdox getColumnWidth() returns the correct width
 	 */
-	public function testGetColumnWidth()
+	public function test_getColumnWidth()
 	{
+		// Fake a different script name for the test
 		$_SERVER['PHP_SELF'] = 'bin/console';
 		
-		$this->setUp('working');
+		// Set up the app environment
+		$this->setUp(false);
 		
+		// Add an alias to the help command
+		self::$application->get('help')->setAliases([ 'help:help' ]);
+		
+		// Calculate the column width
 		$width = 0;
 		$commands = self::$application->all();
-		
-		self::$application->get('help')->setAliases(array('help:help'));
-		
 		foreach ($commands as $command) {
 			/** @var Command $command */
 			$width = max($width, Helper::strlen($command->getName()));
@@ -154,18 +228,23 @@ EOH
 		}
 		$width += 2;
 		
+		// Check the correct width is returned
 		$this->assertEquals($width, $this->callMethod(self::$descriptor, 'getColumnWidth', $commands));
 	}
 	
 	/**
 	 * @covers ::calculateTotalWidthForArguments()
+	 * @testdox calculateTotalWidthForArguments() returns the correct width
 	 */
-	public function testCalculateTotalWidthForArguments()
+	public function test_calculateTotalWidthForArguments()
 	{
+		// Fake a different script name for the test
 		$_SERVER['PHP_SELF'] = 'bin/console';
 		
-		$this->setUp('working');
+		// Set up the app environment
+		$this->setUp(false);
 		
+		// Calculate the width of arguments
 		$width = 0;
 		$arguments = self::$application->getDefinition()->getArguments();
 		foreach ($arguments as $argument) {
@@ -173,18 +252,23 @@ EOH
 			$width = max($width, Helper::strlen($argument->getName()));
 		}
 		
+		// Check the correct width is returned
 		$this->assertEquals($width, $this->callMethod(self::$descriptor, 'calculateTotalWidthForArguments', $arguments));
 	}
 	
 	/**
 	 * @covers ::calculateTotalWidthForShortcuts()
+	 * @testdox calculateTotalWidthForShortcuts() returns the correct width
 	 */
-	public function testCalculateTotalWidthForShortcuts()
+	public function test_calculateTotalWidthForShortcuts()
 	{
+		// Fake a different script name for the test
 		$_SERVER['PHP_SELF'] = 'bin/console';
 		
-		$this->setUp('working');
+		// Set up the app environment
+		$this->setUp(false);
 		
+		// Calculate the width of shortcuts
 		$width = 0;
 		$options = self::$application->getDefinition()->getOptions();
 		foreach ($options as $option) {
@@ -193,19 +277,23 @@ EOH
 		}
 		$width += 2;
 		
+		// Check the correct width is returned
 		$this->assertEquals($width, $this->callMethod(self::$descriptor, 'calculateTotalWidthForShortcuts', $options));
 	}
 	
 	/**
 	 * @covers ::calculateTotalWidthForOptions()
-	 * @depends testCalculateTotalWidthForShortcuts
+	 * @testdox calculateTotalWidthForOptions() returns the correct width
 	 */
-	public function testCalculateTotalWidthForOptions()
+	public function test_calculateTotalWidthForOptions()
 	{
+		// Fake a different script name for the test
 		$_SERVER['PHP_SELF'] = 'bin/console';
 		
-		$this->setUp('working');
+		// Set up the app environment
+		$this->setUp(false);
 		
+		// Calculate the with of options
 		$options = self::$application->getDefinition()->getOptions();
 		$shortcutWidth = $this->callMethod(self::$descriptor, 'calculateTotalWidthForShortcuts', $options);
 		
@@ -222,167 +310,244 @@ EOH
 			$width = max($width, $nameLength);
 		}
 		
+		// Check the correct width is returned
 		$this->assertEquals($width, $this->callMethod(self::$descriptor, 'calculateTotalWidthForOptions', $options));
 	}
 	
 	/**
 	 * @covers ::describeInputArgument()
-	 * @depends testFormatDefaultValue
+	 * @testdox describeInputArgument() returns correct output
 	 */
-	public function testDescribeInputArgument()
+	public function test_describeInputArgument()
 	{
+		// Describe the argument
 		self::$descriptor->describe(self::$output, self::$command->getDefinition()->getArgument(0));
 		
+		// Check the descriptor output is correct
 		$this->assertEquals($this->getTemplate('argument'), self::$output->fetch());
 	}
 	
 	/**
 	 * @covers ::describeInputArgument()
-	 * @depends testDescribeInputArgument
+	 * @testdox describeInputArgument() returns correct output for an argument with default value
 	 */
-	public function testDescribeInputArgumentWithDefaultValue()
+	public function test_describeInputArgument_with_default_value()
 	{
+		// Add a default value to the argument
 		self::$command->getDefinition()->getArgument(0)->setDefault('standard');
 		
+		// Describe the argument
 		self::$descriptor->describe(self::$output, self::$command->getDefinition()->getArgument(0));
 		
+		// Check the descriptor output is correct
 		$this->assertEquals($this->getTemplate('argument_with_default'), self::$output->fetch());
 	}
 	
 	/**
 	 * @covers ::describeInputOption()
-	 * @depends testFormatDefaultValue
-	 * @depends testCalculateTotalWidthForShortcuts
-	 * @depends testCalculateTotalWidthForOptions
+	 * @testdox describeInputOption() returns correct output
 	 */
-	public function testDescribeInputOption()
+	public function test_describeInputOption()
 	{
+		// Describe the option
 		self::$descriptor->describe(self::$output, self::$command->getDefinition()->getOption('all'));
 		
+		// Check the descriptor output is correct
 		$this->assertEquals($this->getTemplate('option'), self::$output->fetch());
 	}
 	
-	public function testDescribeInputOptionWithDefaultValue()
+	/**
+	 * @covers ::describeInputOption()
+	 * @testdox describeInputOption() returns correct output for an option with default value
+	 */
+	public function test_describeInputOption_with_default_value()
 	{
+		// Add a default value to the option
 		self::$command->getDefinition()->getOption('file')->setDefault('autoexec.bat');
 		
+		// Describe the option
 		self::$descriptor->describe(self::$output, self::$command->getDefinition()->getOption('file'));
 		
+		// Check the descriptor output is correct
 		$this->assertEquals($this->getTemplate('option_with_default'), self::$output->fetch());
 	}
 	
 	/**
 	 * @covers ::describeInputDefinition()
-	 * @depends testFormatDefaultValue
-	 * @depends testCalculateTotalWidthForArguments
-	 * @depends testCalculateTotalWidthForShortcuts
-	 * @depends testCalculateTotalWidthForOptions
-	 * @depends testDescribeInputArgument
-	 * @depends testDescribeInputOption
+	 * @testdox describeInputDefinition() returns correct output
 	 */
-	public function testDescribeInputDefinition()
+	public function test_describeInputDefinition_returns_correct_output()
 	{
+		// Describe the definition
 		self::$descriptor->describe(self::$output, self::$command->getDefinition());
 		
+		// Check the descriptor output is correct
 		$this->assertEquals($this->getTemplate('definition'), self::$output->fetch());
 	}
 	
 	/**
-	 * Data provider for testGetCommandData().
+	 * Data provider for test_getCommandData().
 	 *
 	 * @return array
 	 */
-	public function provide_testDescribeCommand_data()
+	public function provide_test_describeCommand_data()
 	{
-		return array(
-			array('working', null, 'command_multikernel', array()),
-			array('working', 'app', 'command_appkernel', array()),
-		);
+		return [
+			'MultikernelApplication' => [
+				null,
+				'command_multikernel',
+				[]
+			],
+			'Application' => [
+				'app',
+				'command_appkernel',
+				[]
+			],
+		];
 	}
 	
 	/**
 	 * @covers ::describeCommand()
-	 * @dataProvider provide_testDescribeCommand_data
-	 * @depends testDescribeInputDefinition
-	 * @param string $type Type (broken | working)
+	 * @dataProvider provide_test_describeCommand_data
 	 * @param string $app App subdirectory name
 	 * @param string $template Template name
 	 * @param array $options Display options
+	 * @testdox describeCommand() returns correct output for
 	 */
-	public function testDescribeCommand($type, $app, $template, array $options = array())
+	public function test_describeCommand($app, $template, array $options = [])
 	{
+		// Fake a different script name for the test
 		$_SERVER['PHP_SELF'] = 'bin/console';
 		
-		$this->setUp($type, $app);
+		// Set up the app environment
+		$this->setUp(false, $app);
 		
+		// Describe the command
 		self::$descriptor->describe(self::$output, self::$command);
 		
+		// Check the descriptor output is correct
 		$this->assertEquals($this->getTemplate($template, $options), self::$output->fetch());
 	}
 	
 	/**
-	 * Data provider for testDescribeApplication()
+	 * Data provider for test_describeApplication().
+	 *
 	 * @return array
 	 */
-	public function provide_testDescribeApplication_data()
+	public function provide_test_describeApplication_data()
 	{
-		return array(
-			array('working', null, 'application_multikernel', array()),
-			array('working', null, 'application_multikernel', array('namespace' => 'debug')),
-			array('working', null, 'application_multikernel', array('raw_text' => true)),
-			array('working', null, 'application_multikernel', array('namespace' => 'debug', 'raw_text' => true)),
-			array('working', 'app', 'application_appkernel', array()),
-			array('working', 'app', 'application_appkernel', array('namespace' => 'debug')),
-			array('working', 'app', 'application_appkernel', array('raw_text' => true)),
-			array('working', 'app', 'application_appkernel', array('namespace' => 'debug', 'raw_text' => true)),
-		);
+		return [
+			'a MultikernelApplication' => [
+				null,
+				'application_multikernel',
+				[]
+			],
+			'a MultikernelApplication (namespace debug)' => [
+				null,
+				'application_multikernel',
+				[
+					'namespace' => 'debug'
+				]
+			],
+			'a MultikernelApplication (raw text)' => [
+				null,
+				'application_multikernel',
+				[
+					'raw_text' => true
+				]
+			],
+			'a MultikernelApplication (raw text, namespace debug)' => [
+				null,
+				'application_multikernel',
+				[
+					'namespace' => 'debug',
+					'raw_text' => true
+				]
+			],
+			'an Application' => [
+				'app',
+				'application_appkernel',
+				[]
+			],
+			'an Application (namespace debug)' => [
+				'app',
+				'application_appkernel',
+				[
+					'namespace' => 'debug'
+				]
+			],
+			'an Application (raw text)' => [
+				'app',
+				'application_appkernel',
+				[
+					'raw_text' => true
+				]
+			],
+			'an Application (raw text, namespace debug)' => [
+				'app',
+				'application_appkernel',
+				[
+					'namespace' => 'debug',
+					'raw_text' => true
+				]
+			],
+		];
 	}
 	
 	/**
 	 * @covers ::describeApplication()
-	 * @dataProvider provide_testDescribeApplication_data
-	 * @depends testDescribeCommand
-	 * @param string $type Type (broken | working)
+	 * @dataProvider provide_test_describeApplication_data
 	 * @param string $app App subdirectory name
 	 * @param string $template Template file name
 	 * @param array $options Display options
+	 * @testdox describeApplication() returns correct output for
 	 */
-	public function testDescribeApplication($type, $app, $template, $options)
+	public function test_describeApplication($app, $template, $options)
 	{
+		// Fake a different script name for the test
 		$_SERVER['PHP_SELF'] = 'bin/console';
 		
-		$this->setUp($type, $app);
+		// Set up the app environment
+		$this->setUp(false, $app);
 		
+		// Describe the application
 		self::$descriptor->describe(self::$output, self::$application, $options);
 		
+		// Check the descriptor output is correct
 		$this->assertEquals($this->getTemplate($template, $options), self::$output->fetch());
 	}
 	
 	/**
 	 * @covers ::describeApplication()
-	 * @depends testDescribeApplication
+	 * @testdox describeApplication() removes aliases and empty namespaces
 	 */
-	public function testDescribeApplicationRemovesAliasesAndEmptyNamespaces()
+	public function test_describeApplication_removes_aliases_and_empty_namespaces()
 	{
+		// Fake a different script name for the test
 		$_SERVER['PHP_SELF'] = 'bin/console';
 		
-		$this->setUp('working', 'app');
+		// Set up the app environment
+		$this->setUp(false, 'app');
 		
-		self::$application->add(self::$application->get('help')->setAliases(array('help:help')));
+		// Add an alias to the help command
+		self::$application->add(self::$application->get('help')->setAliases([ 'help:help' ]));
 		
-		self::$descriptor->describe(self::$output, self::$application, array());
+		// Describe the application
+		self::$descriptor->describe(self::$output, self::$application, []);
 		
-		$this->assertEquals($this->getTemplate('application_appkernel', array('alias' => 'help')), self::$output->fetch());
+		// Check the descriptor output is correct
+		$this->assertEquals($this->getTemplate('application_appkernel', [ 'alias' => 'help' ]), self::$output->fetch());
 	}
 	
 	/**
 	 * @covers ::describe()
-	 * @depends testDescribeApplication
 	 * @expectedException Symfony\Component\Console\Exception\InvalidArgumentException
 	 * @expectedExceptionMessage Object of type "stdClass" is not describable.
+	 * @testdox describeApplication() throws an InvalidArgumentException for unsupported objects
 	 */
-	public function testDescribeInvalidObject()
+	public function test_describe_with_unsupported_object()
 	{
+		// Check an exception is thrown when trying to describe an invalid object
 		self::$descriptor->describe(self::$output, new \stdClass());
 	}
 	
@@ -392,22 +557,45 @@ EOH
 	 * @param string $case Template base name
 	 * @param array $options Display options
 	 * @param string $format Output format (default: txt)
+	 * @param boolean $generateTemplates Boolean indicating to generate templates
 	 * @return string
 	 */
-	protected static function getTemplate($case, array $options = array(), $format = 'txt')
+	protected static function getTemplate($case, array $options = [], $format = 'txt', $generateTemplates = false)
 	{
+		// Append options to template basename
 		$case .= ! empty($options) ? '_' . implode('_', array_keys($options)) : '';
 		
-		if (is_file($file = self::$fixturesDir . '/output/descriptor/' . $format . '/' . $case . '.' . $format)) {
-			return file_get_contents($file);
+		// Insert twig variables into output and save it to a sample file when requested
+		if ($generateTemplates) {
+			$output = clone(self::$output);
+			$content = $output->fetch();
+			if ( ! empty($content)) {
+				$content = str_replace([
+					\Symfony\Component\HttpKernel\Kernel::VERSION,
+					'console boot',
+					'console app',
+					'(kernel: boot,',
+					'(kernel: app,',
+				], [
+					'{{ kernel_version }}',
+					'console {{ kernel_name }}',
+					'console {{ kernel_name }}',
+					'(kernel: {{ kernel_name }},',
+					'(kernel: {{ kernel_name }},',
+				], $content);
+				$content = preg_replace([
+					'#/tmp/motana_multikernel_tests_[^/]+/#',
+				], [
+					'{{ fixture_dir }}/',
+				], $content);
+				self::getFs()->dumpFile(__DIR__ . '/../../../src/Resources/fixtures/descriptor/' . $format . '/' . $case . '.' . $format . '.twig', $content);
+			}
 		}
 		
-		self::getFs()->mkdir(dirname($file));
-		
-		$output = clone(self::$output);
-		$content = $output->fetch();
-		file_put_contents($file, $content);
-		
-		return $content;
+		// Generate expected content from a template
+		$generator = new FixtureGenerator();
+		return $generator->generateDescriptorOutput($case, $format, [
+			'kernel_name' => false !== strpos($case, 'multikernel') ? 'boot' : 'app',
+		]);
 	}
 }

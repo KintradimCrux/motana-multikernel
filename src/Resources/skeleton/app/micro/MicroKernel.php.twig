@@ -1,0 +1,110 @@
+<?php
+
+{% block use_statements %}
+use {{ kernel_base_class }};
+use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+{% if not bundle %}
+use Symfony\Component\HttpFoundation\Response;
+{% endif %}
+use Symfony\Component\Routing\RouteCollectionBuilder;
+{% endblock use_statements %}
+
+{% block class_definition %}
+class {{ kernel_class_name }} extends {{ kernel_base_class_short }}
+{% endblock class_definition %}
+{
+	use MicroKernelTrait;
+	
+{% block class_body %}
+	public function registerBundles()
+	{
+		$bundles = array(
+			new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+			new Symfony\Bundle\TwigBundle\TwigBundle(),
+{% if bundles['SensioFrameworkExtraBundle'] %}
+            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+{% endif %}
+{% if bundles['MotanaMultikernelBundle'] %}
+			new Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle(),
+{% endif %}
+{% if bundle %}
+			new {{ namespace }}\{{ bundle }}(),
+{% endif %}
+		);
+		
+		if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
+			$bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
+			$bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
+			
+			if ('dev' === $this->getEnvironment()) {
+				$bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+			}
+		}
+		
+		return $bundles;
+	}
+	
+	protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
+	{
+		$loader->load(__DIR__.'/config/config.yml');
+		
+		// configure WebProfilerBundle only if the bundle is enabled
+		if (isset($this->bundles['WebProfilerBundle'])) {
+			$container->loadFromExtension('web_profiler', array(
+				'toolbar' => true,
+				'intercept_redirects' => false,
+			));
+		}
+	}
+	
+	protected function configureRoutes(RouteCollectionBuilder $routes)
+	{
+		// import the WebProfilerRoutes, only if the bundle is enabled
+		if (isset($this->bundles['WebProfilerBundle'])) {
+			$routes->import('@WebProfilerBundle/Resources/config/routing/wdt.xml', '/_wdt');
+			$routes->import('@WebProfilerBundle/Resources/config/routing/profiler.xml', '/_profiler');
+		}
+
+{% if bundle %}
+		// load the annotation routes
+		$routes->import('@{{ bundle }}/Controller', '/', 'annotation');
+{% else %}
+        // kernel is a service that points to this class
+        // optional 3rd argument is the route name
+        $routes->add('/random/{limit}', 'kernel:randomAction');
+{% endif %}
+	}
+{% if not bundle %}
+
+    public function randomAction($limit)
+    {
+		$number = rand(0, $limit);
+		
+		return $this->render('random.html.twig', array(
+			'number' => $number
+		));
+    }
+    
+   	protected function render($view, $parameters, Response $response = null)
+	{
+		if ($this->container->has('templating')) {
+			return $this->container->get('templating')->renderResponse($view, $parameters, $response);
+		}
+		
+		if ( ! $this->container->has('twig')) {
+			throw new \LogicException('You can not use the "render" method if the Templating Component or the Twig Bundle are not available.');
+		}
+		
+		if (null === $response) {
+			$response = new Response();
+		}
+		
+		$response->setContent($this->container->get('twig')->render($view, $parameters));
+		
+		return $response;
+	}
+{% endif %}
+{% endblock class_body %}
+}

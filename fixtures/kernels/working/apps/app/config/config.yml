@@ -1,7 +1,0 @@
-imports:
-    - { resource: parameters.yml }
-
-# Put parameters here that don't need to change for each app
-
-framework:
-    secret: "%kernel.secret%"

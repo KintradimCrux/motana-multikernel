@@ -1,0 +1,26 @@
+<?php
+
+{% block namespace %}
+namespace Tests\{{ namespace }}\Controller;
+{% endblock namespace %}
+
+{% block use_statements %}
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+{% endblock use_statements %}
+
+{% block class_definition %}
+class DefaultControllerTest extends WebTestCase
+{% endblock class_definition %}
+{
+{% block class_body %}
+    public function testIndex()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/');
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertContains('Welcome to Symfony', $crawler->filter('#container h1')->text());
+    }
+{% endblock class_body %}
+}

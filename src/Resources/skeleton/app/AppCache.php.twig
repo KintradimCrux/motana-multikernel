@@ -1,0 +1,13 @@
+<?php
+
+{% block use_statements %}
+use {{ cache_base_class }};
+{% endblock use_statements %}
+
+{% block class_definition %}
+class {{ cache_class_name }} extends {{ cache_base_class_short }}
+{% endblock class_definition %}
+{
+{% block class_body %}
+{% endblock class_body %}
+}

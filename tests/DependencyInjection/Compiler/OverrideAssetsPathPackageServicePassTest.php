@@ -1,29 +1,30 @@
 <?php
 
 /*
- * This file is part of the Motana package.
+ * This file is part of the Motana Multi-Kernel Bundle, which is licensed
+ * under the MIT license. For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
  *
  * (c) Wenzel Jonas <mail@ramihyn.sytes.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler;
+namespace Motana\Bundle\MultikernelBundle\Tests\DependencyInjection\Compiler;
 
 use Motana\Bundle\MultikernelBundle\Asset\PathPackage;
 use Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\OverrideAssetsPathPackageServicePass;
-use Motana\Bundle\MultikernelBundle\Test\KernelTestCase;
+use Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\KernelTestCase;
 
 /**
  * @coversDefaultClass Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\OverrideAssetsPathPackageServicePass
+ * @testdox Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\OverrideAssetsPathPackageServicePass
  */
 class OverrideAssetsPathPackageServicePassTest extends KernelTestCase
 {
 	/**
 	 * @covers ::process()
+	 * @testdox process() overrides 'assets.path_package' service class name
 	 */
-	public function testProcess()
+	public function test_process()
 	{
 		$this->callMethod(self::$kernel, 'initializeBundles');
 		

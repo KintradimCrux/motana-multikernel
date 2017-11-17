@@ -1,17 +1,17 @@
 <?php
 
 /*
- * This file is part of the Motana package.
+ * This file is part of the Motana Multi-Kernel Bundle, which is licensed
+ * under the MIT license. For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
  *
  * (c) Wenzel Jonas <mail@ramihyn.sytes.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
 namespace Motana\Bundle\MultikernelBundle\HttpKernel;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
 /**
@@ -21,8 +21,6 @@ use Symfony\Component\HttpKernel\Kernel as BaseKernel;
  */
 abstract class Kernel extends BaseKernel
 {
-	// {{{ Properties
-	
 	/**
 	 * @var string
 	 */
@@ -33,9 +31,6 @@ abstract class Kernel extends BaseKernel
 	 */
 	protected $logDir;
 	
-	// }}}
-	// {{{ Constructor
-	
 	/**
 	 * Constructor.
 	 *
@@ -44,15 +39,14 @@ abstract class Kernel extends BaseKernel
 	 */
 	public function __construct($environment, $debug)
 	{
+		// Call parent constructor
 		parent::__construct($environment, $debug);
 		
-		if (PHP_VERSION_ID < 70000 && ! in_array($environment, ['test', 'dev'])) {
+		// Load class cache for php versions below 7.0
+		if (PHP_VERSION_ID < 70000 && ! in_array($environment, [ 'test', 'dev' ])) {
 			$this->loadClassCache();
 		}
 	}
-	
-	// }}}
-	// {{{ Method overrides
 	
 	/**
 	 * {@inheritDoc}
@@ -60,10 +54,12 @@ abstract class Kernel extends BaseKernel
 	 */
 	public function getCacheDir()
 	{
+		// Initialize cache dir if required
 		if (null === $this->cacheDir) {
 			$this->cacheDir = dirname(dirname($this->getRootDir())) . '/var/cache/' . $this->getName() . '/' . $this->getEnvironment();
 		}
 		
+		// Return the cache dir
 		return $this->cacheDir;
 	}
 	
@@ -73,15 +69,14 @@ abstract class Kernel extends BaseKernel
 	 */
 	public function getLogDir()
 	{
+		// Initialize log dir if required
 		if (null === $this->logDir) {
 			$this->logDir = dirname(dirname($this->getRootDir())) . '/var/logs/' . $this->getName();
 		}
 		
+		// Return the log dir
 		return $this->logDir;
 	}
-	
-	// }}}
-	// {{{ Interface KernelInterface
 	
 	/**
 	 * {@inheritDoc}
@@ -89,8 +84,17 @@ abstract class Kernel extends BaseKernel
 	 */
 	public function registerContainerConfiguration(LoaderInterface $loader)
 	{
+		// Load the configuration for the kernel environment
 		$loader->load($this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml');
 	}
 	
-	// }}}
+	/**
+	 * Gets the container class.
+	 *
+	 * @return string The container class
+	 */
+	protected function getContainerClass()
+	{
+		return lcfirst(Container::camelize($this->name)).ucfirst($this->environment).($this->debug ? 'Debug' : '').'ProjectContainer';
+	}
 }

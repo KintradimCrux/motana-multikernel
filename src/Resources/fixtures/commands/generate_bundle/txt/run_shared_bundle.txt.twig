@@ -1,0 +1,65 @@
+
+                                            
+  Welcome to the Symfony bundle generator!  
+                                            
+
+Are you planning on sharing this bundle across multiple applications? [yes]: 
+Your application code must be written in bundles. This command helps
+you generate them easily.
+
+Each bundle is hosted under a namespace (like Acme/BlogBundle).
+The namespace should begin with a "vendor" name like your company name, your
+project name, or your client name, followed by one or more optional category
+sub-namespaces, and it should end with the bundle name itself
+(which must have Bundle as a suffix).
+
+See http://symfony.com/doc/current/cookbook/bundles/best_practices.html#bundle-name for more
+details on bundle naming conventions.
+
+Use / instead of \  for the namespace delimiter to avoid any problem.
+
+Bundle namespace [Run/Shared/AnnotBundle]: 
+In your code, a bundle is often referenced by its name. It can be the
+concatenation of all namespace parts but it's really up to you to come
+up with a unique name (a good practice is to start with the vendor name).
+Based on the namespace, we suggest RunSharedAnnotBundle.
+
+Bundle name [RunSharedAnnotBundle]: 
+Bundles are usually generated into the src/ directory. Unless you're
+doing something custom, hit enter to keep this default!
+
+Target Directory [src]: 
+What format do you want to use for your generated configuration?
+
+Configuration format (annotation, yml, xml, php) [annotation]: 
+                     
+  Bundle generation  
+                     
+
+> Generating a sample bundle skeleton into {{ fixture_dir }}/generate_bundle/src/Run/Shared/AnnotBundle
+  created ./src/Run/Shared/AnnotBundle/
+  created ./src/Run/Shared/AnnotBundle/RunSharedAnnotBundle.php
+  created ./src/Run/Shared/AnnotBundle/DependencyInjection/
+  created ./src/Run/Shared/AnnotBundle/DependencyInjection/RunSharedAnnotExtension.php
+  created ./src/Run/Shared/AnnotBundle/DependencyInjection/Configuration.php
+  created ./src/Run/Shared/AnnotBundle/Controller/
+  created ./src/Run/Shared/AnnotBundle/Controller/DefaultController.php
+  created ./src/Run/Shared/AnnotBundle/Tests/Controller/
+  created ./src/Run/Shared/AnnotBundle/Tests/Controller/DefaultControllerTest.php
+  created ./src/Run/Shared/AnnotBundle/Resources/views/Default/
+  created ./src/Run/Shared/AnnotBundle/Resources/views/Default/index.html.twig
+  created ./src/Run/Shared/AnnotBundle/Resources/config/
+  created ./src/Run/Shared/AnnotBundle/Resources/config/services.yml
+> Checking that the bundle is autoloaded
+OK
+> Enabling the bundle inside generate_bundle_app/GenerateBundleAppKernel.php
+  updated ./apps/generate_bundle_app/GenerateBundleAppKernel.php
+OK
+> Importing the bundle's routes from the generate_bundle_app/config/routing.yml file
+  updated ./apps/generate_bundle_app/config/routing.yml
+OK
+
+                                         
+  Everything is OK! Now get to work :).  
+                                         
+

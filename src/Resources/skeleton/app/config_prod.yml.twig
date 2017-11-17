@@ -1,0 +1,32 @@
+{% block imports %}
+imports:
+    - { resource: config.yml }
+{% endblock imports %}
+
+{% block doctrine %}
+#doctrine:
+#    orm:
+#        metadata_cache_driver: apc
+#        result_cache_driver: apc
+#        query_cache_driver: apc
+{% endblock doctrine %}
+
+{% block monolog %}
+monolog:
+    handlers:
+        main:
+            type: fingers_crossed
+            action_level: error
+            handler: nested
+        nested:
+            type: stream
+{% if bundles['MotanaMultikernelBundle'] %}
+            path: '%kernel.logs_dir%/%kernel.name%/%kernel.environment%.log'
+{% else %}
+            path: '%kernel.logs_dir%/%kernel.environment%.log'
+{% endif %}
+            level: debug
+        console:
+            type: console
+            process_psr_3_messages: false
+{% endblock monolog %}

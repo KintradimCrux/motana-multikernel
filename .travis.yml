@@ -5,9 +5,10 @@ php:
     - '7.1'
 install:
     - composer install --no-interaction
+    - composer require --no-interaction satooshi/php-coveralls:dev-master
 script:
     - mkdir -p build/logs
-    - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+    - vendor/bin/phpunit --testdox --coverage-clover build/logs/clover.xml
 after_script:
     - vendor/bin/coveralls
 notifications:

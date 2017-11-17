@@ -1,0 +1,29 @@
+<?php
+
+{% block namespace %}
+namespace {{ namespace }}\Controller;
+{% endblock namespace %}
+
+{% block use_statements %}
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+{% endblock use_statements %}
+
+{% block class_definition %}
+class MicroController extends Controller
+{% endblock class_definition %}
+{
+{% block class_body %}
+    /**
+     * @Route("/random/{limit}")
+     */
+    public function randomAction($limit)
+    {
+        $number = rand(0, $limit);
+
+        return $this->render('random.html.twig', array(
+            'number' => $number
+        ));
+    }
+{% endblock class_body %}
+}

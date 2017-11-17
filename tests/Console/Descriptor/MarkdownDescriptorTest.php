@@ -1,61 +1,93 @@
 <?php
 
 /*
- * This file is part of the Motana package.
+ * This file is part of the Motana Multi-Kernel Bundle, which is licensed
+ * under the MIT license. For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
  *
  * (c) Wenzel Jonas <mail@ramihyn.sytes.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultikernelBundle\Console\Descriptor;
+namespace Motana\Bundle\MultikernelBundle\Tests\Console\Descriptor;
+
+use Motana\Bundle\MultikernelBundle\Console\Descriptor\MarkdownDescriptor;
+use Motana\Bundle\MultikernelBundle\Generator\FixtureGenerator;
+use Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\ApplicationTestCase;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-
-use Motana\Bundle\MultikernelBundle\Console\Descriptor\MarkdownDescriptor;
-use Motana\Bundle\MultikernelBundle\Console\Output\BufferedOutput;
-use Motana\Bundle\MultikernelBundle\Test\ApplicationTestCase;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @coversDefaultClass Motana\Bundle\MultikernelBundle\Console\Descriptor\MarkdownDescriptor
+ * @testdox Motana\Bundle\MultikernelBundle\Console\Descriptor\MarkdownDescriptor
  */
 class MarkdownDescriptorTest extends ApplicationTestCase
 {
 	/**
+	 * The project directory.
+	 *
+	 * @var string
+	 */
+	protected static $projectDir;
+	
+	/**
+	 * Descriptor to test.
+	 *
 	 * @var MarkdownDescriptor
 	 */
 	protected static $descriptor;
 	
 	/**
+	 * Descriptor output.
+	 *
 	 * @var BufferedOutput
 	 */
 	protected static $output;
 	
 	/**
+	 * Command to test with.
+	 *
 	 * @var Command
 	 */
 	protected static $command;
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \Motana\Bundle\MultikernelBundle\Test\ApplicationTestCase::setUp()
+	 * @see \Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\ApplicationTestCase::setUp()
 	 */
-	protected function setUp($type = null, $app = null, $environment = 'test', $debug = false)
+	protected function setUp($fake = true, $app = null, $environment = 'test', $debug = false)
 	{
-		if (null !== $type) {
-			parent::setUp($type, $app, $environment, $debug);
-		} else {
-			self::$application = null;
+		if (null === self::$projectDir) {
+			$dir = self::$fixturesDir;
+			while ( ! is_file($dir . '/composer.json')) {
+				$dir = dirname($dir);
+			}
+			self::$projectDir = $dir;
+		}
+		
+		if (null !== self::$projectDir) {
+			chdir(self::$projectDir);
 		}
 		
 		self::$descriptor = new MarkdownDescriptor();
 		
+		if (false === $fake) {
+			parent::setUp($app, $environment, $debug);
+			self::$application->getKernel()->boot();
+			self::$descriptor->setContainer(self::$application->getKernel()->getContainer());
+		} else {
+			self::$application = null;
+			$container = new ContainerBuilder();
+			$container->setParameter('kernel.project_dir', self::$projectDir);
+			self::$descriptor->setContainer($container);
+		}
+		
 		self::$output = new BufferedOutput();
 		
-		if (null !== $type) {
+		if (false === $fake) {
 			self::$command = self::$application->find('help');
 		} else {
 			self::$command = new Command('test');
@@ -68,181 +100,238 @@ Tests the <info>MarkDownDescriptor</info>.
 php %command.full_name%
 EOH
 					);
-			self::$command->setDefinition(array(
+			self::$command->setDefinition([
 				new InputArgument('method', InputArgument::OPTIONAL, $description = 'Test method'),
 				new InputOption('--all', '-a', InputOption::VALUE_NONE, 'Run all tests'),
 				new InputOption('--file', '-f', InputOption::VALUE_OPTIONAL, 'File to process'),
 				new InputOption('--verbose', '-v|vv|vvv', InputOption::VALUE_NONE, 'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug'),
-			));
+			]);
 		}
 	}
 	
 	/**
 	 * @covers ::formatDescription()
+	 * @testdox formatDescription() returns correct output
 	 */
-	public function testFormatDescription()
+	public function test_formatDescription()
 	{
+		// Fake a different script name for the test
 		$_SERVER['PHP_SELF'] = 'bin/console';
 		
+		// Check the description is correct
 		$this->assertEquals($this->getTemplate('description'), $this->callMethod(self::$descriptor, 'formatDescription', self::$command->getDescription()));
 		
+		// Get processed help
 		$help = $this->callMethod(self::$descriptor, 'getProcessedHelp', self::$command);
 		
+		// Check the output is correct
 		$this->assertEquals($this->getTemplate('help'), $this->callMethod(self::$descriptor, 'formatDescription', $help));
 	}
 	
 	/**
 	 * @covers ::describeInputArgument()
-	 * @depends testFormatDescription
+	 * @testdox describeInputArgument() returns correct output
 	 */
-	public function testDescribeInputArgument()
+	public function test_describeInputArgument()
 	{
+		// Describe the argument
 		self::$descriptor->describe(self::$output, self::$command->getDefinition()->getArgument(0));
 		
+		// Check the descriptor output is correct
 		$this->assertEquals($this->getTemplate('argument'), self::$output->fetch());
 	}
 
 	/**
 	 * @covers ::describeInputArgument()
-	 * @depends testDescribeInputArgument
+	 * @testdox describeInputArgument() returns correct output for an argument with default value
 	 */
-	public function testDescribeInputArgumentWithDefault()
+	public function test_describeInputArgument_with_default_value()
 	{
+		// Add a default value to the argument
 		self::$command->getDefinition()->getArgument(0)->setDefault('standard');
 		
+		// Describe the argument
 		self::$descriptor->describe(self::$output, self::$command->getDefinition()->getArgument(0));
 		
+		// Check the descriptor output is correct
 		$this->assertEquals($this->getTemplate('argument_with_default'), self::$output->fetch());
 	}
 	
 	/**
 	 * @covers ::describeInputOption()
-	 * @depends testFormatDescription
+	 * @testdox describeInputOption() returns correct output
 	 */
-	public function testDescribeInputOption()
+	public function test_describeInputOption()
 	{
+		// Describe the option
 		self::$descriptor->describe(self::$output, self::$command->getDefinition()->getOption('all'));
 		
+		// Check the descriptor output is correct
 		$this->assertEquals($this->getTemplate('option'), self::$output->fetch());
 	}
 	
 	/**
 	 * @covers ::describeInputOption()
-	 * @depends testDescribeInputOption
+	 * @testdox describeInputOption() returns correct output for an option with default value
 	 */
-	public function testDescribeInputOptionWithDefault()
+	public function test_describeInputOption_with_default_value()
 	{
+		// Add a default value to the option
 		self::$command->getDefinition()->getOption('file')->setDefault('autoexec.bat');
 		
+		// Describe the option
 		self::$descriptor->describe(self::$output, self::$command->getDefinition()->getOption('file'));
 		
+		// Check the descriptor output is correct
 		$this->assertEquals($this->getTemplate('option_with_default'), self::$output->fetch());
 	}
 	
 	/**
 	 * @covers ::describeInputDefinition()
-	 * @depends testDescribeInputArgument
-	 * @depends testDescribeInputOption
+	 * @testdox describeInputDefinition() returns correct output
 	 */
-	public function testDescribeInputDefinition()
+	public function test_describeInputDefinition_returns_correct_output()
 	{
+		// Describe the definition
 		self::$descriptor->describe(self::$output, self::$command->getDefinition());
 		
+		// Check the descriptor output is correct
 		$this->assertEquals($this->getTemplate('definition'), self::$output->fetch());
 	}
 	
 	/**
-	 * Data provider for testGetCommandData().
+	 * Data provider for test_describeCommand().
 	 *
 	 * @return array
 	 */
-	public function provide_testDescribeCommand_data()
+	public function provide_test_describeCommand_data()
 	{
-		return array(
-			array('working', null, 'command_multikernel', array()),
-			array('working', 'app', 'command_appkernel', array()),
-		);
+		return [
+			'MultikernelApplication' => [
+				null,
+				'command_multikernel',
+				[]
+			],
+			'Application' => [
+				'app',
+				'command_appkernel',
+				[]
+			],
+		];
 	}
 	
 	/**
 	 * @covers ::describeCommand()
-	 * @dataProvider provide_testDescribeCommand_data
-	 * @depends testDescribeInputDefinition
-	 * @param string $type Type (broken | working)
+	 * @dataProvider provide_test_describeCommand_data
 	 * @param string $app App subdirectory name
 	 * @param string $template Template name
 	 * @param array $options Display options
+	 * @testdox describeCommand() returns correct output for
 	 */
-	public function testDescribeCommand($type, $app, $template, array $options = array())
+	public function test_describeCommand($app, $template, array $options = [])
 	{
+		// Fake a different script name for the test
 		$_SERVER['PHP_SELF'] = 'bin/console';
 		
-		$this->setUp($type, $app);
+		// Set up the app environment
+		$this->setUp(false, $app);
 		
+		// Describe the command
 		self::$descriptor->describe(self::$output, self::$command);
 		
+		// Check the descriptor output is correct
 		$this->assertEquals($this->getTemplate($template, $options), self::$output->fetch());
 	}
 
 	/**
-	 * Data provider for testDescribeApplication()
+	 * Data provider for test_describeApplication().
+	 *
 	 * @return array
 	 */
-	public function provide_testDescribeApplication_data()
+	public function provide_test_describeApplication_data()
 	{
-		return array(
-			array('working', null, 'application_multikernel', array()),
-			array('working', null, 'application_multikernel', array('namespace' => 'debug')),
-			array('working', 'app', 'application_appkernel', array()),
-			array('working', 'app', 'application_appkernel', array('namespace' => 'debug')),
-		);
+		return [
+			'a MultikernelApplication' => [
+				null,
+				'application_multikernel',
+				[]
+			],
+			'a MultikernelApplication (namespace debug)' => [
+				null,
+				'application_multikernel',
+				[
+					'namespace' => 'debug'
+				]
+			],
+			'an Application' => [
+				'app',
+				'application_appkernel',
+				[]
+			],
+			'an Application (namespace debug)' => [
+				'app',
+				'application_appkernel',
+				[
+					'namespace' => 'debug'
+				]
+			],
+		];
 	}
 	
 	/**
 	 * @covers ::describeApplication()
-	 * @dataProvider provide_testDescribeApplication_data
-	 * @depends testDescribeCommand
-	 * @param string $type Type (broken | working)
+	 * @dataProvider provide_test_describeApplication_data
 	 * @param string $app App subdirectory name
 	 * @param string $template Template file name
 	 * @param array $options Display options
+	 * @testdox describeApplication() returns correct output for
 	 */
-	public function testDescribeApplication($type, $app, $template, $options)
+	public function test_describeApplication($app, $template, $options)
 	{
+		// Fake a different script name for the test
 		$_SERVER['PHP_SELF'] = 'bin/console';
 		
-		$this->setUp($type, $app);
+		// Set up the app environment
+		$this->setUp(false, $app);
 		
+		// Describe the application
 		self::$descriptor->describe(self::$output, self::$application, $options);
 		
+		// Check the descriptor output is correct
 		$this->assertEquals($this->getTemplate($template, $options), self::$output->fetch());
 	}
 	
 	/**
 	 * @covers ::describeApplication()
-	 * @depends testDescribeApplication
+	 * @testdox describeApplication() removes aliases and empty namespaces
 	 */
-	public function testDescribeApplicationRemovesAliasesAndEmptyNamespaces()
+	public function test_describeApplication_removes_aliases_and_empty_namespaces()
 	{
+		// Fake a different script name for the test
 		$_SERVER['PHP_SELF'] = 'bin/console';
 		
-		$this->setUp('working', 'app');
+		// Set up the app environment
+		$this->setUp(false, 'app');
 		
-		self::$application->add(self::$application->get('help')->setAliases(array('help:help')));
+		// Add an alias to the help command
+		self::$application->add(self::$application->get('help')->setAliases([ 'help:help' ]));
 		
-		self::$descriptor->describe(self::$output, self::$application, array());
+		// Describe the application
+		self::$descriptor->describe(self::$output, self::$application, []);
 		
-		$this->assertEquals($this->getTemplate('application_appkernel', array('alias' => 'help')), self::$output->fetch());
+		// Check the descriptor output is correct
+		$this->assertEquals($this->getTemplate('application_appkernel', [ 'alias' => 'help' ]), self::$output->fetch());
 	}
 	
 	/**
 	 * @covers ::describe()
-	 * @depends testDescribeApplication
 	 * @expectedException Symfony\Component\Console\Exception\InvalidArgumentException
 	 * @expectedExceptionMessage Object of type "stdClass" is not describable.
+	 * @testdox describe() throws an InvalidArgumentException for unsupported objects
 	 */
-	public function testDescribeInvalidObject()
+	public function test_describe_with_unsupported_object()
 	{
+		// Check an exception is thrown when trying to describe an invalid object
 		self::$descriptor->describe(self::$output, new \stdClass());
 	}
 	
@@ -252,12 +341,12 @@ EOH
 	 * @param string $case Template base name
 	 * @param array $options Display options
 	 * @param string $format Output format (default: md)
+	 * @param boolean $generateTemplates Boolean indicating to generate templates
 	 * @return string
 	 */
-	protected static function getTemplate($case, array $options = array(), $format = 'md')
+	protected static function getTemplate($case, array $options = [], $format = 'md', $generateTemplates = false)
 	{
-		$case .= ! empty($options) ? '_' . implode('_', array_keys($options)) : '';
-		
+		// Return small templates directly
 		switch ($case) {
 			case 'description':
 				return 'JsonDescriptor test command';
@@ -267,20 +356,44 @@ Tests the `MarkDownDescriptor`.
 
 Usage:
 test
-bin/console test
+./bin/console test
 EOD;
 		}
 		
-		if (is_file($file = self::$fixturesDir . '/output/descriptor/' . $format . '/'. $case . '.' . $format)) {
-			return file_get_contents($file);
+		// Append options to template basename
+		$case .= ! empty($options) ? '_' . implode('_', array_keys($options)) : '';
+		
+		// Insert twig variables into output and save it to a sample file when requested
+		if ($generateTemplates) {
+			$output = clone(self::$output);
+			$content = $output->fetch();
+			if ( ! empty($content)) {
+				$content = str_replace([
+					\Symfony\Component\HttpKernel\Kernel::VERSION,
+					'console boot',
+					'console app',
+					'(kernel: boot,',
+					'(kernel: app,',
+				], [
+					'{{ kernel_version }}',
+					'console {{ kernel_name }}',
+					'console {{ kernel_name }}',
+					'(kernel: {{ kernel_name }},',
+					'(kernel: {{ kernel_name }},',
+				], $content);
+				$content = preg_replace([
+					'#/tmp/motana_multikernel_tests_[^/]+/#',
+				], [
+					'{{ fixture_dir }}/',
+				], $content);
+				self::getFs()->dumpFile(__DIR__ . '/../../../src/Resources/fixtures/descriptor/' . $format . '/' . $case . '.' . $format . '.twig', $content);
+			}
 		}
 		
-		self::getFs()->mkdir(dirname($file));
-		
-		$output = clone(self::$output);
-		$content = $output->fetch();
-		file_put_contents($file, $content);
-
-		return $content;
+		// Generate expected content from a template
+		$generator = new FixtureGenerator();
+		return $generator->generateDescriptorOutput($case, $format, [
+			'kernel_name' => false !== strpos($case, 'multikernel') ? 'boot' : 'app',
+		]);
 	}
 }

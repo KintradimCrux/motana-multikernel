@@ -1,25 +1,25 @@
 <?php
 
 /*
- * This file is part of the Motana package.
+ * This file is part of the Motana Multi-Kernel Bundle, which is licensed
+ * under the MIT license. For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
  *
  * (c) Wenzel Jonas <mail@ramihyn.sytes.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultikernelBundle\DependencyInjection;
+namespace Motana\Bundle\MultikernelBundle\Tests\DependencyInjection;
+
+use Motana\Bundle\MultikernelBundle\DependencyInjection\Configuration;
+use Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\TestCase;
 
 use Symfony\Component\Config\Definition\ArrayNode;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\ScalarNode;
 
-use Motana\Bundle\MultikernelBundle\DependencyInjection\Configuration;
-use Motana\Bundle\MultikernelBundle\Test\TestCase;
-
 /**
  * @coversDefaultClass Motana\Bundle\MultikernelBundle\DependencyInjection\Configuration
+ * @testdox Motana\Bundle\MultikernelBundle\DependencyInjection\Configuration
  */
 class ConfigurationTest extends TestCase
 {
@@ -30,7 +30,7 @@ class ConfigurationTest extends TestCase
 	
 	/**
 	 * {@inheritDoc}
-	 * @see PHPUnit_Framework_TestCase::setUp()
+	 * @see \PHPUnit_Framework_TestCase::setUp()
 	 */
 	protected function setUp()
 	{
@@ -39,22 +39,24 @@ class ConfigurationTest extends TestCase
 	
 	/**
 	 * @covers ::getConfigTreeBuilder()
+	 * @testdox getConfigTreeBuilder() returns correct configuration sections
 	 */
-	public function testGetConfigTreeBuilder()
+	public function test_getConfigTreeBuilder()
 	{
 		$treeBuilder = $this->configuration->getConfigTreeBuilder();
 		$tree = $treeBuilder->buildTree();
 		/** @var ArrayNode $tree */
 
-		$expected = array(
+		$expected = [
 			'default' => null,
-			'class_cache.exclude' => array(),
-			'commands.add' => array(),
-			'commands.global' => array(),
-			'commands.hidden' => array(),
-		);
+			'class_cache.exclude' => [],
+			'commands.add' => [],
+			'commands.global' => [],
+			'commands.hidden' => [],
+			'commands.ignore' => [],
+		];
 		
-		$config = array();
+		$config = [];
 		foreach ($tree->getChildren() as $groupName => $group) {
 			if ($group instanceof ScalarNode) {
 				$config[$groupName] = $group->getDefaultValue();
@@ -66,7 +68,7 @@ class ConfigurationTest extends TestCase
 			}
 		}
 		
-		// Check that the configuration tree returns the correct settings and default values
+		// Check the returned configuration tree contains the correct settings and default values
 		$this->assertEquals($expected, $config);
 	}
 }

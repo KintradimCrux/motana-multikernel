@@ -1,16 +1,17 @@
 <?php
 
 /*
- * This file is part of the Motana package.
+ * This file is part of the Motana Multi-Kernel Bundle, which is licensed
+ * under the MIT license. For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
  *
  * (c) Jean-François Simon <contact@jfsimon.fr>
  * (c) Wenzel Jonas <mail@ramihyn.sytes.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
 namespace Motana\Bundle\MultikernelBundle\Console\Descriptor;
+
+use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -18,8 +19,6 @@ use Symfony\Component\Console\Descriptor\ApplicationDescription;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
-
-use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
 
 /**
  * A replacement for the Symfony Standard Edition xml descriptor.
@@ -29,13 +28,11 @@ use Motana\Bundle\MultikernelBundle\Console\MultikernelApplication;
  */
 class XmlDescriptor extends Descriptor
 {
-	// {{{ Method overrides
-	
 	/**
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Descriptor\Descriptor::describeInputArgument()
 	 */
-	protected function describeInputArgument(InputArgument $argument, array $options = array())
+	protected function describeInputArgument(InputArgument $argument, array $options = [])
 	{
 		$this->writeDocument($this->getInputArgumentDocument($argument), $options);
 	}
@@ -44,7 +41,7 @@ class XmlDescriptor extends Descriptor
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Descriptor\Descriptor::describeInputOption()
 	 */
-	protected function describeInputOption(InputOption $option, array $options = array())
+	protected function describeInputOption(InputOption $option, array $options = [])
 	{
 		$this->writeDocument($this->getInputOptionDocument($option), $options);
 	}
@@ -53,7 +50,7 @@ class XmlDescriptor extends Descriptor
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Descriptor\Descriptor::describeInputDefinition()
 	 */
-	protected function describeInputDefinition(InputDefinition $definition, array $options = array())
+	protected function describeInputDefinition(InputDefinition $definition, array $options = [])
 	{
 		$this->writeDocument($this->getInputDefinitionDocument($definition), $options);
 	}
@@ -62,7 +59,7 @@ class XmlDescriptor extends Descriptor
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Descriptor\Descriptor::describeCommand()
 	 */
-	protected function describeCommand(Command $command, array $options = array())
+	protected function describeCommand(Command $command, array $options = [])
 	{
 		$this->writeDocument($this->getCommandDocument($command), $options);
 	}
@@ -71,13 +68,10 @@ class XmlDescriptor extends Descriptor
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Descriptor\Descriptor::describeApplication()
 	 */
-	protected function describeApplication(Application $application, array $options = array())
+	protected function describeApplication(Application $application, array $options = [])
 	{
 		$this->writeDocument($this->getApplicationDocument($application, isset($options['namespace']) ? $options['namespace'] : null), $options);
 	}
-	
-	// }}}
-	// {{{ Helper methods
 	
 	/**
 	 * Returns the DOM document for an InputArgument instance.
@@ -98,7 +92,7 @@ class XmlDescriptor extends Descriptor
 		$descriptionXML->appendChild($dom->createTextNode($argument->getDescription()));
 		
 		$objectXML->appendChild($defaultsXML = $dom->createElement('defaults'));
-		$defaults = is_array($argument->getDefault()) ? $argument->getDefault() : (is_bool($argument->getDefault()) ? array(var_export($argument->getDefault(), true)) : ($argument->getDefault() ? array($argument->getDefault()) : array()));
+		$defaults = is_array($argument->getDefault()) ? $argument->getDefault() : (is_bool($argument->getDefault()) ? [ var_export($argument->getDefault(), true) ] : ($argument->getDefault() ? [ $argument->getDefault() ] : []));
 		foreach ($defaults as $default) {
 			$defaultsXML->appendChild($defaultXML = $dom->createElement('default'));
 			$defaultXML->appendChild($dom->createTextNode($default));
@@ -136,7 +130,7 @@ class XmlDescriptor extends Descriptor
 		$descriptionXML->appendChild($dom->createTextNode($option->getDescription()));
 		
 		if ($option->acceptValue()) {
-			$defaults = is_array($option->getDefault()) ? $option->getDefault() : (is_bool($option->getDefault()) ? array(var_export($option->getDefault(), true)) : ($option->getDefault() ? array($option->getDefault()) : array()));
+			$defaults = is_array($option->getDefault()) ? $option->getDefault() : (is_bool($option->getDefault()) ? [ var_export($option->getDefault(), true) ] : ($option->getDefault() ? [ $option->getDefault() ] : []));
 			$objectXML->appendChild($defaultsXML = $dom->createElement('defaults'));
 			if ( ! empty($defaults)) {
 				foreach ($defaults as $default) {
@@ -203,12 +197,12 @@ class XmlDescriptor extends Descriptor
 		$commandXML->appendChild($usagesXML = $dom->createElement('usages'));
 		
 		if ( ! $kernel) {
-			$usagesXML->appendChild($dom->createElement('usage', $_SERVER['PHP_SELF'] . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $command->getSynopsis(true))));
+			$usagesXML->appendChild($dom->createElement('usage', $this->makePathRelative($_SERVER['PHP_SELF']) . ' ' . str_replace([ ' <kernel>', ' <command>' ], '', $command->getSynopsis(true))));
 		}
 		
 		if ( ! $global) {
-			foreach (array_merge(array($command->getSynopsis(true)), $command->getAliases(), $command->getUsages()) as $usage) {
-				$usagesXML->appendChild($dom->createElement('usage', $_SERVER['PHP_SELF'] . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace(array(' <kernel>', ' <command>'), '', $usage)));
+			foreach (array_merge([ $command->getSynopsis(true) ], $command->getAliases(), $command->getUsages()) as $usage) {
+				$usagesXML->appendChild($dom->createElement('usage', $this->makePathRelative($_SERVER['PHP_SELF']) . ' ' . ($kernel ? $kernel : '<kernel>') . ' ' . str_replace([ ' <kernel>', ' <command>' ], '', $usage)));
 			}
 		}
 		
@@ -225,7 +219,7 @@ class XmlDescriptor extends Descriptor
 			}
 		}
 		
-		$definitionXML = $this->getInputDefinitionDocument($command->getNativeDefinition());
+		$definitionXML = $this->getInputDefinitionDocument($command->getDefinition());
 		$this->appendDocument($commandXML, $definitionXML->getElementsByTagName('definition')->item(0));
 		
 		return $dom;
@@ -323,12 +317,10 @@ class XmlDescriptor extends Descriptor
 	 *
 	 * @param \DOMDocument $dom
 	 */
-	private function writeDocument(\DOMDocument $dom, array $options = array())
+	private function writeDocument(\DOMDocument $dom, array $options = [])
 	{
 		$dom->formatOutput = true;
 		
 		$this->write($dom->saveXML());
 	}
-	
-	// }}}
 }

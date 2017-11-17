@@ -5,8 +5,8 @@
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.8/phpunit.xsd"
          backupGlobals="false"
          colors="true"
-         bootstrap="fixtures/autoload.php"
->
+         bootstrap="autoload.php"
+	>
     <php>
     	<env name="COLUMNS" value="80"/>
     	<env name="LINES" value="50"/>
@@ -14,10 +14,14 @@
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
+        <testsuite>
             <directory>tests</directory>
         </testsuite>
     </testsuites>
+
+	<listeners>
+		<listener class="Motana\Bundle\MultikernelBundle\Tests\TestListener"/>
+	</listeners>
 
     <filter>
         <whitelist>
@@ -26,6 +30,7 @@
             	<directory>src/Resources</directory>
                 <directory>src/*Bundle/Resources</directory>
                 <directory>src/*/*Bundle/Resources</directory>
+            	<directory>src/Resources</directory>
                 <directory>src/*/Bundle/*Bundle/Resources</directory>
             </exclude>
         </whitelist>

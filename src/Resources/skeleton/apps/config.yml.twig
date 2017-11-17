@@ -1,0 +1,43 @@
+{% block imports %}
+imports:
+    - { resource: parameters.yml }
+{% endblock imports %}
+
+{% block framework %}
+# Symfony configuration
+framework:
+    http_method_override: false
+    profiler:
+        collect: false
+    annotations:
+        enabled: false
+{% endblock framework %}
+
+{% block motana_multikernel %}
+# MotanaMultikernelBundle configuration
+motana_multikernel:
+
+    # Default kernel the front controller should load when no kernel matches the URL
+    default: '%kernel.default%' # Example: "app" for the default AppKernel
+
+    # Class cache configuration
+    class_cache:
+
+        # Classes to exclude from being cached in classes.php of app kernels
+        exclude:              []
+
+    # Console commands configuration
+    commands:
+
+        # Commands to add as multi-kernel command, bypassing the requirement of being available for all kernels
+        add:                  []
+
+        # Commands that will always be run on the boot kernel and will be hidden in the other kernels
+        global:               []
+
+        # Commands that will be hidden in all kernels
+        hidden:               []
+        
+        # Commands that will be left as-is, overriding all of the above command settings
+        ignore:               []
+{% endblock motana_multikernel %}

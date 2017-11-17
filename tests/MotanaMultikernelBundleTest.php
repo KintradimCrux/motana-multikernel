@@ -1,33 +1,35 @@
 <?php
 
 /*
- * This file is part of the Motana package.
+ * This file is part of the Motana Multi-Kernel Bundle, which is licensed
+ * under the MIT license. For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
  *
  * (c) Wenzel Jonas <mail@ramihyn.sytes.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
-namespace Tests\Motana\Bundle\MultikernelBundle;
+namespace Motana\Bundle\MultikernelBundle\Tests;
+
+use Motana\Bundle\MultikernelBundle\Command\MultikernelConvertCommand;
+use Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\ExcludeClassesFromCachePass;
+use Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\OverrideAssetsPathPackageServicePass;
+use Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle;
+use Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\ApplicationTestCase;
 
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\ExcludeClassesFromCachePass;
-use Motana\Bundle\MultikernelBundle\DependencyInjection\Compiler\OverrideAssetsPathPackageServicePass;
-use Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle;
-use Motana\Bundle\MultikernelBundle\Test\ApplicationTestCase;
-
 /**
  * @coversDefaultClass Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle
+ * @testdox Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle
  */
 class MotanaMultikernelBundleTest extends ApplicationTestCase
 {
 	/**
 	 * @covers ::build()
+	 * @testdox build() does not add compiler passes on BootKernel
 	 */
-	public function testBuildDoesNotAddCompilerPassesOnBootKernel()
+	public function test_build_with_BootKernel()
 	{
 		$container = new ContainerBuilder();
 		$container->setParameter('kernel.name', 'boot');
@@ -50,8 +52,9 @@ class MotanaMultikernelBundleTest extends ApplicationTestCase
 
 	/**
 	 * @covers ::build()
+	 * @testdox build() adds compiler passes on AppKernel
 	 */
-	public function testBuildAddsCompilerPassesOnAppKernels()
+	public function test_build_with_AppKernel()
 	{
 		$container = new ContainerBuilder();
 		$container->setParameter('kernel.name', 'app');
@@ -74,24 +77,28 @@ class MotanaMultikernelBundleTest extends ApplicationTestCase
 	
 	/**
 	 * @covers ::registerCommands()
+	 * @testdox registerCommands() registers multikernel commands for BootKernel
 	 */
-	public function testRegisterCommands()
+	public function test_registerCommands_with_BootKernel()
 	{
 		// Check the "boot" kernel has commands in the multi-kernel namespace
 		$app = self::$application;
-		$app->find('multikernel:create-app');
+		$command = $app->find('multikernel:convert');
+		
+		// Check the returned command is an instance of the correct class
+		$this->assertInstanceOf(MultikernelConvertCommand::class, $command);
 	}
 	
 	/**
 	 * @covers ::registerCommands()
-	 * @depends testRegisterCommands
 	 * @expectedException Symfony\Component\Console\Exception\CommandNotFoundException
-	 * @expectedExceptionMessage There are no commands defined in the "multikernel" namespace.
+	 * @expectedExceptionMessage There are no commands defined in the "generate" namespace.
+	 * @testdox registerCommands() does not register multikernel commands for AppKernel
 	 */
-	public function testRegisterCommandsThrowsException()
+	public function test_registerCommands_with_AppKernel()
 	{
 		// Check the "app" kernel has no commands in the multi-kernel namespace
 		$app = $this->callMethod(self::$application, 'getApplication', 'app');
-		$app->find('multikernel:create-app');
+		$app->find('generate:app');
 	}
 }

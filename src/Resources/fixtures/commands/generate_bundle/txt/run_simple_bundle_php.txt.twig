@@ -1,0 +1,50 @@
+
+                                            
+  Welcome to the Symfony bundle generator!  
+                                            
+
+Are you planning on sharing this bundle across multiple applications? [no]: 
+Your application code must be written in bundles. This command helps
+you generate them easily.
+
+Give your bundle a descriptive name, like BlogBundle.
+Bundle name [RunPhpBundle]: 
+Bundles are usually generated into the src/ directory. Unless you're
+doing something custom, hit enter to keep this default!
+
+Target Directory [src]: 
+What format do you want to use for your generated configuration?
+
+Configuration format (annotation, yml, xml, php) [php]: 
+                     
+  Bundle generation  
+                     
+
+> Generating a sample bundle skeleton into {{ fixture_dir }}/generate_bundle/src/RunPhpBundle
+  created ./src/RunPhpBundle/
+  created ./src/RunPhpBundle/RunPhpBundle.php
+  created ./src/RunPhpBundle/Controller/
+  created ./src/RunPhpBundle/Controller/DefaultController.php
+  created ./tests/RunPhpBundle/Controller/
+  created ./tests/RunPhpBundle/Controller/DefaultControllerTest.php
+  created ./src/RunPhpBundle/Resources/views/Default/
+  created ./src/RunPhpBundle/Resources/views/Default/index.html.twig
+  created ./src/RunPhpBundle/Resources/config/
+  created ./src/RunPhpBundle/Resources/config/services.php
+  created ./src/RunPhpBundle/Resources/config/routing.php
+> Checking that the bundle is autoloaded
+OK
+> Enabling the bundle inside generate_bundle_app/GenerateBundleAppKernel.php
+  updated ./apps/generate_bundle_app/GenerateBundleAppKernel.php
+OK
+> Importing the bundle's routes from the generate_bundle_app/config/routing.yml file
+  updated ./apps/generate_bundle_app/config/routing.yml
+OK
+> Importing the bundle's services.php from the generate_bundle_app/config/config.yml file
+  updated ./apps/generate_bundle_app/config/config.yml
+OK
+
+                                         
+  Everything is OK! Now get to work :).  
+                                         
+

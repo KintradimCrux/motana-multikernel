@@ -1,0 +1,87 @@
+<?php
+
+{% block use_statements %}
+use {{ kernel_base_class }};
+{% if not bundles['MotanaMultikernelBundle'] %}
+use Symfony\Component\Config\Loader\LoaderInterface;
+{% endif %}
+{% if uses is defined %}
+{% for use in uses %}
+{% if use.alias is defined %}
+use {{ use.class }} as {{ use.alias }};
+{% else %}
+use {{ use.class }};
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endblock use_statements %}
+
+{% block class_definition %}
+class {{ kernel_class_name }} extends {{ kernel_base_class_short }}
+{% endblock class_definition %}
+{
+{% block class_body %}
+    public function registerBundles()
+    {
+        $bundles = [
+            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
+            new Symfony\Bundle\TwigBundle\TwigBundle(),
+            new Symfony\Bundle\MonologBundle\MonologBundle(),
+{% if bundles['SwiftmailerBundle'] %}
+            new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
+{% endif %}
+{% if bundles['DoctrineBundle'] %}
+            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+{% endif %}
+{% if bundles['SensioFrameworkExtraBundle'] %}
+            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+{% endif %}
+{% if bundle %}
+            new {{ namespace }}\{{ bundle }}(),
+{% endif %}
+        ];
+
+        if (in_array($this->getEnvironment(), [ 'dev', 'test' ], true)) {
+            $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
+            $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
+{% if bundles['SensioDistributionBundle'] %}
+            $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
+{% endif %}
+
+            if ('dev' === $this->getEnvironment()) {
+                $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+                $bundles[] = new Symfony\Bundle\WebServerBundle\WebServerBundle();
+            }
+        }
+{% if bundles['MotanaMultikernelBundle'] %}
+
+        $bundles[] = new Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle();
+{% endif %}
+
+        return $bundles;
+    }
+
+    public function getRootDir()
+    {
+        return __DIR__;
+    }
+{% if not bundles['MotanaMultikernelBundle'] %}
+
+    public function getCacheDir()
+    {
+        return dirname(__DIR__).'/var/cache/'.$this->getEnvironment();
+    }
+
+    public function getLogDir()
+    {
+        return dirname(__DIR__).'/var/logs';
+    }
+
+    public function registerContainerConfiguration(LoaderInterface $loader)
+    {
+        $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+    }
+{% endif %}
+{% endblock class_body %}
+}

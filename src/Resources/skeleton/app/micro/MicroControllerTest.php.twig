@@ -1,0 +1,37 @@
+<?php
+
+{% block namespace %}
+namespace Tests\{{ namespace }}\Controller;
+{% endblock namespace %}
+
+{% block use_statements %}
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+{% endblock use_statements %}
+
+{% block class_doc_comment %}
+{% endblock class_doc_comment %}
+{% block class_definition %}
+class MicroControllerTest extends WebTestCase
+{% endblock class_definition %}
+{
+{% block class_body %}
+    public function testRandom()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/{{ kernel_name }}/random/100');
+        
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        
+        $this->assertEquals('Random action', $crawler->filter('head title')->text());
+        
+        $number = $crawler->filter('body p')->text();
+        
+        $this->assertRegExp('|^[0-9]+$|', $number);
+        
+        $this->assertGreaterThanOrEqual(0, (int) $number);
+        
+        $this->assertLessThanOrEqual(100, (int) $number);
+    }
+{% endblock class_body %}
+}

@@ -1,0 +1,61 @@
+Motana Multi-Kernel App Console - Symfony {{ kernel_version }} (kernel: app, env: test, debug: false)
+
+Usage:
+  ./bin/console {{ kernel_name }}
+     To display the list of commands available on the app kernel
+
+  ./bin/console {{ kernel_name }} <command> [options] [--] [arguments]
+     To run a command on the app kernel
+
+Options:
+   -h         --help            Display this help message
+   -q         --quiet           Do not output any message
+   -V         --version         Display this application version
+              --ansi            Force ANSI output
+              --no-ansi         Disable ANSI output
+   -n         --no-interaction  Do not ask any interactive question
+   -e         --env=ENV         The environment name [default: "test"]
+              --no-debug        Switches off debug mode
+   -v|vv|vvv  --verbose         Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+
+Commands:
+   about                        Displays information about the current project
+   help                         Displays help for a command
+   list                         Lists commands
+
+ assets
+   assets:install               Installs bundles web assets under a public directory
+
+ cache
+   cache:clear                  Clears the cache
+   cache:pool:clear             Clears cache pools
+   cache:warmup                 Warms up an empty cache
+
+ config
+   config:dump-reference        Dumps the default configuration for an extension
+
+ debug
+   debug:config                 Dumps the current configuration for an extension
+   debug:container              Displays current services for an application
+   debug:event-dispatcher       Displays configured listeners for an application
+   debug:router                 Displays current routes for an application
+   debug:translation            Displays translation messages information
+   debug:twig                   Shows a list of twig functions, filters, globals and tests
+
+ lint
+   lint:twig                    Lints a template and outputs encountered errors
+   lint:xliff                   Lints a XLIFF file and outputs encountered errors
+   lint:yaml                    Lints a file and outputs encountered errors
+
+ multikernel
+   multikernel:convert          Converts a project to a multikernel project
+
+ router
+   router:match                 Helps debug routes by simulating a path info match
+
+ security
+   security:encode-password     Encodes a password.
+
+ translation
+   translation:update           Updates the translation file
+

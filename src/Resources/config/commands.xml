@@ -4,18 +4,44 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     
     <parameters>
-    
+
+		<!-- Commands that are left unchanged if available -->
+		<parameter key="motana.multikernel.commands.ignore" type="collection">
+			<parameter>help</parameter>
+			<parameter>list</parameter>
+			<parameter>config:dump-reference</parameter>
+			<parameter>lint:twig</parameter>
+			<parameter>lint:yaml</parameter>
+			<parameter>lint:xliff</parameter>
+			<!-- parameters from config.yml will be appended here -->
+		</parameter>
+		
+    	<!-- Commands that will be hidden in all kernels -->
+    	<parameter key="motana.multikernel.commands.hidden" type="collection">
+    		<!-- parameters from config.yml will be appended here -->
+    	</parameter>
+
     	<!-- Commands to add as multi-kernel command, bypassing the requirement of being available for all kernels -->
     	<parameter key="motana.multikernel.commands.add" type="collection">
+    		<parameter>debug:router</parameter>
+    		<parameter>debug:swiftmailer</parameter>
+			<parameter>doctrine:cache:clear-metadata</parameter>
+    		<parameter>doctrine:database:create</parameter>
+    		<parameter>doctrine:database:drop</parameter>
+    		<parameter>doctrine:ensure-production-settings</parameter>
+    		<parameter>doctrine:schema:create</parameter>
+    		<parameter>doctrine:schema:drop</parameter>
+    		<parameter>doctrine:schema:update</parameter>
+    		<parameter>doctrine:schema:validate</parameter>
+    		<parameter>swiftmailer:email:send</parameter>
+    		<parameter>swiftmailer:spool:send</parameter>
     		<!-- parameters from config.yml will be appended here -->
     	</parameter>
     	
     	<!-- Commands that will always be run on the boot kernel and will be hidden in the other kernels -->
     	<parameter key="motana.multikernel.commands.global" type="collection">
-    		<parameter>lint:yaml</parameter>
-	    	<parameter>lint:xliff</parameter>
 	    	<parameter>multikernel:convert</parameter>
-	    	<parameter>multikernel:create-app</parameter>
+	    	<parameter>security:check</parameter>
 	    	<parameter>server:log</parameter>
     		<parameter>server:run</parameter>
     		<parameter>server:start</parameter>
@@ -23,11 +49,6 @@
     		<parameter>server:stop</parameter>
     		<!-- parameters from config.yml will be appended here -->
     	</parameter>
-    	
-    	<!-- Commands that will be hidden in all kernels -->
-    	<parameter key="motana.multikernel.commands.hidden" type="collection">
-    		<!-- parameters from config.yml will be appended here -->
-    	</parameter>
-    	
+
     </parameters>
 </container>
