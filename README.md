@@ -129,6 +129,9 @@ motana_multikernel:
         # Commands that will be hidden in all kernels
         hidden:               []
 
+        # Commands that will be left as-is, overriding all of the above command settings
+        ignore:               []
+
 ```
 
 ## Testing your project

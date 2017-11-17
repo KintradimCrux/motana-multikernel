@@ -236,11 +236,14 @@ class FilesystemManipulatorTest extends TestCase
 		self::$manipulator->mirror(self::$fixturesDir . '/subdir', self::$fixturesDir . '/subdir_copy');
 
 		// Check the output contains the correct messages
-		$output = self::$output->fetch();
-		$this->assertContains('created ./subdir_copy/'.PHP_EOL, $output);
-		$this->assertContains('created ./subdir_copy/dumped_file'.PHP_EOL, $output);
-		$this->assertContains('created ./subdir_copy/testfile'.PHP_EOL,$output);
-		$this->assertContains('created ./subdir_copy/testfile_copy'.PHP_EOL, $output);
+		$this->assertEquals(<<<EOC
+  created ./subdir_copy/
+  created ./subdir_copy/dumped_file
+  created ./subdir_copy/testfile
+  created ./subdir_copy/testfile_copy
+
+EOC
+		, self::$output->fetch());
 
 		// Check the copied files exist
 		$this->assertFileExists(self::$fixturesDir . '/subdir_copy/dumped_file');
@@ -280,11 +283,14 @@ class FilesystemManipulatorTest extends TestCase
 		self::$manipulator->remove(self::$fixturesDir . '/subdir_copy');
 
 		// Check the output contains the correct messages
-		$output = self::$output->fetch();
-		$this->assertContains('removed ./subdir_copy/dumped_file'.PHP_EOL, $output);
-		$this->assertContains('removed ./subdir_copy/testfile'.PHP_EOL,$output);
-		$this->assertContains('removed ./subdir_copy/testfile_copy'.PHP_EOL, $output);
-		$this->assertContains('removed ./subdir_copy/'.PHP_EOL, $output);
+		$this->assertEquals(<<<EOC
+  removed ./subdir_copy/testfile_copy
+  removed ./subdir_copy/testfile
+  removed ./subdir_copy/dumped_file
+  removed ./subdir_copy/
+
+EOC
+		, self::$output->fetch());
 	}
 
 	/**

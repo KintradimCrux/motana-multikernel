@@ -14,6 +14,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Iterator\CustomFilterIterator;
+use Symfony\Component\Finder\Iterator\SortableIterator;
 
 /**
  * Changes the project filesystem.
@@ -92,13 +93,20 @@ class FilesystemManipulator extends Filesystem
 	public function mirror($originDir, $targetDir, \Traversable $iterator = null, $options = [])
 	{
 		// No iterator specified, create one only skipping '.' and '..'
-		if (null === $iterator) {
+		if (null === $iterator)
+		{
+			// Create a recursive iterator over the origin directory
 			$innerIterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($originDir), \RecursiveIteratorIterator::SELF_FIRST);
-			$iterator = new CustomFilterIterator($innerIterator, [
+			
+			// Filter out '.' and '..' on the recursive iterator
+			$filterIterator = new CustomFilterIterator($innerIterator, [
 				function(\SplFileInfo $file) {
 					return ! in_array($file->getBasename(), ['.', '..']);
 				}
 			]);
+			
+			// Sort the result of the filter iterator
+			$iterator = new SortableIterator($filterIterator, SortableIterator::SORT_BY_NAME);
 		}
 
 		// Mirror the directory
@@ -139,8 +147,11 @@ class FilesystemManipulator extends Filesystem
 		// Convert dirs parameter to array
 		$files = $files instanceof \Traversable ? iterator_to_array($files) : (array) $files;
 
+		// Sort the files in reverse order
+		krsort($files);
+		
 		// Remove all files and directories in the list (in reverse order)
-		foreach (array_reverse($files) as $file)
+		foreach ($files as $file)
 		{
 			// Generate the suffix for the message
 			$suffix = is_dir($file) ? '/' : '';

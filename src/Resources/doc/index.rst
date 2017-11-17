@@ -119,6 +119,9 @@ The following settings can be used in ``./apps/config/config.yml`` to configure 
         # Commands that will be hidden in all kernels
         hidden:               []
 
+        # Commands that will be left as-is, overriding all of the above command settings
+        ignore:               []
+
 Testing your project
 --------------------
 
