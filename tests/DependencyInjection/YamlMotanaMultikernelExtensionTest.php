@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * @coversDefaultClass Motana\Bundle\MultikernelBundle\DependencyInjection\MotanaMultikernelExtension
- * @testdox Motana\Bundle\MultikernelBundle\DependencyInjection\MotanaMultikernelExtension with Yaml configuration
+ * @testdox Motana\Bundle\MultikernelBundle\DependencyInjection\MotanaMultikernelExtension (with Yaml configuration)
  */
 class YamlMotanaMultikernelExtensionTest extends GenericMotanaMultikernelExtensionTest
 {
