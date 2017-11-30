@@ -73,7 +73,7 @@ This will make the following changes to the filesystem structure of your project
 The following changes will be made to each app kernel to make it work with the ``BootKernel``:
 
 * Use clauses are replaced to use classes from the MotanaMultikernelBundle
-* The methods getCacheDir(), getLogDir() and registerContainerConfiguration are removed
+* The methods getCacheDir(), getLogDir() and registerContainerConfiguration() are removed
 
 The following changes are made to the directory structure in ``./var/``:
 
@@ -86,7 +86,6 @@ After running the ``multikernel:convert`` command, run the following commands:
 .. code-block: bash
 
     $ composer dump-autoload
-    $ composer symfony-scripts
 
 The SensioDistributionBundle will run the ``cache:clear`` and ``assets:install`` commands for all
 available apps.

@@ -74,7 +74,7 @@ filesystem structure of the project:
 
 * A boot kernel skeleton will be created into the ``apps/`` subdirectory of your project
 * All found apps will be copied to ``apps/<DIR_NAME>``
-* The kernel of every app are be modified to run with the BootKernel
+* The kernel of every app will be modified to run with the BootKernel
 * Configuration of the apps are modified to reflect the filesystem structure changes
 * The front controller and bin/console are replaced
 
@@ -86,7 +86,7 @@ The command makes the following changes to each app kernel to make it work in a 
 environment:
 
 * Use clauses are replaced to use classes from the MotanaMultikernelBundle
-* The methods getCacheDir(), getLogDir() and registerContainerConfiguration are removed
+* The methods getCacheDir(), getLogDir() and registerContainerConfiguration() are removed
 
 The command changes the configuration of each app for a changed directory scheme under ``var/``:
 
