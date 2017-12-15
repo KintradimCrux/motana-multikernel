@@ -11,6 +11,6 @@ script:
     - mkdir -p build/logs
     - vendor/bin/phpunit --debug --verbose --coverage-clover build/logs/clover.xml
 after_script:
-    - vendor/bin/coveralls
+    - vendor/bin/php-coveralls
 notifications:
     email: false
