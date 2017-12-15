@@ -3,9 +3,10 @@ php:
     - '5.6'
     - '7.0'
     - '7.1'
+    - '7.2'
 install:
     - composer install --no-interaction
-    - composer require --no-interaction satooshi/php-coveralls:dev-master
+    - composer require --no-interaction satooshi/php-coveralls
 script:
     - mkdir -p build/logs
     - vendor/bin/phpunit --debug --verbose --coverage-clover build/logs/clover.xml
