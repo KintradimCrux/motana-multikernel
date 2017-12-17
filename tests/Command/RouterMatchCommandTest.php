@@ -12,9 +12,13 @@ namespace Motana\Bundle\MultikernelBundle\Tests\Command;
 
 use Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\CommandTestCase;
 
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\Output;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\Routing\Route;
 
 /**
  * @coversDefaultClass Motana\Bundle\MultikernelBundle\Command\RouterMatchCommand
@@ -42,14 +46,40 @@ class RouterMatchCommandTest extends CommandTestCase
 	
 	/**
 	 * @covers ::isEnabled()
-	 * @testdox isEnabled() returns FALSE for an Application
+	 * @testdox isEnabled() returns TRUE for an Application
 	 */
-	public function test_isEnabled_with_appkernel()
+	public function test_isEnabled_with_AppKernel()
 	{
-		// Override the application of the command with a single kernel application
-		self::$command->setApplication(self::$application->getApplication('app'));
+		// Set up the AppKernel environment
+		$this->setUp('app');
 		
-		// Check that isEnabled() returns FALSE now
+		// Override the application of the command with a single kernel application
+		self::$command->setApplication(self::$application);
+		
+		// Check that isEnabled() returns TRUE
+		$this->assertTrue(self::$command->isEnabled());
+		
+		// Remove the router service of the container
+		$container = self::$kernel->getContainer();
+		
+		// Remove the router service from the method map so it cannot be reloaded
+		$methodMap = $this->readAttribute($container, 'methodMap');
+		unset($methodMap['router']);
+		$this->writeAttribute($container, 'methodMap', $methodMap);
+		
+		// Remove the router service
+		$services = $this->readAttribute($container, 'services');
+		unset($services['router']);
+		$this->writeAttribute($container, 'services', $services);
+		
+		// Check that isEnabled() returns FALSE
+		$this->assertFalse(self::$command->isEnabled());
+		
+		// Insert an invalid replacement for the router service
+		$services['router'] = new \stdClass();
+		$this->writeAttribute($container, 'services', $services);
+		
+		// Check that isEnabled() returns FALSE
 		$this->assertFalse(self::$command->isEnabled());
 	}
 	
@@ -128,6 +158,9 @@ EOH
 				'command_no_app_match',
 				[
 					'--format' => 'txt',
+					'--method' => 'GET',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
 					'path_info' => '/nomatch'
 				]
 			],
@@ -137,6 +170,9 @@ EOH
 				[
 					'--format' => 'txt',
 					'--verbose' => Output::VERBOSITY_VERBOSE,
+					'--method' => 'GET',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
 					'path_info' => '/nomatch'
 				]
 			],
@@ -145,6 +181,9 @@ EOH
 				'command_no_router',
 				[
 					'--format' => 'txt',
+					'--method' => 'GET',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
 					'path_info' => '/boot'
 				]
 			],
@@ -154,6 +193,9 @@ EOH
 				[
 					'--format' => 'txt',
 					'--verbose' => Output::VERBOSITY_VERBOSE,
+					'--method' => 'GET',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
 					'path_info' => '/boot'
 				]
 			],
@@ -162,6 +204,9 @@ EOH
 				'command_no_route_match',
 				[
 					'--format' => 'txt',
+					'--method' => 'GET',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
 					'path_info' => '/app/foo/bar'
 				]
 			],
@@ -171,6 +216,9 @@ EOH
 				[
 					'--format' => 'txt',
 					'--verbose' => Output::VERBOSITY_VERBOSE,
+					'--method' => 'GET',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
 					'path_info' => '/app/foo/bar'
 				]
 			],
@@ -179,6 +227,9 @@ EOH
 				'command_with_route_match',
 				[
 					'--format' => 'txt',
+					'--method' => 'GET',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
 					'path_info' => '/app'
 				]
 			],
@@ -188,10 +239,108 @@ EOH
 				[
 					'--format' => 'txt',
 					'--verbose' => Output::VERBOSITY_VERBOSE,
+					'--method' => 'GET',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
 					'path_info' => '/app'
 				]
 			],
 		];
+	}
+	
+	/**
+	 * @covers ::execute()
+	 * @dataProvider provide_test_execute_data
+	 * @param string $app App subdirectory name
+	 * @param string $template Template name
+	 * @param array $parameters Input parameters
+	 * @testdox execute() returns correct output for
+	 */
+	public function test_execute($app, $template, array $parameters = [])
+	{
+		parent::test_execute($app, $template, $parameters);
+	}
+	
+	/**
+	 * Data provider for test_execute_with_almost_matching_route().
+	 *
+	 * @return array
+	 */
+	public function provide_test_execute_with_almost_matching_route_data()
+	{
+		return [
+			'a path info matching an application with router and an almost matching route (verbosity normal)' => [
+				'command_with_almost_matching_route',
+				[
+					'--format' => 'txt',
+					'--method' => 'POST',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
+					'path_info' => '/app',
+				]
+			],
+			'a path info matching an application with router and an almost matching route (verbosity verbose)' => [
+				'command_with_almost_matching_route',
+				[
+					'--format' => 'txt',
+					'--verbose' => Output::VERBOSITY_VERBOSE,
+					'--method' => 'POST',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
+					'path_info' => '/app',
+				]
+			]
+		];
+	}
+	
+	/**
+	 * @covers ::execute()
+	 * @dataProvider provide_test_execute_with_almost_matching_route_data
+	 * @param string $template Template name
+	 * @param array $parameters Input parameters
+	 * @testdox execute() returns correct output for
+	 */
+	public function test_execute_with_almost_matching_route($template, array $parameters = [])
+	{
+		// Fake a different script name for the test
+		$_SERVER['PHP_SELF'] = 'bin/console';
+		
+		// Modify the homepage route to match only the request method GET
+		$container = self::$application->getApplication('app')->getKernel()->getContainer();
+		$routes = $container->get('router')->getRouteCollection();
+		$route = $routes->get('homepage');
+		$route->setMethods('GET');
+		
+		// Get requested format
+		$format = isset($parameters['--format']) ? $parameters['--format'] : 'txt';
+		
+		// Merge command parameters
+		$parameters = array_merge([
+			'command' => $this->commandName
+		], $this->commandParameters, $parameters);
+		
+		// Set kernel parameter
+		$parameters['kernel'] = null;
+		
+		// Create an input for the command
+		$input = new ArrayInput($this->filterCommandParameters($parameters));
+		
+		// Bind input to command definition
+		$input->bind(self::$command->getDefinition());
+		
+		// Set the container on container aware commands
+		if (self::$command instanceof ContainerAwareInterface) {
+			self::$command->setContainer(self::$application->getKernel()->getContainer());
+		}
+		
+		// Invoke the command
+		self::$command->run($input, self::$output);
+		
+		// Convert parameters to display options
+		$options = $this->convertParametersToOptions($parameters);
+		
+		// Check the command output is correct
+		$this->assertEquals($this->getTemplate($template, $options, $format, $this->commandName), self::$output->fetch());
 	}
 	
 	/**
@@ -202,6 +351,102 @@ EOH
 	public function provide_test_run_data()
 	{
 		return $this->provide_test_execute_data();
+	}
+	
+	/**
+	 * @covers ::run()
+	 * @covers ::execute()
+	 * @dataProvider provide_test_run_data
+	 * @param string $app App subdirectory name
+	 * @param string $template Template name
+	 * @param array $parameters Input parameters
+	 * @testdox run() returns correct output for
+	 */
+	public function test_run($app, $template, array $parameters = [])
+	{
+		parent::test_run($app, $template, $parameters);
+	}
+	
+	/**
+	 * Data provider for test_run_with_almost_matching_route().
+	 *
+	 * @return array
+	 */
+	public function provide_test_run_with_almost_matching_route_data()
+	{
+		return [
+			'a path info matching an application with router and an almost matching route (verbosity normal)' => [
+				'command_with_almost_matching_route',
+				[
+					'--format' => 'txt',
+					'--method' => 'POST',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
+					'path_info' => '/app',
+				]
+			],
+			'a path info matching an application with router and an almost matching route (verbosity verbose)' => [
+				'command_with_almost_matching_route',
+				[
+					'--format' => 'txt',
+					'--verbose' => Output::VERBOSITY_VERBOSE,
+					'--method' => 'POST',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
+					'path_info' => '/app',
+				]
+			]
+		];
+	}
+	
+	/**
+	 * @covers ::run()
+	 * @dataProvider provide_test_run_with_almost_matching_route_data
+	 * @param string $template Template name
+	 * @param array $parameters Input parameters
+	 * @testdox execute() returns correct output for
+	 */
+	public function test_run_with_almost_matching_route($template, array $parameters = [])
+	{
+		// Fake a different script name for the test
+		$_SERVER['PHP_SELF'] = 'bin/console';
+		
+		// Modify the homepage route to match only the request method GET
+		$container = self::$application->getApplication('app')->getKernel()->getContainer();
+		$routes = $container->get('router')->getRouteCollection();
+		$route = $routes->get('homepage');
+		$route->setMethods('GET');
+		
+		// Get requested format
+		$format = isset($parameters['--format']) ? $parameters['--format'] : 'txt';
+		
+		// Merge command parameters
+		$parameters = array_merge([
+			'command' => $this->commandName
+		], $this->commandParameters, $parameters);
+		
+		// Set kernel parameter
+		$parameters['kernel'] = null;
+		
+		// Create an input for the command
+		$input = new ArrayInput($this->filterCommandParameters($parameters));
+		
+		// Bind input to command definition
+		$input->bind(self::$command->getDefinition());
+		
+		// Set the container on container aware commands
+		if (self::$command instanceof ContainerAwareInterface) {
+			self::$command->setContainer(self::$application->getKernel()->getContainer());
+		}
+		
+		// Invoke the command
+		self::$command->run($input, self::$output);
+		
+		// Convert parameters to display options
+		$options = $this->convertParametersToOptions($parameters);
+		
+		// Check the command output is correct
+		$this->assertEquals($this->getTemplate($template, $options, $format, $this->commandName), self::$output->fetch());
 	}
 	
 	/**

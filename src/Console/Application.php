@@ -34,6 +34,13 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class Application extends BaseApplication
 {
 	/**
+	 * Project root directory.
+	 *
+	 * @var string
+	 */
+	protected $projectRootDir;
+	
+	/**
 	 * Event dispatcher for the application.
 	 *
 	 * @var EventDispatcherInterface
@@ -73,6 +80,7 @@ class Application extends BaseApplication
 		
 		$this->setAutoExit($autoExit);
 		$this->defaultCommand = 'list';
+		$this->projectRootDir = $kernel->getProjectDir();
 	}
 	
 	/**
@@ -142,7 +150,7 @@ class Application extends BaseApplication
 		// Return a boolean indicating the command is enabled and not hidden
 		return $command->isEnabled() && ! $command->isHidden();
 	}
-
+		
 	/**
 	 * {@inheritDoc}
 	 * @see \Symfony\Bundle\FrameworkBundle\Console\Application::all()
@@ -205,7 +213,7 @@ class Application extends BaseApplication
 		// Get the container
 		$this->getKernel()->boot();
 		$container = $this->getKernel()->getContainer();
-		
+
 		// Set the container on all container aware commands
 		foreach ($this->all() as $command) {
 			if ($command instanceof ContainerAwareInterface) {
@@ -334,8 +342,6 @@ class Application extends BaseApplication
 	 */
 	protected function makePathRelative($absolutePath)
 	{
-		$projectRootDir = $this->getKernel()->getContainer()->getParameter('kernel.project_dir');
-		
-		return str_replace($projectRootDir, '.', realpath($absolutePath) ?: $absolutePath);
+		return str_replace($this->projectRootDir, '.', realpath($absolutePath) ?: $absolutePath);
 	}
 }

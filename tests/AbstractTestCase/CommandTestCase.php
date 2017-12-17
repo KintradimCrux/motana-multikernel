@@ -168,7 +168,7 @@ abstract class CommandTestCase extends ApplicationTestCase
 			'command' => $this->commandName
 		], $this->commandParameters, $parameters);
 		
-		// Set kernel parameter if an app is specified
+		// Set kernel parameter if no app is specified
 		if (null === $app) {
 			$parameters['kernel'] = $app;
 		}
@@ -236,6 +236,9 @@ abstract class CommandTestCase extends ApplicationTestCase
 		// Append options to template basename
 		$case .= ! empty($options) ? '_' . implode('_', array_keys($options)) : '';
 
+		// Get the project directory
+		$projectDir = realpath(__DIR__ . '/../..');
+		
 		// Insert twig variables into output and save it to a sample file when requested
 		if ($generateTemplates) {
 			$output = clone(self::$output);
@@ -247,12 +250,14 @@ abstract class CommandTestCase extends ApplicationTestCase
 					'console app',
 					'(kernel: boot,',
 					'(kernel: app,',
+					$projectDir,
 				], [
 					'{{ kernel_version }}',
 					'console {{ kernel_name }}',
 					'console {{ kernel_name }}',
 					'(kernel: {{ kernel_name }},',
 					'(kernel: {{ kernel_name }},',
+					'{{ project_dir }}',
 				], $content);
 				$content = preg_replace([
 					'#/tmp/motana_multikernel_tests_[^/]+/#',
@@ -268,6 +273,7 @@ abstract class CommandTestCase extends ApplicationTestCase
 		return $generator->generateCommandOutput($case, $format, [
 			'kernel_name' => false !== strpos($case, 'multikernel') ? 'boot' : 'app',
 			'command_name' => $commandName,
+			'project_dir' => $projectDir,
 		]);
 	}
 }

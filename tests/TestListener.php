@@ -294,6 +294,9 @@ class TestListener extends \PHPUnit_Framework_BaseTestListener
 	 */
 	public function startTest(\PHPUnit_Framework_Test $test)
 	{
+		// Force garbage collection
+		gc_collect_cycles();
+		
 		// Do not process incomplete, skipped or warning test cases
 		if (
 		   $test instanceof \PHPUnit_Framework_IncompleteTestCase

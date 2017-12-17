@@ -116,6 +116,9 @@ class AppGenerator extends Generator
 		// Generate configuration
 		if ($app->shouldGenerateMicrokernel()) {
 			$this->renderFile('app/micro/config.yml.twig', $app->getAppDirectory() . '/config/config.yml', $parameters);
+			$this->renderFile('app/micro/config_dev.yml.twig', $app->getAppDirectory() . '/config/config_dev.yml', $parameters);
+			$this->renderFile('app/micro/config_prod.yml.twig', $app->getAppDirectory() . '/config/config_prod.yml', $parameters);
+			$this->renderFile('app/micro/config_test.yml.twig', $app->getAppDirectory() . '/config/config_test.yml', $parameters);
 		} else {
 			$this->renderFile('app/config.yml.twig', $app->getAppDirectory() . '/config/config.yml', $parameters);
 			$this->renderFile('app/config_dev.yml.twig', $app->getAppDirectory() . '/config/config_dev.yml', $parameters);
