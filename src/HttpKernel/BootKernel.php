@@ -14,6 +14,7 @@ use Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle;
 
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache;
+use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebServerBundle\WebServerBundle;
 use Symfony\Component\Config\ResourceCheckerConfigCache;
@@ -212,6 +213,7 @@ abstract class BootKernel extends Kernel
 		$bundles = [];
 		
 		$bundles[] = new FrameworkBundle();
+		$bundles[] = new MonologBundle();
 		$bundles[] = new MotanaMultikernelBundle();
 		
 		if ('dev' === $this->getEnvironment()) {

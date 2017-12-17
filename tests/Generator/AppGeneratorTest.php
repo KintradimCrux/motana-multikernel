@@ -145,6 +145,9 @@ class AppGeneratorTest extends TestCase
 		// Check the app configuration files were generated
 		if ($app->shouldGenerateMicrokernel()) {
 			self::assertFileExists(sprintf('%s/%s/config/config.yml', $dir, $app->getKernelName()));
+			self::assertFileExists(sprintf('%s/%s/config/config_dev.yml', $dir, $app->getKernelName()));
+			self::assertFileExists(sprintf('%s/%s/config/config_prod.yml', $dir, $app->getKernelName()));
+			self::assertFileExists(sprintf('%s/%s/config/config_test.yml', $dir, $app->getKernelName()));
 		} else {
 			self::assertFileExists(sprintf('%s/%s/config/config.yml', $dir, $app->getKernelName()));
 			self::assertFileExists(sprintf('%s/%s/config/config_dev.yml', $dir, $app->getKernelName()));

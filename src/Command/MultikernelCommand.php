@@ -13,6 +13,8 @@ namespace Motana\Bundle\MultikernelBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Kernel;
@@ -108,14 +110,26 @@ class MultikernelCommand extends ContainerAwareCommand
 	 */
 	protected function configure()
 	{
+		// Get the first command
 		$command = reset($this->commands);
 		/** @var Command $command */
 		
+		// Clone the input definition of the first command
+		$definition = new InputDefinition();
+		foreach ($command->getNativeDefinition()->getArguments() as $argument) {
+			$definition->addArgument(clone $argument);
+		}
+		foreach ($command->getNativeDefinition()->getOptions() as $option) {
+			$definition->addOption(clone $option);
+		}
+		
+		// Configure the command
 		$this->setAliases((array) $command->getAliases())
-		->setDefinition(clone($command->getNativeDefinition()))
+		->setDefinition($definition)
 		->setDescription($command->getDescription())
 		->setHelp($command->getHelp());
 		
+		// Copy usages of the first command
 		foreach ($command->getUsages() as $usage) {
 			$this->addUsage($usage);
 		}

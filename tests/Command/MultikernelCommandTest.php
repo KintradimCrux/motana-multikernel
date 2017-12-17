@@ -694,16 +694,10 @@ class MultikernelCommandTest extends CommandTestCase
 		$this->assertContains('Executing command on kernel boot...', $content);
 		$this->assertContains('Executing command on kernel app...', $content);
 		
-		// Check the output contains the expected exception name
-		$this->assertContains($expectedException, $content);
-		
-		// ...twice
+		// Check the output contains the expected exception name twice
 		$this->assertEquals(2, substr_count($content, $expectedException));
 		
-		// Check the output contains the expected message
-		$this->assertContains($expectedExceptionMessage, $content);
-		
-		// ...twice
+		// Check the output contains the expected message twice
 		$this->assertEquals(2, substr_count($content, $expectedExceptionMessage));
 	}
 	

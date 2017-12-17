@@ -21,6 +21,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Routing\Matcher\TraceableUrlMatcher;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Global replacement for the router:match command which also matches the application.
@@ -42,17 +44,30 @@ class RouterMatchCommand extends ContainerAwareCommand
 	 */
 	public function isEnabled()
 	{
-		// This command is only enabled for a MultikernelApplication
-		if ( ! $this->getApplication() instanceof MultikernelApplication) {
-			return false;
+		// Not running on the boot kernel
+		if ( ! $this->getApplication() instanceof MultikernelApplication)
+		{
+			// Not enabled if there is no router service
+			if ( ! $this->getContainer()->has('router')) {
+				return false;
+			}
+			
+			// Not enabled if the router service is not an instance of RouterInterface
+			$router = $this->getContainer()->get('router');
+			if ( ! $router instanceof RouterInterface) {
+				return false;
+			}
+			
+			// Call parent method
+			return parent::isEnabled();
 		}
 		
-		// Get the applications for all kernels
+		// MultikernelApplication: get the applications for all kernels
 		$this->applications = $this->getApplication()->getApplications();
 		
 		// Check each application if the command is supported
 		$enabled = [];
-		foreach ($this->applications as $app) {
+		foreach ($this->applications as $apn => $app) {
 			/** @var Application $app */
 			$enabled[] = $app->has('router:match');
 		}
@@ -84,7 +99,7 @@ class RouterMatchCommand extends ContainerAwareCommand
 		$this->setName('router:match')
 		->setDefinition($this->getNativeDefinition())
 		->setDescription('Helps debug routes by simulating a path info match')
-		->setHelp(<<<EOH
+		->setHelp(<<<'EOF'
 The <info>%command.name%</info> shows which routes match a given request and which don't and for what reason:
 
   <info>php %command.full_name% /foo</info>
@@ -92,7 +107,7 @@ The <info>%command.name%</info> shows which routes match a given request and whi
 or
 
   <info>php %command.full_name% /foo --method POST --scheme https --host symfony.com --verbose</info>
-EOH
+EOF
 		);
 	}
 	
@@ -105,51 +120,115 @@ EOH
 		// Create a SymfonyStyle instance for message output
 		$io = new SymfonyStyle($input, $output);
 		
-		// Get the path info argument
-		$pathInfo = $input->getArgument('path_info');
-		
-		// Find the application with a kernel name matching the path info
-		$matchedApplication = null;
-		$matchedApplicationName = null;
-		foreach ($this->applications as $kernelName => $application) {
-			if (0 === strpos($pathInfo, '/' . $kernelName)) {
-				$matchedApplication = $application;
-				$matchedApplicationName = $kernelName;
-			} elseif ($input->getOption('verbose')) {
-				$io->text(sprintf('Application "%s" does not match: Path "/%s" does not match', $kernelName, $kernelName));
+		// Not a MultikernelApplication
+		if ( ! $this->getApplication() instanceof MultikernelApplication)
+		{
+			// Get the router
+			$router = $this->getContainer()->get('router');
+			
+			// Set router context options
+			$context = $router->getContext();
+			if (null !== $method = $input->getOption('method')) {
+				$context->setMethod($method);
+			}
+			if (null !== $scheme = $input->getOption('scheme')) {
+				$context->setScheme($scheme);
+			}
+			if (null !== $host = $input->getOption('host')) {
+				$context->setHost($host);
+			}
+			
+			// Get a traceable URL matcher
+			$matcher = new TraceableUrlMatcher($router->getRouteCollection(), $context);
+			
+			// Get traces
+			$traces = $matcher->getTraces($input->getArgument('path_info'));
+			
+			// Output a newline
+			$io->newLine();
+			
+			// Process traces
+			$matches = false;
+			foreach ($traces as $trace)
+			{
+				// Route almost matches, but...
+				if (TraceableUrlMatcher::ROUTE_ALMOST_MATCHES == $trace['level']) {
+					$io->text(sprintf('Route <info>"%s"</> almost matches but %s', $trace['name'], lcfirst($trace['log'])));
+				}
+				
+				// Route matches
+				elseif (TraceableUrlMatcher::ROUTE_MATCHES == $trace['level']) {
+					$io->success(sprintf('Route "%s" matches', $trace['name']));
+					
+					$routerDebugCommand = $this->getApplication()->find('debug:router');
+					$routerDebugCommand->run(new ArrayInput(array('name' => $trace['name'])), $output);
+					
+					$matches = true;
+				}
+				
+				// Route does not match
+				elseif ($input->getOption('verbose')) {
+					$io->text(sprintf('Route "%s" does not match: %s', $trace['name'], $trace['log']));
+				}
+			}
+			
+			// Found no matching route
+			if ( ! $matches) {
+				$io->error(sprintf('None of the routes match the path "%s"', $input->getArgument('path_info')));
+				
+				return 1;
 			}
 		}
 		
-		// Print an error message if no kernel matches the path info
-		if (null === $matchedApplication) {
-			$io->error(sprintf('No application matches the path prefix "%s"', substr($pathInfo, 0, strpos($pathInfo, '/', 1) ?: strlen($pathInfo))));
-			return 1;
-		}
-		
-		// Get the container of the matched application
-		$container = $matchedApplication->getKernel()->getContainer();
-		
-		// Print an error message if the matched application does not have a router
-		if ( ! $container->has('router')) {
-			$io->error(sprintf('Matched application "%s" does not have a router', $matchedApplicationName));
-			return 1;
-		}
-		
-		// Print a message indicating we have a matching application
-		$io->success(sprintf('Application "%s" matches', $matchedApplicationName));
-		
-		// Generate parameters for the router:match command of the application
-		$params = [
-			'path_info' => substr($pathInfo, 1 + strlen($matchedApplicationName)) ?: '/'
-		];
-		foreach ($input->getOptions() as $option => $value) {
-			if (null !== $value) {
-				$params['--' . $option] = $value;
+		// MultikernelApplication
+		else
+		{
+			// Get the path info argument
+			$pathInfo = $input->getArgument('path_info');
+			
+			// Find the application with a kernel name matching the path info
+			$matchedApplication = null;
+			$matchedApplicationName = null;
+			foreach ($this->applications as $kernelName => $application) {
+				if (0 === strpos($pathInfo, '/' . $kernelName)) {
+					$matchedApplication = $application;
+					$matchedApplicationName = $kernelName;
+				} elseif ($input->getOption('verbose')) {
+					$io->text(sprintf('Application "%s" does not match: Path "/%s" does not match', $kernelName, $kernelName));
+				}
 			}
+			
+			// Print an error message if no kernel matches the path info
+			if (null === $matchedApplication) {
+				$io->error(sprintf('No application matches the path prefix "%s"', substr($pathInfo, 0, strpos($pathInfo, '/', 1) ?: strlen($pathInfo))));
+				return 1;
+			}
+			
+			// Get the container of the matched application
+			$container = $matchedApplication->getKernel()->getContainer();
+			
+			// Print an error message if the matched application does not have a router
+			if ( ! $container->has('router')) {
+				$io->error(sprintf('Matched application "%s" does not have a router', $matchedApplicationName));
+				return 1;
+			}
+			
+			// Print a message indicating we have a matching application
+			$io->success(sprintf('Application "%s" matches', $matchedApplicationName));
+			
+			// Generate parameters for the router:match command of the application
+			$params = [
+				'path_info' => substr($pathInfo, 1 + strlen($matchedApplicationName)) ?: '/'
+			];
+			foreach ($input->getOptions() as $option => $value) {
+				if (null !== $value) {
+					$params['--' . $option] = $value;
+				}
+			}
+			
+			// Run the router:match command of the application
+			$routerMatchCommand = $matchedApplication->find('router:match');
+			return $routerMatchCommand->run(new ArrayInput($params), $output);
 		}
-		
-		// Run the router:match command of the application
-		$routerMatchCommand = $matchedApplication->find('router:match');
-		return $routerMatchCommand->run(new ArrayInput($params), $output);
 	}
 }

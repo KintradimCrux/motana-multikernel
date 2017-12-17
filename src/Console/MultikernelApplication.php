@@ -128,8 +128,16 @@ class MultikernelApplication extends Application
 			}
 			
 			// Add configured commands as global commands
-			elseif (isset($forceGlobal[$commandName])) {
-				$this->add(clone(current($commandList)));
+			elseif (isset($forceGlobal[$commandName]))
+			{
+				// Create a new instance of the command
+				$commandClass = get_class(current($commandList));
+				$command = new $commandClass();
+				
+				// Add the new command instance
+				$this->add($command);
+				
+				// Hide the commands
 				$this->hideCommands($commandList);
 			}
 			
@@ -283,7 +291,15 @@ class MultikernelApplication extends Application
 		}
 		
 		// Create the instance for each application
-		foreach ($this->getKernel()->getKernels() as $kernelName => $kernel) {
+		foreach ($this->getKernel()->getKernels() as $kernelName => $kernel)
+		{
+			// Create a second instance of the boot kernel for the application
+			if ('boot' === $kernelName) {
+				$class = get_class($kernel);
+				$kernel = new $class($this->getKernel()->getEnvironment(), $this->getKernel()->isDebug());
+			}
+			
+			// Add the application instance
 			$this->applications[$kernelName] = new Application($kernel, false);
 		}
 		

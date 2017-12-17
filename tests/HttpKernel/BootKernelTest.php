@@ -17,6 +17,7 @@ use Motana\Bundle\MultikernelBundle\MotanaMultikernelBundle;
 use Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\KernelTestCase;
 
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -184,12 +185,13 @@ class BootKernelTest extends KernelTestCase
 		$bundles = self::$kernel->registerBundles();
 		
 		// Check that registerBundles() returned the correct number of bundles
-		$this->assertEquals(3, count($bundles));
+		$this->assertEquals(4, count($bundles));
 		
 		// Check the returned bundles are instances of the correct classes
 		$this->assertEquals(FrameworkBundle::class, get_class($bundles[0]));
-		$this->assertEquals(MotanaMultikernelBundle::class, get_class($bundles[1]));
-		$this->assertEquals(TwigBundle::class, get_class($bundles[2]));
+		$this->assertEquals(MonologBundle::class, get_class($bundles[1]));
+		$this->assertEquals(MotanaMultikernelBundle::class, get_class($bundles[2]));
+		$this->assertEquals(TwigBundle::class, get_class($bundles[3]));
 	}
 
 	/**

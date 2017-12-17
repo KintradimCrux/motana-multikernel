@@ -23,6 +23,7 @@ class {{ kernel_class_name }} extends {{ kernel_base_class_short }}
 		$bundles = array(
 			new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
 			new Symfony\Bundle\TwigBundle\TwigBundle(),
+			new Symfony\Bundle\MonologBundle\MonologBundle(),
 {% if bundles['SensioFrameworkExtraBundle'] %}
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 {% endif %}
@@ -48,7 +49,7 @@ class {{ kernel_class_name }} extends {{ kernel_base_class_short }}
 	
 	protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
 	{
-		$loader->load(__DIR__.'/config/config.yml');
+		$loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
 		
 		// configure WebProfilerBundle only if the bundle is enabled
 		if (isset($this->bundles['WebProfilerBundle'])) {
