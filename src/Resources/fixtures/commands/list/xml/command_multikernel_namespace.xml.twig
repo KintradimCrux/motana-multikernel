@@ -5,6 +5,59 @@
     <kernel>app</kernel>
   </kernels>
   <commands namespace="debug">
+    <command id="debug:autowiring" name="debug:autowiring">
+      <usages>
+        <usage>./bin/console debug:autowiring [options] [--] [&lt;search&gt;]</usage>
+        <usage>./bin/console &lt;kernel&gt; debug:autowiring [options] [--] [&lt;search&gt;]</usage>
+      </usages>
+      <description>Lists classes/interfaces you can use for autowiring</description>
+      <help>The &lt;info&gt;debug:autowiring&lt;/info&gt; command displays all classes and interfaces that
+ you can use as type-hints for autowiring:
+ 
+   &lt;info&gt;./bin/console debug:autowiring&lt;/info&gt;
+ 
+ You can also pass a search term to filter the list:
+ 
+   &lt;info&gt;./bin/console debug:autowiring log&lt;/info&gt;</help>
+      <arguments>
+        <argument name="search" is_required="0" is_array="0">
+          <description>A search filter</description>
+          <defaults/>
+        </argument>
+      </arguments>
+      <options>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
     <command id="debug:config" name="debug:config">
       <usages>
         <usage>./bin/console debug:config [options] [--] [&lt;name&gt;] [&lt;path&gt;]</usage>
@@ -262,95 +315,6 @@
         </option>
         <option name="--raw" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
           <description>To output raw route(s)</description>
-        </option>
-        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Display this help message</description>
-        </option>
-        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Do not output any message</description>
-        </option>
-        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
-        </option>
-        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Display this application version</description>
-        </option>
-        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Force ANSI output</description>
-        </option>
-        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Disable ANSI output</description>
-        </option>
-        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Do not ask any interactive question</description>
-        </option>
-        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
-          <description>The environment name</description>
-          <defaults>
-            <default>test</default>
-          </defaults>
-        </option>
-        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Switches off debug mode</description>
-        </option>
-      </options>
-    </command>
-    <command id="debug:translation" name="debug:translation">
-      <usages>
-        <usage>./bin/console debug:translation [options] [--] &lt;locale&gt; [&lt;bundle&gt;]</usage>
-        <usage>./bin/console &lt;kernel&gt; debug:translation [options] [--] &lt;locale&gt; [&lt;bundle&gt;]</usage>
-      </usages>
-      <description>Displays translation messages information</description>
-      <help>The &lt;info&gt;debug:translation&lt;/info&gt; command helps finding unused or missing translation
- messages and comparing them with the fallback ones by inspecting the
- templates and translation files of a given bundle or the app folder.
- 
- You can display information about bundle translations in a specific locale:
- 
-   &lt;info&gt;./bin/console debug:translation en AcmeDemoBundle&lt;/info&gt;
- 
- You can also specify a translation domain for the search:
- 
-   &lt;info&gt;./bin/console debug:translation --domain=messages en AcmeDemoBundle&lt;/info&gt;
- 
- You can only display missing messages:
- 
-   &lt;info&gt;./bin/console debug:translation --only-missing en AcmeDemoBundle&lt;/info&gt;
- 
- You can only display unused messages:
- 
-   &lt;info&gt;./bin/console debug:translation --only-unused en AcmeDemoBundle&lt;/info&gt;
- 
- You can display information about app translations in a specific locale:
- 
-   &lt;info&gt;./bin/console debug:translation en&lt;/info&gt;
- 
- You can display information about translations in all registered bundles in a specific locale:
- 
-   &lt;info&gt;./bin/console debug:translation --all en&lt;/info&gt;</help>
-      <arguments>
-        <argument name="locale" is_required="1" is_array="0">
-          <description>The locale</description>
-          <defaults/>
-        </argument>
-        <argument name="bundle" is_required="0" is_array="0">
-          <description>The bundle name or directory where to load the messages, defaults to app/Resources folder</description>
-          <defaults/>
-        </argument>
-      </arguments>
-      <options>
-        <option name="--domain" shortcut="" accept_value="1" is_value_required="0" is_multiple="0">
-          <description>The messages domain</description>
-          <defaults/>
-        </option>
-        <option name="--only-missing" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Displays only missing messages</description>
-        </option>
-        <option name="--only-unused" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Displays only unused messages</description>
-        </option>
-        <option name="--all" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Load messages from all registered bundles</description>
         </option>
         <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
           <description>Display this help message</description>

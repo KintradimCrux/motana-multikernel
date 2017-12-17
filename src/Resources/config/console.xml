@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults public="false" />
+
+		<service id="console.command.generate_app" class="Motana\Bundle\MultikernelBundle\Command\GenerateAppCommand">
+			<tag name="console.command" command="generate:app"/>
+		</service>
+
+		<!--
+		The command is not a service because the original class has not been updated,
+		see https://github.com/sensiolabs/SensioGeneratorBundle/issues/578
+		-->
+		<!--
+		<service id="console.command.generate_bundle" class="Motana\Bundle\MultikernelBundle\Command\GenerateBundleCommand">
+			<tag name="console.command" command="generate:bundle"/>
+		</service>
+		-->
+
+		<service id="console.command.help" class="Motana\Bundle\MultikernelBundle\Command\HelpCommand">
+			<tag name="console.command" command="help"/>
+		</service>
+
+		<service id="console.command.list" class="Motana\Bundle\MultikernelBundle\Command\ListCommand">
+			<tag name="console.command" command="list"/>
+		</service>
+
+		<service id="console.command.multikernel_convert" class="Motana\Bundle\MultikernelBundle\Command\MultikernelConvertCommand">
+			<tag name="console.command" command="multikernel:convert"/>
+		</service>
+
+		<service id="console.command.router_match" class="Motana\Bundle\MultikernelBundle\Command\RouterMatchCommand">
+			<argument type="service" id="router" on-invalid="null"/>
+			<tag name="console.command" command="router:match"/>
+		</service>
+    </services>
+</container>

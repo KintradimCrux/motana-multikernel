@@ -245,13 +245,15 @@ class ApplicationTest extends ApplicationTestCase
 			'assets:install',
 			'cache:clear',
 			'cache:pool:clear',
+			'cache:pool:prune',
 			'cache:warmup',
 			'config:dump-reference',
+			'debug:autowiring',
 			'debug:config',
 			'debug:container',
 			'debug:event-dispatcher',
+			'debug:form',
 			'debug:router',
-			'debug:translation',
 			'debug:twig',
 			'help',
 			'lint:twig',
@@ -261,7 +263,6 @@ class ApplicationTest extends ApplicationTestCase
 			'multikernel:convert',
 			'router:match',
 			'security:encode-password',
-			'translation:update',
 		], $commands);
 	}
 	
@@ -279,10 +280,10 @@ class ApplicationTest extends ApplicationTestCase
 		
 		// Check the correct command names are returned
 		$this->assertEquals([
+			'debug:autowiring',
 			'debug:config',
 			'debug:container',
 			'debug:event-dispatcher',
-			'debug:translation',
 			'debug:twig',
 		], $commands);
 	}
@@ -312,13 +313,15 @@ class ApplicationTest extends ApplicationTestCase
 			'assets:install',
 			'cache:clear',
 			'cache:pool:clear',
+			'cache:pool:prune',
 			'cache:warmup',
 			'config:dump-reference',
+			'debug:autowiring',
 			'debug:config',
 			'debug:container',
 			'debug:event-dispatcher',
+			'debug:form',
 			'debug:router',
-			'debug:translation',
 			'debug:twig',
 			'lint:twig',
 			'lint:xliff',
@@ -327,7 +330,6 @@ class ApplicationTest extends ApplicationTestCase
 			'multikernel:convert',
 			'router:match',
 			'security:encode-password',
-			'translation:update',
 		], $commands);
 	}
 	
@@ -369,8 +371,8 @@ class ApplicationTest extends ApplicationTestCase
 		// Get the output
 		$content = self::$output->fetch();
 		
-		// Check the output contains the exception name
-		$this->assertContains('[InvalidArgumentException]', $content);
+		// Check the output contains the exception location
+		$this->assertRegExp('|In ApplicationTest.php line \d+|', $content);
 		
 		// Check the output contains the exception message
 		$this->assertContains('The "test" argument does not exist.', $content);
@@ -395,8 +397,8 @@ class ApplicationTest extends ApplicationTestCase
 		// Get the output
 		$content = self::$output->fetch();
 		
-		// Check the output contains the exception name
-		$this->assertContains('[InvalidArgumentException]', $content);
+		// Check the output contains the exception location
+		$this->assertRegExp('|In ApplicationTest.php line \d+|', $content);
 		
 		// Check the output contains the exception message
 		$this->assertContains('The "test" argument does not exist.', $content);
@@ -448,8 +450,8 @@ class ApplicationTest extends ApplicationTestCase
 		// Get command output
 		$content = self::$output->fetch();
 		
-		// Check the output contains the expected exception name
-		$this->assertContains('[Symfony\\Component\\DependencyInjection\\Exception\\ServiceNotFoundException]', $content);
+		// Check the output contains the expected exception location
+		$this->assertRegExp('|In Container.php line \d+|', $content);
 		
 		// Check the output contains the expected message
 		$this->assertContains('You have requested a non-existent service "invalid".', $content);
@@ -484,8 +486,8 @@ class ApplicationTest extends ApplicationTestCase
 		// Get the error output
 		$content = self::$output->fetch();
 		
-		// Check the output contains the expected exception name
-		$this->assertContains('[Symfony\\Component\\DependencyInjection\\Exception\\ServiceNotFoundException]', $content);
+		// Check the output contains the expected exception location
+		$this->assertRegExp('|In Container.php line \d+|', $content);
 		
 		// Check the output contains the expected message
 		$this->assertContains('You have requested a non-existent service "invalid".', $content);
@@ -527,8 +529,8 @@ class ApplicationTest extends ApplicationTestCase
 		// Get the output
 		$content = self::$output->fetch();
 		
-		// Check the output contains the expected exception name
-		$this->assertContains('[Exception]', $content);
+		// Check the output contains the expected exception location
+		$this->assertRegExp('|In ApplicationTest.php line \d+|', $content);
 		
 		// Check the output contains the expected message
 		$this->assertContains('My getCode() method returns a string.', $content);

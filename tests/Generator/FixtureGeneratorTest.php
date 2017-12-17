@@ -486,11 +486,11 @@ Options:
    -v|vv|vvv  --verbose         Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 
 Commands in namespace "debug":
+  *debug:autowiring             Lists classes/interfaces you can use for autowiring
   *debug:config                 Dumps the current configuration for an extension
   *debug:container              Displays current services for an application
   *debug:event-dispatcher       Displays configured listeners for an application
   *debug:router                 Displays current routes for an application
-  *debug:translation            Displays translation messages information
   *debug:twig                   Shows a list of twig functions, filters, globals and tests
 
 

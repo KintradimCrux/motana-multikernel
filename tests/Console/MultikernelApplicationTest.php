@@ -248,13 +248,15 @@ class MultikernelApplicationTest extends ApplicationTestCase
 			'assets:install' => 'boot:app',
 			'cache:clear' => 'boot:app',
 			'cache:pool:clear' => 'boot:app',
+			'cache:pool:prune' => 'boot:app',
 			'cache:warmup' => 'boot:app',
 			'config:dump-reference' => 'boot:app',
+			'debug:autowiring' => 'boot:app',
 			'debug:config' => 'boot:app',
 			'debug:container' => 'boot:app',
 			'debug:event-dispatcher' => 'boot:app',
+			'debug:form' => 'app',
 			'debug:router' => 'app',
-			'debug:translation' => 'boot:app',
 			'debug:twig' => 'boot:app',
 			'generate:app' => 'boot',
 			'help' => 'boot:app',
@@ -264,7 +266,6 @@ class MultikernelApplicationTest extends ApplicationTestCase
 			'list' => 'boot:app',
 			'router:match' => 'app',
 			'security:encode-password' => 'app',
-			'translation:update' => 'boot:app',
 			'multikernel:convert' => 'boot:app',
 		], $map);
 	}
@@ -435,9 +436,17 @@ class MultikernelApplicationTest extends ApplicationTestCase
 				MultiKernelCommand::class,
 				'cache:pool:clear'
 			],
+			'\'cache:pool:prune\'' => [
+				MultiKernelCommand::class,
+				'cache:pool:prune'
+			],
 			'\'cache:warmup\'' => [
 				MultiKernelCommand::class,
 				'cache:warmup'
+			],
+			'\'debug:autowiring\'' => [
+				MultiKernelCommand::class,
+				'debug:autowiring'
 			],
 			'\'debug:config\'' => [
 				MultiKernelCommand::class,
@@ -450,14 +459,6 @@ class MultikernelApplicationTest extends ApplicationTestCase
 			'\'debug:event-dispatcher\'' => [
 				MultiKernelCommand::class,
 				'debug:event-dispatcher'
-			],
-			'\'debug:translation\'' => [
-				MultiKernelCommand::class,
-				'debug:translation'
-			],
-			'\'translation:update\'' => [
-				MultiKernelCommand::class,
-				'translation:update'
 			],
 			
 			// Multi-kernel bundle commands
@@ -540,8 +541,8 @@ class MultikernelApplicationTest extends ApplicationTestCase
 		// Get command output
 		$content = $output->fetch();
 		
-		// Check the output contains the exception name
-		$this->assertContains('[RuntimeException]', $content);
+		// Check the output contains the exception location
+		$this->assertRegExp('|In ArgvInput.php line \d+|', $content);
 		
 		// Check the output contains the exception message
 		$this->assertContains('Too many arguments, expected arguments: "command" "name" "path".', $content);
@@ -740,8 +741,8 @@ class MultikernelApplicationTest extends ApplicationTestCase
 		// Get the output
 		$content = self::$output->fetch();
 		
-		// Check the output contains the exception name
-		$this->assertContains('[InvalidArgumentException]', $content);
+		// Check the output contains the exception location
+		$this->assertRegExp('|In MultikernelApplicationTest.php line \d+|', $content);
 		
 		// Check the output contains the exception message
 		$this->assertContains('The "test" argument does not exist.', $content);
@@ -770,8 +771,8 @@ class MultikernelApplicationTest extends ApplicationTestCase
 		// Get the output
 		$content = self::$output->fetch();
 		
-		// Check the output contains the exception name
-		$this->assertContains('[InvalidArgumentException]', $content);
+		// Check the output contains the exception location
+		$this->assertRegExp('|In MultikernelApplicationTest.php line \d+|', $content);
 		
 		// Check the output contains the exception message
 		$this->assertContains('The "test" argument does not exist.', $content);
@@ -801,8 +802,8 @@ class MultikernelApplicationTest extends ApplicationTestCase
 		// Get the output
 		$content = self::$output->fetch();
 		
-		// Check the output contains the exception name
-		$this->assertContains('[InvalidArgumentException]', $content);
+		// Check the output contains the exception location
+		$this->assertRegExp('|In MultikernelApplicationTest.php line \d+|', $content);
 		
 		// Check the output contains the exception message
 		$this->assertContains('The "test" argument does not exist.', $content);

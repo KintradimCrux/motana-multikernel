@@ -101,6 +101,9 @@ class MotanaMultikernelExtension extends Extension implements PrependExtensionIn
 		
 		// Load commands configuration
 		$this->registerCommandsConfiguration($config, $container, $loader);
+		
+		// Load console command services definitions
+		$loader->load('console.xml');
 	}
 	
 	/**

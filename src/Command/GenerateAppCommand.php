@@ -34,6 +34,13 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 class GenerateAppCommand extends GeneratorCommand
 {
 	/**
+	 * Default command name.
+	 *
+	 * @var string
+	 */
+	protected static $defaultName = 'generate:app';
+	
+	/**
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Command\Command::isEnabled()
 	 */
@@ -50,7 +57,7 @@ class GenerateAppCommand extends GeneratorCommand
 	 */
 	protected function configure()
 	{
-		$this->setName('generate:app')
+		$this
 		->setDescription('Generates an app')
 		->setDefinition(new InputDefinition([
 			new InputOption('kernel', null, InputOption::VALUE_REQUIRED, 'App kernel name'),

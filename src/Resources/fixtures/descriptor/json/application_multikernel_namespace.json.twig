@@ -5,6 +5,109 @@
     ],
     "commands": [
         {
+            "name": "debug:autowiring",
+            "usage": [
+                ".\/bin\/console debug:autowiring [options] [--] [<search>]",
+                ".\/bin\/console <kernel> debug:autowiring [options] [--] [<search>]"
+            ],
+            "description": "Lists classes\/interfaces you can use for autowiring",
+            "help": "The <info>debug:autowiring<\/info> command displays all classes and interfaces that\nyou can use as type-hints for autowiring:\n\n  <info>.\/bin\/console debug:autowiring<\/info>\n\nYou can also pass a search term to filter the list:\n\n  <info>.\/bin\/console debug:autowiring log<\/info>",
+            "definition": {
+                "arguments": {
+                    "search": {
+                        "name": "search",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "A search filter",
+                        "default": null
+                    }
+                },
+                "options": {
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
             "name": "debug:config",
             "usage": [
                 ".\/bin\/console debug:config [options] [--] [<name>] [<path>]",
@@ -463,152 +566,6 @@
                         "is_value_required": false,
                         "is_multiple": false,
                         "description": "To output raw route(s)",
-                        "default": false
-                    },
-                    "help": {
-                        "name": "--help",
-                        "shortcut": "-h",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Display this help message",
-                        "default": false
-                    },
-                    "quiet": {
-                        "name": "--quiet",
-                        "shortcut": "-q",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Do not output any message",
-                        "default": false
-                    },
-                    "verbose": {
-                        "name": "--verbose",
-                        "shortcut": "-v|-vv|-vvv",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
-                        "default": false
-                    },
-                    "version": {
-                        "name": "--version",
-                        "shortcut": "-V",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Display this application version",
-                        "default": false
-                    },
-                    "ansi": {
-                        "name": "--ansi",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Force ANSI output",
-                        "default": false
-                    },
-                    "no-ansi": {
-                        "name": "--no-ansi",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Disable ANSI output",
-                        "default": false
-                    },
-                    "no-interaction": {
-                        "name": "--no-interaction",
-                        "shortcut": "-n",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Do not ask any interactive question",
-                        "default": false
-                    },
-                    "env": {
-                        "name": "--env",
-                        "shortcut": "-e",
-                        "accept_value": true,
-                        "is_value_required": true,
-                        "is_multiple": false,
-                        "description": "The environment name",
-                        "default": "test"
-                    },
-                    "no-debug": {
-                        "name": "--no-debug",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Switches off debug mode",
-                        "default": false
-                    }
-                }
-            }
-        },
-        {
-            "name": "debug:translation",
-            "usage": [
-                ".\/bin\/console debug:translation [options] [--] <locale> [<bundle>]",
-                ".\/bin\/console <kernel> debug:translation [options] [--] <locale> [<bundle>]"
-            ],
-            "description": "Displays translation messages information",
-            "help": "The <info>debug:translation<\/info> command helps finding unused or missing translation\nmessages and comparing them with the fallback ones by inspecting the\ntemplates and translation files of a given bundle or the app folder.\n\nYou can display information about bundle translations in a specific locale:\n\n  <info>.\/bin\/console debug:translation en AcmeDemoBundle<\/info>\n\nYou can also specify a translation domain for the search:\n\n  <info>.\/bin\/console debug:translation --domain=messages en AcmeDemoBundle<\/info>\n\nYou can only display missing messages:\n\n  <info>.\/bin\/console debug:translation --only-missing en AcmeDemoBundle<\/info>\n\nYou can only display unused messages:\n\n  <info>.\/bin\/console debug:translation --only-unused en AcmeDemoBundle<\/info>\n\nYou can display information about app translations in a specific locale:\n\n  <info>.\/bin\/console debug:translation en<\/info>\n\nYou can display information about translations in all registered bundles in a specific locale:\n\n  <info>.\/bin\/console debug:translation --all en<\/info>",
-            "definition": {
-                "arguments": {
-                    "locale": {
-                        "name": "locale",
-                        "is_required": true,
-                        "is_array": false,
-                        "description": "The locale",
-                        "default": null
-                    },
-                    "bundle": {
-                        "name": "bundle",
-                        "is_required": false,
-                        "is_array": false,
-                        "description": "The bundle name or directory where to load the messages, defaults to app\/Resources folder",
-                        "default": null
-                    }
-                },
-                "options": {
-                    "domain": {
-                        "name": "--domain",
-                        "shortcut": "",
-                        "accept_value": true,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "The messages domain",
-                        "default": null
-                    },
-                    "only-missing": {
-                        "name": "--only-missing",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Displays only missing messages",
-                        "default": false
-                    },
-                    "only-unused": {
-                        "name": "--only-unused",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Displays only unused messages",
-                        "default": false
-                    },
-                    "all": {
-                        "name": "--all",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Load messages from all registered bundles",
                         "default": false
                     },
                     "help": {

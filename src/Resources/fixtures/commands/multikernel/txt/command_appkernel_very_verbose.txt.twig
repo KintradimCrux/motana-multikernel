@@ -5,3 +5,24 @@ Tests
 
  * even
 
+Loader Paths
+------------
+
+ --------------- ------------------------------------------------------------------------------------------------------------------------- 
+  Namespace       Paths                                                                                                                    
+ --------------- ------------------------------------------------------------------------------------------------------------------------- 
+  @Framework      - {{ project_dir }}/vendor/symfony/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/views    
+  @!Framework     - {{ project_dir }}/vendor/symfony/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/views    
+  @Security       - {{ project_dir }}/vendor/symfony/symfony/src/Symfony/Bundle/SecurityBundle/Resources/views     
+  @!Security      - {{ project_dir }}/vendor/symfony/symfony/src/Symfony/Bundle/SecurityBundle/Resources/views     
+  @Twig           - {{ project_dir }}/vendor/symfony/symfony/src/Symfony/Bundle/TwigBundle/Resources/views         
+  @!Twig          - {{ project_dir }}/vendor/symfony/symfony/src/Symfony/Bundle/TwigBundle/Resources/views         
+  @Debug          - {{ project_dir }}/vendor/symfony/symfony/src/Symfony/Bundle/DebugBundle/Resources/views        
+  @!Debug         - {{ project_dir }}/vendor/symfony/symfony/src/Symfony/Bundle/DebugBundle/Resources/views        
+  @WebProfiler    - {{ project_dir }}/vendor/symfony/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views  
+  @!WebProfiler   - {{ project_dir }}/vendor/symfony/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views  
+                                                                                                                                           
+  (None)          - apps/app/Resources/views                                                                                               
+                  - {{ project_dir }}/vendor/symfony/symfony/src/Symfony/Bridge/Twig/Resources/views/Form          
+ --------------- ------------------------------------------------------------------------------------------------------------------------- 
+

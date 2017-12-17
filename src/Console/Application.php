@@ -112,12 +112,8 @@ class Application extends BaseApplication
 	public function get($name)
 	{
 		// Get the command
+		// Checking that the command exists is done by parent::get()
 		$command = parent::get($name);
-		
-		// Check the command exists, is enabled and is not hidden
-		if (null === $command || ! $command->isEnabled() || $command->isHidden()) {
-			throw new CommandNotFoundException(sprintf('The command "%s" does not exist.', $name));
-		}
 		
 		// Requested to show commandline help, return a help command for the requested command
 		if ($this->showHelp) {
@@ -139,18 +135,33 @@ class Application extends BaseApplication
 	 */
 	public function has($name)
 	{
+		// Loop detection for recursive calls to has() since we are calling
+		// parent::get() and in Symfony 3.4 parent::get() calls $this->has()
+		static $loop = false;
+		
 		// Command not available, return to caller
 		if ( ! parent::has($name)) {
 			return false;
 		}
 		
-		// Get the command
-		$command = parent::get($name);
+		// Not running in recursive loop
+		elseif ( ! $loop)
+		{
+			// Get the command
+			$loop = true;
+			$command = parent::get($name);
+			$loop = false;
+			
+			// Return a boolean indicating the command is enabled and not hidden
+			return $command->isEnabled() && ! $command->isHidden();
+		}
 		
-		// Return a boolean indicating the command is enabled and not hidden
-		return $command->isEnabled() && ! $command->isHidden();
+		// Running in recursive loop
+		else {
+			return true;
+		}
 	}
-		
+
 	/**
 	 * {@inheritDoc}
 	 * @see \Symfony\Bundle\FrameworkBundle\Console\Application::all()
@@ -214,6 +225,9 @@ class Application extends BaseApplication
 		$this->getKernel()->boot();
 		$container = $this->getKernel()->getContainer();
 
+		// Load the console.error_listener service
+		$container->get('console.error_listener');
+		
 		// Set the container on all container aware commands
 		foreach ($this->all() as $command) {
 			if ($command instanceof ContainerAwareInterface) {

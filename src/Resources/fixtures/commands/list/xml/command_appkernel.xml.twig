@@ -6,7 +6,13 @@
         <usage>./bin/console {{ kernel_name }} about [options]</usage>
       </usages>
       <description>Displays information about the current project</description>
-      <help>Displays information about the current project</help>
+      <help>The &lt;info&gt;about&lt;/info&gt; command displays information about the current Symfony project.
+ 
+ The &lt;info&gt;PHP&lt;/info&gt; section displays important configuration that could affect your application. The values might
+ be different between web and CLI.
+ 
+ The &lt;info&gt;Environment&lt;/info&gt; section displays the current environment variables managed by Symfony Dotenv. It will not
+ be shown if no variables were found. The values might be different between web and CLI.</help>
       <arguments/>
       <options>
         <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
@@ -338,6 +344,48 @@
         </option>
       </options>
     </command>
+    <command id="cache:pool:prune" name="cache:pool:prune">
+      <usages>
+        <usage>./bin/console {{ kernel_name }} cache:pool:prune [options]</usage>
+      </usages>
+      <description>Prune cache pools</description>
+      <help>The &lt;info&gt;cache:pool:prune&lt;/info&gt; command deletes all expired items from all pruneable pools.
+ 
+     bin/console cache:pool:prune</help>
+      <arguments/>
+      <options>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
     <command id="cache:warmup" name="cache:warmup">
       <usages>
         <usage>./bin/console {{ kernel_name }} cache:warmup [options]</usage>
@@ -427,6 +475,58 @@
             <default>yaml</default>
           </defaults>
         </option>
+        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this help message</description>
+        </option>
+        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not output any message</description>
+        </option>
+        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
+        </option>
+        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Display this application version</description>
+        </option>
+        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Force ANSI output</description>
+        </option>
+        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Disable ANSI output</description>
+        </option>
+        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Do not ask any interactive question</description>
+        </option>
+        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The environment name</description>
+          <defaults>
+            <default>test</default>
+          </defaults>
+        </option>
+        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Switches off debug mode</description>
+        </option>
+      </options>
+    </command>
+    <command id="debug:autowiring" name="debug:autowiring">
+      <usages>
+        <usage>./bin/console {{ kernel_name }} debug:autowiring [options] [--] [&lt;search&gt;]</usage>
+      </usages>
+      <description>Lists classes/interfaces you can use for autowiring</description>
+      <help>The &lt;info&gt;debug:autowiring&lt;/info&gt; command displays all classes and interfaces that
+ you can use as type-hints for autowiring:
+ 
+   &lt;info&gt;./bin/console debug:autowiring&lt;/info&gt;
+ 
+ You can also pass a search term to filter the list:
+ 
+   &lt;info&gt;./bin/console debug:autowiring log&lt;/info&gt;</help>
+      <arguments>
+        <argument name="search" is_required="0" is_array="0">
+          <description>A search filter</description>
+          <defaults/>
+        </argument>
+      </arguments>
+      <options>
         <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
           <description>Display this help message</description>
         </option>
@@ -686,32 +786,45 @@
         </option>
       </options>
     </command>
-    <command id="debug:router" name="debug:router">
+    <command id="debug:form" name="debug:form">
       <usages>
-        <usage>./bin/console {{ kernel_name }} debug:router [options] [--] [&lt;name&gt;]</usage>
+        <usage>./bin/console {{ kernel_name }} debug:form [options] [--] [&lt;class&gt;] [&lt;option&gt;]</usage>
       </usages>
-      <description>Displays current routes for an application</description>
-      <help>The &lt;info&gt;debug:router&lt;/info&gt; displays the configured routes:
+      <description>Displays form type information</description>
+      <help>The &lt;info&gt;debug:form&lt;/info&gt; command displays information about form types.
  
-   &lt;info&gt;./bin/console debug:router&lt;/info&gt;</help>
+   &lt;info&gt;./bin/console debug:form&lt;/info&gt;
+ 
+ The command lists all built-in types, services types, type extensions and guessers currently available.
+ 
+   &lt;info&gt;./bin/console debug:form Symfony\Component\Form\Extension\Core\Type\ChoiceType&lt;/info&gt;
+   &lt;info&gt;./bin/console debug:form ChoiceType&lt;/info&gt;
+ 
+ The command lists all defined options that contains the given form type, as well as their parents and type extensions.
+ 
+   &lt;info&gt;./bin/console debug:form ChoiceType choice_value&lt;/info&gt;
+ 
+ The command displays the definition of the given option name.
+ 
+   &lt;info&gt;./bin/console debug:form --format=json&lt;/info&gt;
+ 
+ The command lists everything in a machine readable json format.</help>
       <arguments>
-        <argument name="name" is_required="0" is_array="0">
-          <description>A route name</description>
+        <argument name="class" is_required="0" is_array="0">
+          <description>The form type class</description>
+          <defaults/>
+        </argument>
+        <argument name="option" is_required="0" is_array="0">
+          <description>The form type option</description>
           <defaults/>
         </argument>
       </arguments>
       <options>
-        <option name="--show-controllers" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Show assigned controllers in overview</description>
-        </option>
         <option name="--format" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
-          <description>The output format (txt, xml, json, or md)</description>
+          <description>The output format (txt or json)</description>
           <defaults>
             <default>txt</default>
           </defaults>
-        </option>
-        <option name="--raw" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>To output raw route(s)</description>
         </option>
         <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
           <description>Display this help message</description>
@@ -745,61 +858,32 @@
         </option>
       </options>
     </command>
-    <command id="debug:translation" name="debug:translation">
+    <command id="debug:router" name="debug:router">
       <usages>
-        <usage>./bin/console {{ kernel_name }} debug:translation [options] [--] &lt;locale&gt; [&lt;bundle&gt;]</usage>
+        <usage>./bin/console {{ kernel_name }} debug:router [options] [--] [&lt;name&gt;]</usage>
       </usages>
-      <description>Displays translation messages information</description>
-      <help>The &lt;info&gt;debug:translation&lt;/info&gt; command helps finding unused or missing translation
- messages and comparing them with the fallback ones by inspecting the
- templates and translation files of a given bundle or the app folder.
+      <description>Displays current routes for an application</description>
+      <help>The &lt;info&gt;debug:router&lt;/info&gt; displays the configured routes:
  
- You can display information about bundle translations in a specific locale:
- 
-   &lt;info&gt;./bin/console debug:translation en AcmeDemoBundle&lt;/info&gt;
- 
- You can also specify a translation domain for the search:
- 
-   &lt;info&gt;./bin/console debug:translation --domain=messages en AcmeDemoBundle&lt;/info&gt;
- 
- You can only display missing messages:
- 
-   &lt;info&gt;./bin/console debug:translation --only-missing en AcmeDemoBundle&lt;/info&gt;
- 
- You can only display unused messages:
- 
-   &lt;info&gt;./bin/console debug:translation --only-unused en AcmeDemoBundle&lt;/info&gt;
- 
- You can display information about app translations in a specific locale:
- 
-   &lt;info&gt;./bin/console debug:translation en&lt;/info&gt;
- 
- You can display information about translations in all registered bundles in a specific locale:
- 
-   &lt;info&gt;./bin/console debug:translation --all en&lt;/info&gt;</help>
+   &lt;info&gt;./bin/console debug:router&lt;/info&gt;</help>
       <arguments>
-        <argument name="locale" is_required="1" is_array="0">
-          <description>The locale</description>
-          <defaults/>
-        </argument>
-        <argument name="bundle" is_required="0" is_array="0">
-          <description>The bundle name or directory where to load the messages, defaults to app/Resources folder</description>
+        <argument name="name" is_required="0" is_array="0">
+          <description>A route name</description>
           <defaults/>
         </argument>
       </arguments>
       <options>
-        <option name="--domain" shortcut="" accept_value="1" is_value_required="0" is_multiple="0">
-          <description>The messages domain</description>
-          <defaults/>
+        <option name="--show-controllers" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>Show assigned controllers in overview</description>
         </option>
-        <option name="--only-missing" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Displays only missing messages</description>
+        <option name="--format" shortcut="" accept_value="1" is_value_required="1" is_multiple="0">
+          <description>The output format (txt, xml, json, or md)</description>
+          <defaults>
+            <default>txt</default>
+          </defaults>
         </option>
-        <option name="--only-unused" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Displays only unused messages</description>
-        </option>
-        <option name="--all" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Load messages from all registered bundles</description>
+        <option name="--raw" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
+          <description>To output raw route(s)</description>
         </option>
         <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
           <description>Display this help message</description>
@@ -1307,98 +1391,6 @@
         </option>
       </options>
     </command>
-    <command id="translation:update" name="translation:update">
-      <usages>
-        <usage>./bin/console {{ kernel_name }} translation:update [options] [--] &lt;locale&gt; [&lt;bundle&gt;]</usage>
-      </usages>
-      <description>Updates the translation file</description>
-      <help>The &lt;info&gt;translation:update&lt;/info&gt; command extracts translation strings from templates
- of a given bundle or the app folder. It can display them or merge the new ones into the translation files.
- 
- When new translation strings are found it can automatically add a prefix to the translation
- message.
- 
- Example running against a Bundle (AcmeBundle)
-   &lt;info&gt;./bin/console translation:update --dump-messages en AcmeBundle&lt;/info&gt;
-   &lt;info&gt;./bin/console translation:update --force --prefix="new_" fr AcmeBundle&lt;/info&gt;
- 
- Example running against app messages (app/Resources folder)
-   &lt;info&gt;./bin/console translation:update --dump-messages en&lt;/info&gt;
-   &lt;info&gt;./bin/console translation:update --force --prefix="new_" fr&lt;/info&gt;</help>
-      <arguments>
-        <argument name="locale" is_required="1" is_array="0">
-          <description>The locale</description>
-          <defaults/>
-        </argument>
-        <argument name="bundle" is_required="0" is_array="0">
-          <description>The bundle name or directory where to load the messages, defaults to app/Resources folder</description>
-          <defaults/>
-        </argument>
-      </arguments>
-      <options>
-        <option name="--prefix" shortcut="" accept_value="1" is_value_required="0" is_multiple="0">
-          <description>Override the default prefix</description>
-          <defaults>
-            <default>__</default>
-          </defaults>
-        </option>
-        <option name="--no-prefix" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>If set, no prefix is added to the translations</description>
-        </option>
-        <option name="--output-format" shortcut="" accept_value="1" is_value_required="0" is_multiple="0">
-          <description>Override the default output format</description>
-          <defaults>
-            <default>yml</default>
-          </defaults>
-        </option>
-        <option name="--dump-messages" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Should the messages be dumped in the console</description>
-        </option>
-        <option name="--force" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Should the update be done</description>
-        </option>
-        <option name="--no-backup" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Should backup be disabled</description>
-        </option>
-        <option name="--clean" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Should clean not found messages</description>
-        </option>
-        <option name="--domain" shortcut="" accept_value="1" is_value_required="0" is_multiple="0">
-          <description>Specify the domain to update</description>
-          <defaults/>
-        </option>
-        <option name="--help" shortcut="-h" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Display this help message</description>
-        </option>
-        <option name="--quiet" shortcut="-q" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Do not output any message</description>
-        </option>
-        <option name="--verbose" shortcut="-v" shortcuts="-v|-vv|-vvv" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug</description>
-        </option>
-        <option name="--version" shortcut="-V" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Display this application version</description>
-        </option>
-        <option name="--ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Force ANSI output</description>
-        </option>
-        <option name="--no-ansi" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Disable ANSI output</description>
-        </option>
-        <option name="--no-interaction" shortcut="-n" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Do not ask any interactive question</description>
-        </option>
-        <option name="--env" shortcut="-e" accept_value="1" is_value_required="1" is_multiple="0">
-          <description>The environment name</description>
-          <defaults>
-            <default>test</default>
-          </defaults>
-        </option>
-        <option name="--no-debug" shortcut="" accept_value="0" is_value_required="0" is_multiple="0">
-          <description>Switches off debug mode</description>
-        </option>
-      </options>
-    </command>
   </commands>
   <namespaces>
     <namespace id="_global">
@@ -1412,17 +1404,19 @@
     <namespace id="cache">
       <command>cache:clear</command>
       <command>cache:pool:clear</command>
+      <command>cache:pool:prune</command>
       <command>cache:warmup</command>
     </namespace>
     <namespace id="config">
       <command>config:dump-reference</command>
     </namespace>
     <namespace id="debug">
+      <command>debug:autowiring</command>
       <command>debug:config</command>
       <command>debug:container</command>
       <command>debug:event-dispatcher</command>
+      <command>debug:form</command>
       <command>debug:router</command>
-      <command>debug:translation</command>
       <command>debug:twig</command>
     </namespace>
     <namespace id="lint">
@@ -1438,9 +1432,6 @@
     </namespace>
     <namespace id="security">
       <command>security:encode-password</command>
-    </namespace>
-    <namespace id="translation">
-      <command>translation:update</command>
     </namespace>
   </namespaces>
 </symfony>
