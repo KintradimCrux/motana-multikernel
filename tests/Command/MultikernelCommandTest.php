@@ -12,6 +12,7 @@ namespace Motana\Bundle\MultikernelBundle\Tests\Command;
 
 use Motana\Bundle\MultikernelBundle\Command\MultikernelCommand;
 use Motana\Bundle\MultikernelBundle\Console\Application;
+use Motana\Bundle\MultikernelBundle\Generator\FixtureGenerator;
 use Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\CommandTestCase;
 
 use Symfony\Component\Console\Command\Command;
@@ -897,6 +898,57 @@ class MultikernelCommandTest extends CommandTestCase
 	 */
 	protected static function getTemplate($case, array $options = [], $format, $commandName, $generateTemplates = false)
 	{
-		return parent::getTemplate($case, $options, $format, 'multikernel', $generateTemplates);
+		// Set the command name
+		$commandName = 'multikernel';
+		
+		// Append options to template basename
+		$case .= ! empty($options) ? '_' . implode('_', array_keys($options)) : '';
+		
+		// Get the project directory
+		$projectDir = realpath(__DIR__ . '/../..');
+		$projectDirLen = strlen($projectDir);
+		
+		// Insert twig variables into output and save it to a sample file when requested
+		if ($generateTemplates) {
+			$output = clone(self::$output);
+			$content = $output->fetch();
+			if ( ! empty($content)) {
+				$content = str_replace([
+					\Symfony\Component\HttpKernel\Kernel::VERSION,
+					'console boot',
+					'console app',
+					'(kernel: boot,',
+					'(kernel: app,',
+					$projectDir,
+				], [
+					'{{ kernel_version }}',
+					'console {{ kernel_name }}',
+					'console {{ kernel_name }}',
+					'(kernel: {{ kernel_name }},',
+					'(kernel: {{ kernel_name }},',
+					'{{ project_dir }}',
+				], $content);
+				$content = preg_replace([
+					'#/tmp/motana_multikernel_tests_[^/]+/#',
+					"#[\-]{" . $projectDirLen . "} \n#",
+					"#[ ]{" . $projectDirLen . "}\n#",
+				], [
+					'{{ fixture_dir }}/',
+					"{{ io_table_line }} \n",
+					"{{ io_table_space }}\n",
+				], $content);
+				self::getFs()->dumpFile(__DIR__ . '/../../src/Resources/fixtures/commands/' . $commandName . '/' . $format . '/' . $case . '.' . $format . '.twig', $content);
+			}
+		}
+		
+		// Generate expected content from a template
+		$generator = new FixtureGenerator();
+		return $generator->generateCommandOutput($case, $format, [
+			'kernel_name' => false !== strpos($case, 'multikernel') ? 'boot' : 'app',
+			'command_name' => $commandName,
+			'project_dir' => $projectDir,
+			'io_table_line' => str_repeat('-', $projectDirLen),
+			'io_table_space' => str_repeat(' ', $projectDirLen),
+		]);
 	}
 }
