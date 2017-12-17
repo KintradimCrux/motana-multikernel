@@ -540,18 +540,6 @@ EOH
 	}
 	
 	/**
-	 * @covers ::describe()
-	 * @expectedException Symfony\Component\Console\Exception\InvalidArgumentException
-	 * @expectedExceptionMessage Object of type "stdClass" is not describable.
-	 * @testdox describeApplication() throws an InvalidArgumentException for unsupported objects
-	 */
-	public function test_describe_with_unsupported_object()
-	{
-		// Check an exception is thrown when trying to describe an invalid object
-		self::$descriptor->describe(self::$output, new \stdClass());
-	}
-	
-	/**
 	 * Returns the expected output for each of the tests.
 	 *
 	 * @param string $case Template base name
@@ -565,6 +553,9 @@ EOH
 		// Append options to template basename
 		$case .= ! empty($options) ? '_' . implode('_', array_keys($options)) : '';
 		
+		// Get the project directory
+		$projectDir = realpath(__DIR__ . '/../../..');
+		
 		// Insert twig variables into output and save it to a sample file when requested
 		if ($generateTemplates) {
 			$output = clone(self::$output);
@@ -576,12 +567,14 @@ EOH
 					'console app',
 					'(kernel: boot,',
 					'(kernel: app,',
+					$projectDir,
 				], [
 					'{{ kernel_version }}',
 					'console {{ kernel_name }}',
 					'console {{ kernel_name }}',
 					'(kernel: {{ kernel_name }},',
 					'(kernel: {{ kernel_name }},',
+					'{{ project_dir }}',
 				], $content);
 				$content = preg_replace([
 					'#/tmp/motana_multikernel_tests_[^/]+/#',
@@ -596,6 +589,7 @@ EOH
 		$generator = new FixtureGenerator();
 		return $generator->generateDescriptorOutput($case, $format, [
 			'kernel_name' => false !== strpos($case, 'multikernel') ? 'boot' : 'app',
+			'project_dir' => $projectDir,
 		]);
 	}
 }
