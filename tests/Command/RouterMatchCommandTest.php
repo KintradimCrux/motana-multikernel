@@ -35,6 +35,39 @@ class RouterMatchCommandTest extends CommandTestCase
 	}
 	
 	/**
+	 * @covers ::__construct()
+	 * @testdox __construct() initializes properties correctly
+	 */
+	public function test_constructor()
+	{
+		// Get the input definition of the command
+		$definition = $this->readAttribute(self::$command, 'definition');
+		
+		// Check the input definition is initialized
+		$this->assertInstanceOf(InputDefinition::class, $definition);
+		$this->assertEquals(3, count($definition->getArguments()));
+		$this->assertEquals(12, count($definition->getOptions()));
+
+		// Check the description is correct
+		$this->assertEquals('Helps debug routes by simulating a path info match', self::$command->getDescription());
+		
+		// Check the help is correct
+		$this->assertEquals(<<<EOH
+The <info>%command.name%</info> shows which routes match a given request and which don't and for what reason:
+
+  <info>php %command.full_name% /foo</info>
+
+or
+
+  <info>php %command.full_name% /foo --method POST --scheme https --host symfony.com --verbose</info>
+EOH
+		, self::$command->getHelp());
+		
+		// Check the router property is initialized correctly
+		$this->assertNull($this->readAttribute(self::$command, 'router'));
+	}
+	
+	/**
 	 * @covers ::isEnabled()
 	 * @testdox isEnabled() returns TRUE for a MultikernelApplication
 	 */
@@ -55,6 +88,12 @@ class RouterMatchCommandTest extends CommandTestCase
 		
 		// Override the application of the command with a single kernel application
 		self::$command->setApplication(self::$application);
+		
+		// Check that isEnabled() returns TRUE
+		$this->assertTrue(self::$command->isEnabled());
+		
+		// Set the router property of the command to NULL
+		$this->writeAttribute(self::$command, 'router', null);
 		
 		// Check that isEnabled() returns TRUE
 		$this->assertTrue(self::$command->isEnabled());
@@ -262,6 +301,87 @@ EOH
 	}
 	
 	/**
+	 * Data provider for test_execute_with_backwards_compatibility().
+	 *
+	 * @return array
+	 */
+	public function provide_test_execute_with_backwards_compatibility_data()
+	{
+		return [
+			'a path info matching an application with router and a route (verbosity normal)' => [
+				'command_backwards_compatibility',
+				[
+					'--format' => 'txt',
+					'--method' => 'GET',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
+					'path_info' => '/app',
+				]
+			],
+			'a path info matching an application with router and a route (verbosity verbose)' => [
+				'command_backwards_compatibility',
+				[
+					'--format' => 'txt',
+					'--verbose' => Output::VERBOSITY_VERBOSE,
+					'--method' => 'GET',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
+					'path_info' => '/app',
+				]
+			]
+		];
+	}
+	
+	/**
+	 * @covers ::execute()
+	 * @dataProvider provide_test_execute_with_backwards_compatibility_data
+	 * @param string $template Template name
+	 * @param array $parameters Input parameters
+	 * @testdox execute() BC returns correct output for
+	 */
+	public function test_execute_with_backwards_compatibility($template, array $parameters = [])
+	{
+		// Fake a different script name for the test
+		$_SERVER['PHP_SELF'] = 'bin/console';
+		
+		// Clear the router property of the command to simulate backwards compatibility
+		// (by not using dependency injection to specify the Router as constructor parameter)
+		$command = self::$application->getApplication('app')->get('router:match');
+		$this->writeAttribute($command, 'router', null);
+		
+		// Get requested format
+		$format = isset($parameters['--format']) ? $parameters['--format'] : 'txt';
+		
+		// Merge command parameters
+		$parameters = array_merge([
+			'command' => $this->commandName
+		], $this->commandParameters, $parameters);
+		
+		// Set kernel parameter
+		$parameters['kernel'] = null;
+		
+		// Create an input for the command
+		$input = new ArrayInput($this->filterCommandParameters($parameters));
+		
+		// Bind input to command definition
+		$input->bind(self::$command->getDefinition());
+		
+		// Set the container on container aware commands
+		if (self::$command instanceof ContainerAwareInterface) {
+			self::$command->setContainer(self::$application->getKernel()->getContainer());
+		}
+		
+		// Invoke the command
+		self::$command->run($input, self::$output);
+		
+		// Convert parameters to display options
+		$options = $this->convertParametersToOptions($parameters);
+		
+		// Check the command output is correct
+		$this->assertEquals($this->getTemplate($template, $options, $format, $this->commandName), self::$output->fetch());
+	}
+	
+	/**
 	 * Data provider for test_execute_with_almost_matching_route().
 	 *
 	 * @return array
@@ -365,6 +485,87 @@ EOH
 	public function test_run($app, $template, array $parameters = [])
 	{
 		parent::test_run($app, $template, $parameters);
+	}
+	
+	/**
+	 * Data provider for test_run_with_backwards_compatibility().
+	 *
+	 * @return array
+	 */
+	public function provide_test_run_with_backwards_compatibility_data()
+	{
+		return [
+			'a path info matching an application with router and a route (verbosity normal)' => [
+				'command_backwards_compatibility',
+				[
+					'--format' => 'txt',
+					'--method' => 'GET',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
+					'path_info' => '/app',
+				]
+			],
+			'a path info matching an application with router and a route (verbosity verbose)' => [
+				'command_backwards_compatibility',
+				[
+					'--format' => 'txt',
+					'--verbose' => Output::VERBOSITY_VERBOSE,
+					'--method' => 'GET',
+					'--scheme' => 'https',
+					'--host' => 'localhost',
+					'path_info' => '/app',
+				]
+			]
+		];
+	}
+	
+	/**
+	 * @covers ::run()
+	 * @dataProvider provide_test_run_with_backwards_compatibility_data
+	 * @param string $template Template name
+	 * @param array $parameters Input parameters
+	 * @testdox execute() BC returns correct output for
+	 */
+	public function test_run_with_backwards_compatibility($template, array $parameters = [])
+	{
+		// Fake a different script name for the test
+		$_SERVER['PHP_SELF'] = 'bin/console';
+		
+		// Clear the router property of the command to simulate backwards compatibility
+		// (by not using dependency injection to specify the Router as constructor parameter)
+		$command = self::$application->getApplication('app')->get('router:match');
+		$this->writeAttribute($command, 'router', null);
+		
+		// Get requested format
+		$format = isset($parameters['--format']) ? $parameters['--format'] : 'txt';
+		
+		// Merge command parameters
+		$parameters = array_merge([
+			'command' => $this->commandName
+		], $this->commandParameters, $parameters);
+		
+		// Set kernel parameter
+		$parameters['kernel'] = null;
+		
+		// Create an input for the command
+		$input = new ArrayInput($this->filterCommandParameters($parameters));
+		
+		// Bind input to command definition
+		$input->bind(self::$command->getDefinition());
+		
+		// Set the container on container aware commands
+		if (self::$command instanceof ContainerAwareInterface) {
+			self::$command->setContainer(self::$application->getKernel()->getContainer());
+		}
+		
+		// Invoke the command
+		self::$command->run($input, self::$output);
+		
+		// Convert parameters to display options
+		$options = $this->convertParametersToOptions($parameters);
+		
+		// Check the command output is correct
+		$this->assertEquals($this->getTemplate($template, $options, $format, $this->commandName), self::$output->fetch());
 	}
 	
 	/**

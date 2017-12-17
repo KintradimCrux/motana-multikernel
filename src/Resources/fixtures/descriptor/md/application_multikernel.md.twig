@@ -1,5 +1,5 @@
-Motana Multi-Kernel App Console - Symfony `{{ kernel_version }}` (kernel: boot, env: test, debug: false)
-==========================================================================================
+Motana Multi-Kernel App Console - Symfony `{{ kernel_version }}` (kernel: {{ kernel_name }}, env: test, debug: false)
+=========================================================================================
 
 Kernels
 -------
@@ -22,6 +22,7 @@ Commands
 
 * cache:clear
 * cache:pool:clear
+* cache:pool:prune
 * cache:warmup
 
 **config:**
@@ -30,11 +31,11 @@ Commands
 
 **debug:**
 
+* debug:autowiring
 * debug:config
 * debug:container
 * debug:event-dispatcher
 * debug:router
-* debug:translation
 * debug:twig
 
 **generate:**
@@ -55,10 +56,6 @@ Commands
 
 * router:match
 
-**translation:**
-
-* translation:update
-
 Command "about"
 ---------------
 
@@ -68,7 +65,13 @@ Command "about"
   * `./bin/console about [options]`
   * `./bin/console <kernel> about [options]`
 
-Displays information about the current project
+The `about` command displays information about the current Symfony project.
+
+The `PHP` section displays important configuration that could affect your application. The values might
+be different between web and CLI.
+
+The `Environment` section displays the current environment variables managed by Symfony Dotenv. It will not
+be shown if no variables were found. The values might be different between web and CLI.
 
 
 ### Kernels:
@@ -876,6 +879,117 @@ The `cache:pool:clear` command clears the given cache pools or cache pool cleare
 * Description: Switches off debug mode
 * Default: `false`
 
+Command "cache:pool:prune"
+--------------------------
+
+* Description: Prune cache pools
+* Usage:
+
+  * `./bin/console cache:pool:prune [options]`
+  * `./bin/console <kernel> cache:pool:prune [options]`
+
+The `cache:pool:prune` command deletes all expired items from all pruneable pools.
+
+    bin/console cache:pool:prune
+
+
+### Kernels:
+
+* boot
+* app
+
+### Options:
+
+**help:**
+
+* Name: `--help`
+* Shortcut: `-h`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this help message
+* Default: `false`
+
+**quiet:**
+
+* Name: `--quiet`
+* Shortcut: `-q`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not output any message
+* Default: `false`
+
+**verbose:**
+
+* Name: `--verbose`
+* Shortcut: `-v|-vv|-vvv`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+* Default: `false`
+
+**version:**
+
+* Name: `--version`
+* Shortcut: `-V`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this application version
+* Default: `false`
+
+**ansi:**
+
+* Name: `--ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Force ANSI output
+* Default: `false`
+
+**no-ansi:**
+
+* Name: `--no-ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Disable ANSI output
+* Default: `false`
+
+**no-interaction:**
+
+* Name: `--no-interaction`
+* Shortcut: `-n`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not ask any interactive question
+* Default: `false`
+
+**env:**
+
+* Name: `--env`
+* Shortcut: `-e`
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The environment name
+* Default: `'test'`
+
+**no-debug:**
+
+* Name: `--no-debug`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Switches off debug mode
+* Default: `false`
+
 Command "cache:warmup"
 ----------------------
 
@@ -1064,6 +1178,132 @@ For dumping a specific option, add its path as second argument (only available f
 * Is multiple: no
 * Description: The output format (yaml or xml)
 * Default: `'yaml'`
+
+**help:**
+
+* Name: `--help`
+* Shortcut: `-h`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this help message
+* Default: `false`
+
+**quiet:**
+
+* Name: `--quiet`
+* Shortcut: `-q`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not output any message
+* Default: `false`
+
+**verbose:**
+
+* Name: `--verbose`
+* Shortcut: `-v|-vv|-vvv`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+* Default: `false`
+
+**version:**
+
+* Name: `--version`
+* Shortcut: `-V`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this application version
+* Default: `false`
+
+**ansi:**
+
+* Name: `--ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Force ANSI output
+* Default: `false`
+
+**no-ansi:**
+
+* Name: `--no-ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Disable ANSI output
+* Default: `false`
+
+**no-interaction:**
+
+* Name: `--no-interaction`
+* Shortcut: `-n`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not ask any interactive question
+* Default: `false`
+
+**env:**
+
+* Name: `--env`
+* Shortcut: `-e`
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The environment name
+* Default: `'test'`
+
+**no-debug:**
+
+* Name: `--no-debug`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Switches off debug mode
+* Default: `false`
+
+Command "debug:autowiring"
+--------------------------
+
+* Description: Lists classes/interfaces you can use for autowiring
+* Usage:
+
+  * `./bin/console debug:autowiring [options] [--] [<search>]`
+  * `./bin/console <kernel> debug:autowiring [options] [--] [<search>]`
+
+The `debug:autowiring` command displays all classes and interfaces that
+you can use as type-hints for autowiring:
+
+  `./bin/console debug:autowiring`
+
+You can also pass a search term to filter the list:
+
+  `./bin/console debug:autowiring log`
+
+
+### Kernels:
+
+* boot
+* app
+
+### Arguments:
+
+**search:**
+
+* Name: search
+* Is required: no
+* Is array: no
+* Description: A search filter
+* Default: `NULL`
+
+### Options:
 
 **help:**
 
@@ -1736,199 +1976,6 @@ The `debug:router` displays the configured routes:
 * Is value required: no
 * Is multiple: no
 * Description: To output raw route(s)
-* Default: `false`
-
-**help:**
-
-* Name: `--help`
-* Shortcut: `-h`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Display this help message
-* Default: `false`
-
-**quiet:**
-
-* Name: `--quiet`
-* Shortcut: `-q`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Do not output any message
-* Default: `false`
-
-**verbose:**
-
-* Name: `--verbose`
-* Shortcut: `-v|-vv|-vvv`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-* Default: `false`
-
-**version:**
-
-* Name: `--version`
-* Shortcut: `-V`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Display this application version
-* Default: `false`
-
-**ansi:**
-
-* Name: `--ansi`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Force ANSI output
-* Default: `false`
-
-**no-ansi:**
-
-* Name: `--no-ansi`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Disable ANSI output
-* Default: `false`
-
-**no-interaction:**
-
-* Name: `--no-interaction`
-* Shortcut: `-n`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Do not ask any interactive question
-* Default: `false`
-
-**env:**
-
-* Name: `--env`
-* Shortcut: `-e`
-* Accepts value: yes
-* Is value required: yes
-* Is multiple: no
-* Description: The environment name
-* Default: `'test'`
-
-**no-debug:**
-
-* Name: `--no-debug`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Switches off debug mode
-* Default: `false`
-
-Command "debug:translation"
----------------------------
-
-* Description: Displays translation messages information
-* Usage:
-
-  * `./bin/console debug:translation [options] [--] <locale> [<bundle>]`
-  * `./bin/console <kernel> debug:translation [options] [--] <locale> [<bundle>]`
-
-The `debug:translation` command helps finding unused or missing translation
-messages and comparing them with the fallback ones by inspecting the
-templates and translation files of a given bundle or the app folder.
-
-You can display information about bundle translations in a specific locale:
-
-  `./bin/console debug:translation en AcmeDemoBundle`
-
-You can also specify a translation domain for the search:
-
-  `./bin/console debug:translation --domain=messages en AcmeDemoBundle`
-
-You can only display missing messages:
-
-  `./bin/console debug:translation --only-missing en AcmeDemoBundle`
-
-You can only display unused messages:
-
-  `./bin/console debug:translation --only-unused en AcmeDemoBundle`
-
-You can display information about app translations in a specific locale:
-
-  `./bin/console debug:translation en`
-
-You can display information about translations in all registered bundles in a specific locale:
-
-  `./bin/console debug:translation --all en`
-
-
-### Kernels:
-
-* boot
-* app
-
-### Arguments:
-
-**locale:**
-
-* Name: locale
-* Is required: yes
-* Is array: no
-* Description: The locale
-* Default: `NULL`
-
-**bundle:**
-
-* Name: bundle
-* Is required: no
-* Is array: no
-* Description: The bundle name or directory where to load the messages, defaults to app/Resources folder
-* Default: `NULL`
-
-### Options:
-
-**domain:**
-
-* Name: `--domain`
-* Shortcut: <none>
-* Accepts value: yes
-* Is value required: no
-* Is multiple: no
-* Description: The messages domain
-* Default: `NULL`
-
-**only-missing:**
-
-* Name: `--only-missing`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Displays only missing messages
-* Default: `false`
-
-**only-unused:**
-
-* Name: `--only-unused`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Displays only unused messages
-* Default: `false`
-
-**all:**
-
-* Name: `--all`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Load messages from all registered bundles
 * Default: `false`
 
 **help:**
@@ -2964,225 +3011,6 @@ or
 * Is value required: yes
 * Is multiple: no
 * Description: Sets the URI host
-* Default: `NULL`
-
-**help:**
-
-* Name: `--help`
-* Shortcut: `-h`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Display this help message
-* Default: `false`
-
-**quiet:**
-
-* Name: `--quiet`
-* Shortcut: `-q`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Do not output any message
-* Default: `false`
-
-**verbose:**
-
-* Name: `--verbose`
-* Shortcut: `-v|-vv|-vvv`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-* Default: `false`
-
-**version:**
-
-* Name: `--version`
-* Shortcut: `-V`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Display this application version
-* Default: `false`
-
-**ansi:**
-
-* Name: `--ansi`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Force ANSI output
-* Default: `false`
-
-**no-ansi:**
-
-* Name: `--no-ansi`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Disable ANSI output
-* Default: `false`
-
-**no-interaction:**
-
-* Name: `--no-interaction`
-* Shortcut: `-n`
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Do not ask any interactive question
-* Default: `false`
-
-**env:**
-
-* Name: `--env`
-* Shortcut: `-e`
-* Accepts value: yes
-* Is value required: yes
-* Is multiple: no
-* Description: The environment name
-* Default: `'test'`
-
-**no-debug:**
-
-* Name: `--no-debug`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Switches off debug mode
-* Default: `false`
-
-Command "translation:update"
-----------------------------
-
-* Description: Updates the translation file
-* Usage:
-
-  * `./bin/console translation:update [options] [--] <locale> [<bundle>]`
-  * `./bin/console <kernel> translation:update [options] [--] <locale> [<bundle>]`
-
-The `translation:update` command extracts translation strings from templates
-of a given bundle or the app folder. It can display them or merge the new ones into the translation files.
-
-When new translation strings are found it can automatically add a prefix to the translation
-message.
-
-Example running against a Bundle (AcmeBundle)
-  `./bin/console translation:update --dump-messages en AcmeBundle`
-  `./bin/console translation:update --force --prefix="new_" fr AcmeBundle`
-
-Example running against app messages (app/Resources folder)
-  `./bin/console translation:update --dump-messages en`
-  `./bin/console translation:update --force --prefix="new_" fr`
-
-
-### Kernels:
-
-* boot
-* app
-
-### Arguments:
-
-**locale:**
-
-* Name: locale
-* Is required: yes
-* Is array: no
-* Description: The locale
-* Default: `NULL`
-
-**bundle:**
-
-* Name: bundle
-* Is required: no
-* Is array: no
-* Description: The bundle name or directory where to load the messages, defaults to app/Resources folder
-* Default: `NULL`
-
-### Options:
-
-**prefix:**
-
-* Name: `--prefix`
-* Shortcut: <none>
-* Accepts value: yes
-* Is value required: no
-* Is multiple: no
-* Description: Override the default prefix
-* Default: `'__'`
-
-**no-prefix:**
-
-* Name: `--no-prefix`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: If set, no prefix is added to the translations
-* Default: `false`
-
-**output-format:**
-
-* Name: `--output-format`
-* Shortcut: <none>
-* Accepts value: yes
-* Is value required: no
-* Is multiple: no
-* Description: Override the default output format
-* Default: `'yml'`
-
-**dump-messages:**
-
-* Name: `--dump-messages`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Should the messages be dumped in the console
-* Default: `false`
-
-**force:**
-
-* Name: `--force`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Should the update be done
-* Default: `false`
-
-**no-backup:**
-
-* Name: `--no-backup`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Should backup be disabled
-* Default: `false`
-
-**clean:**
-
-* Name: `--clean`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Should clean not found messages
-* Default: `false`
-
-**domain:**
-
-* Name: `--domain`
-* Shortcut: <none>
-* Accepts value: yes
-* Is value required: no
-* Is multiple: no
-* Description: Specify the domain to update
 * Default: `NULL`
 
 **help:**

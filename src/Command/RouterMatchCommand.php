@@ -32,12 +32,49 @@ use Symfony\Component\Routing\RouterInterface;
 class RouterMatchCommand extends ContainerAwareCommand
 {
 	/**
+	 * Default command name.
+	 *
+	 * @var string
+	 */
+	protected static $defaultName = 'router:match';
+	
+	/**
+	 * The router service of the application.
+	 *
+	 * @var RouterInterface
+	 */
+	private $router;
+	
+	/**
 	 * Applications for each kernel.
 	 *
 	 * @var Application[]
 	 */
 	private $applications = [];
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param RouterInterface $router The router service of the application
+	 */
+	public function __construct(RouterInterface $router = null)
+	{
+		// Do not expect a router service to be present since there is no router service on the boot kernel
+		/*
+		if ( ! $router instanceof RouterInterface) {
+			@trigger_error(sprintf('%s() expects an instance of "%s" as first argument since version 3.4. Not passing it is deprecated and will throw a TypeError in 4.0.', __METHOD__, RouterInterface::class), E_USER_DEPRECATED);
+			
+			parent::__construct($router);
+			
+			return;
+		}
+		*/
+		
+		parent::__construct();
+		
+		$this->router = $router;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 * @see \Symfony\Component\Console\Command\Command::isEnabled()
@@ -47,6 +84,11 @@ class RouterMatchCommand extends ContainerAwareCommand
 		// Not running on the boot kernel
 		if ( ! $this->getApplication() instanceof MultikernelApplication)
 		{
+			// Call parent method if there is a router
+			if (null !== $this->router) {
+				return parent::isEnabled();
+			}
+			
 			// Not enabled if there is no router service
 			if ( ! $this->getContainer()->has('router')) {
 				return false;
@@ -96,7 +138,7 @@ class RouterMatchCommand extends ContainerAwareCommand
 	 */
 	protected function configure()
 	{
-		$this->setName('router:match')
+		$this
 		->setDefinition($this->getNativeDefinition())
 		->setDescription('Helps debug routes by simulating a path info match')
 		->setHelp(<<<'EOF'
@@ -123,11 +165,13 @@ EOF
 		// Not a MultikernelApplication
 		if ( ! $this->getApplication() instanceof MultikernelApplication)
 		{
-			// Get the router
-			$router = $this->getContainer()->get('router');
+			// BC to be removed in 4.0
+			if (null === $this->router) {
+				$this->router = $this->getContainer()->get('router');
+			}
 			
 			// Set router context options
-			$context = $router->getContext();
+			$context = $this->router->getContext();
 			if (null !== $method = $input->getOption('method')) {
 				$context->setMethod($method);
 			}
@@ -139,7 +183,7 @@ EOF
 			}
 			
 			// Get a traceable URL matcher
-			$matcher = new TraceableUrlMatcher($router->getRouteCollection(), $context);
+			$matcher = new TraceableUrlMatcher($this->router->getRouteCollection(), $context);
 			
 			// Get traces
 			$traces = $matcher->getTraces($input->getArgument('path_info'));

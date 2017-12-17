@@ -6,7 +6,7 @@
                 ".\/bin\/console {{ kernel_name }} about [options]"
             ],
             "description": "Displays information about the current project",
-            "help": "Displays information about the current project",
+            "help": "The <info>about<\/info> command displays information about the current Symfony project.\n\nThe <info>PHP<\/info> section displays important configuration that could affect your application. The values might\nbe different between web and CLI.\n\nThe <info>Environment<\/info> section displays the current environment variables managed by Symfony Dotenv. It will not\nbe shown if no variables were found. The values might be different between web and CLI.",
             "definition": {
                 "arguments": [],
                 "options": {
@@ -669,6 +669,100 @@
             }
         },
         {
+            "name": "cache:pool:prune",
+            "usage": [
+                ".\/bin\/console {{ kernel_name }} cache:pool:prune [options]"
+            ],
+            "description": "Prune cache pools",
+            "help": "The <info>cache:pool:prune<\/info> command deletes all expired items from all pruneable pools.\n\n    bin\/console cache:pool:prune",
+            "definition": {
+                "arguments": [],
+                "options": {
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
             "name": "cache:warmup",
             "usage": [
                 ".\/bin\/console {{ kernel_name }} cache:warmup [options]"
@@ -805,6 +899,108 @@
                         "description": "The output format (yaml or xml)",
                         "default": "yaml"
                     },
+                    "help": {
+                        "name": "--help",
+                        "shortcut": "-h",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this help message",
+                        "default": false
+                    },
+                    "quiet": {
+                        "name": "--quiet",
+                        "shortcut": "-q",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not output any message",
+                        "default": false
+                    },
+                    "verbose": {
+                        "name": "--verbose",
+                        "shortcut": "-v|-vv|-vvv",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+                        "default": false
+                    },
+                    "version": {
+                        "name": "--version",
+                        "shortcut": "-V",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Display this application version",
+                        "default": false
+                    },
+                    "ansi": {
+                        "name": "--ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Force ANSI output",
+                        "default": false
+                    },
+                    "no-ansi": {
+                        "name": "--no-ansi",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Disable ANSI output",
+                        "default": false
+                    },
+                    "no-interaction": {
+                        "name": "--no-interaction",
+                        "shortcut": "-n",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Do not ask any interactive question",
+                        "default": false
+                    },
+                    "env": {
+                        "name": "--env",
+                        "shortcut": "-e",
+                        "accept_value": true,
+                        "is_value_required": true,
+                        "is_multiple": false,
+                        "description": "The environment name",
+                        "default": "test"
+                    },
+                    "no-debug": {
+                        "name": "--no-debug",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Switches off debug mode",
+                        "default": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "debug:autowiring",
+            "usage": [
+                ".\/bin\/console {{ kernel_name }} debug:autowiring [options] [--] [<search>]"
+            ],
+            "description": "Lists classes\/interfaces you can use for autowiring",
+            "help": "The <info>debug:autowiring<\/info> command displays all classes and interfaces that\nyou can use as type-hints for autowiring:\n\n  <info>.\/bin\/console debug:autowiring<\/info>\n\nYou can also pass a search term to filter the list:\n\n  <info>.\/bin\/console debug:autowiring log<\/info>",
+            "definition": {
+                "arguments": {
+                    "search": {
+                        "name": "search",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "A search filter",
+                        "default": null
+                    }
+                },
+                "options": {
                     "help": {
                         "name": "--help",
                         "shortcut": "-h",
@@ -1302,49 +1498,38 @@
             }
         },
         {
-            "name": "debug:router",
+            "name": "debug:form",
             "usage": [
-                ".\/bin\/console {{ kernel_name }} debug:router [options] [--] [<name>]"
+                ".\/bin\/console {{ kernel_name }} debug:form [options] [--] [<class>] [<option>]"
             ],
-            "description": "Displays current routes for an application",
-            "help": "The <info>debug:router<\/info> displays the configured routes:\n\n  <info>.\/bin\/console debug:router<\/info>",
+            "description": "Displays form type information",
+            "help": "The <info>debug:form<\/info> command displays information about form types.\n\n  <info>.\/bin\/console debug:form<\/info>\n\nThe command lists all built-in types, services types, type extensions and guessers currently available.\n\n  <info>.\/bin\/console debug:form Symfony\\Component\\Form\\Extension\\Core\\Type\\ChoiceType<\/info>\n  <info>.\/bin\/console debug:form ChoiceType<\/info>\n\nThe command lists all defined options that contains the given form type, as well as their parents and type extensions.\n\n  <info>.\/bin\/console debug:form ChoiceType choice_value<\/info>\n\nThe command displays the definition of the given option name.\n\n  <info>.\/bin\/console debug:form --format=json<\/info>\n\nThe command lists everything in a machine readable json format.",
             "definition": {
                 "arguments": {
-                    "name": {
-                        "name": "name",
+                    "class": {
+                        "name": "class",
                         "is_required": false,
                         "is_array": false,
-                        "description": "A route name",
+                        "description": "The form type class",
+                        "default": null
+                    },
+                    "option": {
+                        "name": "option",
+                        "is_required": false,
+                        "is_array": false,
+                        "description": "The form type option",
                         "default": null
                     }
                 },
                 "options": {
-                    "show-controllers": {
-                        "name": "--show-controllers",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Show assigned controllers in overview",
-                        "default": false
-                    },
                     "format": {
                         "name": "--format",
                         "shortcut": "",
                         "accept_value": true,
                         "is_value_required": true,
                         "is_multiple": false,
-                        "description": "The output format (txt, xml, json, or md)",
+                        "description": "The output format (txt or json)",
                         "default": "txt"
-                    },
-                    "raw": {
-                        "name": "--raw",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "To output raw route(s)",
-                        "default": false
                     },
                     "help": {
                         "name": "--help",
@@ -1431,64 +1616,48 @@
             }
         },
         {
-            "name": "debug:translation",
+            "name": "debug:router",
             "usage": [
-                ".\/bin\/console {{ kernel_name }} debug:translation [options] [--] <locale> [<bundle>]"
+                ".\/bin\/console {{ kernel_name }} debug:router [options] [--] [<name>]"
             ],
-            "description": "Displays translation messages information",
-            "help": "The <info>debug:translation<\/info> command helps finding unused or missing translation\nmessages and comparing them with the fallback ones by inspecting the\ntemplates and translation files of a given bundle or the app folder.\n\nYou can display information about bundle translations in a specific locale:\n\n  <info>.\/bin\/console debug:translation en AcmeDemoBundle<\/info>\n\nYou can also specify a translation domain for the search:\n\n  <info>.\/bin\/console debug:translation --domain=messages en AcmeDemoBundle<\/info>\n\nYou can only display missing messages:\n\n  <info>.\/bin\/console debug:translation --only-missing en AcmeDemoBundle<\/info>\n\nYou can only display unused messages:\n\n  <info>.\/bin\/console debug:translation --only-unused en AcmeDemoBundle<\/info>\n\nYou can display information about app translations in a specific locale:\n\n  <info>.\/bin\/console debug:translation en<\/info>\n\nYou can display information about translations in all registered bundles in a specific locale:\n\n  <info>.\/bin\/console debug:translation --all en<\/info>",
+            "description": "Displays current routes for an application",
+            "help": "The <info>debug:router<\/info> displays the configured routes:\n\n  <info>.\/bin\/console debug:router<\/info>",
             "definition": {
                 "arguments": {
-                    "locale": {
-                        "name": "locale",
-                        "is_required": true,
-                        "is_array": false,
-                        "description": "The locale",
-                        "default": null
-                    },
-                    "bundle": {
-                        "name": "bundle",
+                    "name": {
+                        "name": "name",
                         "is_required": false,
                         "is_array": false,
-                        "description": "The bundle name or directory where to load the messages, defaults to app\/Resources folder",
+                        "description": "A route name",
                         "default": null
                     }
                 },
                 "options": {
-                    "domain": {
-                        "name": "--domain",
+                    "show-controllers": {
+                        "name": "--show-controllers",
+                        "shortcut": "",
+                        "accept_value": false,
+                        "is_value_required": false,
+                        "is_multiple": false,
+                        "description": "Show assigned controllers in overview",
+                        "default": false
+                    },
+                    "format": {
+                        "name": "--format",
                         "shortcut": "",
                         "accept_value": true,
-                        "is_value_required": false,
+                        "is_value_required": true,
                         "is_multiple": false,
-                        "description": "The messages domain",
-                        "default": null
+                        "description": "The output format (txt, xml, json, or md)",
+                        "default": "txt"
                     },
-                    "only-missing": {
-                        "name": "--only-missing",
+                    "raw": {
+                        "name": "--raw",
                         "shortcut": "",
                         "accept_value": false,
                         "is_value_required": false,
                         "is_multiple": false,
-                        "description": "Displays only missing messages",
-                        "default": false
-                    },
-                    "only-unused": {
-                        "name": "--only-unused",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Displays only unused messages",
-                        "default": false
-                    },
-                    "all": {
-                        "name": "--all",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Load messages from all registered bundles",
+                        "description": "To output raw route(s)",
                         "default": false
                     },
                     "help": {
@@ -2366,187 +2535,6 @@
                     }
                 }
             }
-        },
-        {
-            "name": "translation:update",
-            "usage": [
-                ".\/bin\/console {{ kernel_name }} translation:update [options] [--] <locale> [<bundle>]"
-            ],
-            "description": "Updates the translation file",
-            "help": "The <info>translation:update<\/info> command extracts translation strings from templates\nof a given bundle or the app folder. It can display them or merge the new ones into the translation files.\n\nWhen new translation strings are found it can automatically add a prefix to the translation\nmessage.\n\nExample running against a Bundle (AcmeBundle)\n  <info>.\/bin\/console translation:update --dump-messages en AcmeBundle<\/info>\n  <info>.\/bin\/console translation:update --force --prefix=\"new_\" fr AcmeBundle<\/info>\n\nExample running against app messages (app\/Resources folder)\n  <info>.\/bin\/console translation:update --dump-messages en<\/info>\n  <info>.\/bin\/console translation:update --force --prefix=\"new_\" fr<\/info>",
-            "definition": {
-                "arguments": {
-                    "locale": {
-                        "name": "locale",
-                        "is_required": true,
-                        "is_array": false,
-                        "description": "The locale",
-                        "default": null
-                    },
-                    "bundle": {
-                        "name": "bundle",
-                        "is_required": false,
-                        "is_array": false,
-                        "description": "The bundle name or directory where to load the messages, defaults to app\/Resources folder",
-                        "default": null
-                    }
-                },
-                "options": {
-                    "prefix": {
-                        "name": "--prefix",
-                        "shortcut": "",
-                        "accept_value": true,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Override the default prefix",
-                        "default": "__"
-                    },
-                    "no-prefix": {
-                        "name": "--no-prefix",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "If set, no prefix is added to the translations",
-                        "default": false
-                    },
-                    "output-format": {
-                        "name": "--output-format",
-                        "shortcut": "",
-                        "accept_value": true,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Override the default output format",
-                        "default": "yml"
-                    },
-                    "dump-messages": {
-                        "name": "--dump-messages",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Should the messages be dumped in the console",
-                        "default": false
-                    },
-                    "force": {
-                        "name": "--force",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Should the update be done",
-                        "default": false
-                    },
-                    "no-backup": {
-                        "name": "--no-backup",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Should backup be disabled",
-                        "default": false
-                    },
-                    "clean": {
-                        "name": "--clean",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Should clean not found messages",
-                        "default": false
-                    },
-                    "domain": {
-                        "name": "--domain",
-                        "shortcut": "",
-                        "accept_value": true,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Specify the domain to update",
-                        "default": null
-                    },
-                    "help": {
-                        "name": "--help",
-                        "shortcut": "-h",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Display this help message",
-                        "default": false
-                    },
-                    "quiet": {
-                        "name": "--quiet",
-                        "shortcut": "-q",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Do not output any message",
-                        "default": false
-                    },
-                    "verbose": {
-                        "name": "--verbose",
-                        "shortcut": "-v|-vv|-vvv",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
-                        "default": false
-                    },
-                    "version": {
-                        "name": "--version",
-                        "shortcut": "-V",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Display this application version",
-                        "default": false
-                    },
-                    "ansi": {
-                        "name": "--ansi",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Force ANSI output",
-                        "default": false
-                    },
-                    "no-ansi": {
-                        "name": "--no-ansi",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Disable ANSI output",
-                        "default": false
-                    },
-                    "no-interaction": {
-                        "name": "--no-interaction",
-                        "shortcut": "-n",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Do not ask any interactive question",
-                        "default": false
-                    },
-                    "env": {
-                        "name": "--env",
-                        "shortcut": "-e",
-                        "accept_value": true,
-                        "is_value_required": true,
-                        "is_multiple": false,
-                        "description": "The environment name",
-                        "default": "test"
-                    },
-                    "no-debug": {
-                        "name": "--no-debug",
-                        "shortcut": "",
-                        "accept_value": false,
-                        "is_value_required": false,
-                        "is_multiple": false,
-                        "description": "Switches off debug mode",
-                        "default": false
-                    }
-                }
-            }
         }
     ],
     "namespaces": [
@@ -2569,6 +2557,7 @@
             "commands": [
                 "cache:clear",
                 "cache:pool:clear",
+                "cache:pool:prune",
                 "cache:warmup"
             ]
         },
@@ -2581,11 +2570,12 @@
         {
             "id": "debug",
             "commands": [
+                "debug:autowiring",
                 "debug:config",
                 "debug:container",
                 "debug:event-dispatcher",
+                "debug:form",
                 "debug:router",
-                "debug:translation",
                 "debug:twig"
             ]
         },
@@ -2613,12 +2603,6 @@
             "id": "security",
             "commands": [
                 "security:encode-password"
-            ]
-        },
-        {
-            "id": "translation",
-            "commands": [
-                "translation:update"
             ]
         }
     ]

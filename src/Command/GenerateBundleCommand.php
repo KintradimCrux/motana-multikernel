@@ -21,6 +21,9 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
  * A replacement for the SensioGeneratorBundle GenerateBundleCommand.
  * To be removed when https://github.com/sensiolabs/SensioGeneratorBundle/issues/568 is resolved.
  *
+ * The command is not a service because the original class has not been updated,
+ * see https://github.com/sensiolabs/SensioGeneratorBundle/issues/578
+ *
  * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
 class GenerateBundleCommand extends BaseCommand implements ContainerAwareInterface

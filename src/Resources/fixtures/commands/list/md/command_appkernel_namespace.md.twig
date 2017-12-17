@@ -1,17 +1,137 @@
 Motana Multi-Kernel App Console - Symfony `{{ kernel_version }}` (kernel: {{ kernel_name }}, env: test, debug: false)
-=========================================================================================
+========================================================================================
 
 Commands in namespace "debug"
 -----------------------------
 
 **debug:**
 
+* debug:autowiring
 * debug:config
 * debug:container
 * debug:event-dispatcher
+* debug:form
 * debug:router
-* debug:translation
 * debug:twig
+
+Command "debug:autowiring"
+--------------------------
+
+* Description: Lists classes/interfaces you can use for autowiring
+* Usage:
+
+  * `./bin/console {{ kernel_name }} debug:autowiring [options] [--] [<search>]`
+
+The `debug:autowiring` command displays all classes and interfaces that
+you can use as type-hints for autowiring:
+
+  `./bin/console debug:autowiring`
+
+You can also pass a search term to filter the list:
+
+  `./bin/console debug:autowiring log`
+
+### Arguments:
+
+**search:**
+
+* Name: search
+* Is required: no
+* Is array: no
+* Description: A search filter
+* Default: `NULL`
+
+### Options:
+
+**help:**
+
+* Name: `--help`
+* Shortcut: `-h`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this help message
+* Default: `false`
+
+**quiet:**
+
+* Name: `--quiet`
+* Shortcut: `-q`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not output any message
+* Default: `false`
+
+**verbose:**
+
+* Name: `--verbose`
+* Shortcut: `-v|-vv|-vvv`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+* Default: `false`
+
+**version:**
+
+* Name: `--version`
+* Shortcut: `-V`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Display this application version
+* Default: `false`
+
+**ansi:**
+
+* Name: `--ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Force ANSI output
+* Default: `false`
+
+**no-ansi:**
+
+* Name: `--no-ansi`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Disable ANSI output
+* Default: `false`
+
+**no-interaction:**
+
+* Name: `--no-interaction`
+* Shortcut: `-n`
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Do not ask any interactive question
+* Default: `false`
+
+**env:**
+
+* Name: `--env`
+* Shortcut: `-e`
+* Accepts value: yes
+* Is value required: yes
+* Is multiple: no
+* Description: The environment name
+* Default: `'test'`
+
+**no-debug:**
+
+* Name: `--no-debug`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Switches off debug mode
+* Default: `false`
 
 Command "debug:config"
 ----------------------
@@ -514,39 +634,52 @@ To get specific listeners for an event, specify its name:
 * Description: Switches off debug mode
 * Default: `false`
 
-Command "debug:router"
-----------------------
+Command "debug:form"
+--------------------
 
-* Description: Displays current routes for an application
+* Description: Displays form type information
 * Usage:
 
-  * `./bin/console {{ kernel_name }} debug:router [options] [--] [<name>]`
+  * `./bin/console {{ kernel_name }} debug:form [options] [--] [<class>] [<option>]`
 
-The `debug:router` displays the configured routes:
+The `debug:form` command displays information about form types.
 
-  `./bin/console debug:router`
+  `./bin/console debug:form`
+
+The command lists all built-in types, services types, type extensions and guessers currently available.
+
+  `./bin/console debug:form Symfony\Component\Form\Extension\Core\Type\ChoiceType`
+  `./bin/console debug:form ChoiceType`
+
+The command lists all defined options that contains the given form type, as well as their parents and type extensions.
+
+  `./bin/console debug:form ChoiceType choice_value`
+
+The command displays the definition of the given option name.
+
+  `./bin/console debug:form --format=json`
+
+The command lists everything in a machine readable json format.
 
 ### Arguments:
 
-**name:**
+**class:**
 
-* Name: name
+* Name: class
 * Is required: no
 * Is array: no
-* Description: A route name
+* Description: The form type class
+* Default: `NULL`
+
+**option:**
+
+* Name: option
+* Is required: no
+* Is array: no
+* Description: The form type option
 * Default: `NULL`
 
 ### Options:
-
-**show-controllers:**
-
-* Name: `--show-controllers`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Show assigned controllers in overview
-* Default: `false`
 
 **format:**
 
@@ -555,18 +688,8 @@ The `debug:router` displays the configured routes:
 * Accepts value: yes
 * Is value required: yes
 * Is multiple: no
-* Description: The output format (txt, xml, json, or md)
+* Description: The output format (txt or json)
 * Default: `'txt'`
-
-**raw:**
-
-* Name: `--raw`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: To output raw route(s)
-* Default: `false`
 
 **help:**
 
@@ -658,100 +781,58 @@ The `debug:router` displays the configured routes:
 * Description: Switches off debug mode
 * Default: `false`
 
-Command "debug:translation"
----------------------------
+Command "debug:router"
+----------------------
 
-* Description: Displays translation messages information
+* Description: Displays current routes for an application
 * Usage:
 
-  * `./bin/console {{ kernel_name }} debug:translation [options] [--] <locale> [<bundle>]`
+  * `./bin/console {{ kernel_name }} debug:router [options] [--] [<name>]`
 
-The `debug:translation` command helps finding unused or missing translation
-messages and comparing them with the fallback ones by inspecting the
-templates and translation files of a given bundle or the app folder.
+The `debug:router` displays the configured routes:
 
-You can display information about bundle translations in a specific locale:
-
-  `./bin/console debug:translation en AcmeDemoBundle`
-
-You can also specify a translation domain for the search:
-
-  `./bin/console debug:translation --domain=messages en AcmeDemoBundle`
-
-You can only display missing messages:
-
-  `./bin/console debug:translation --only-missing en AcmeDemoBundle`
-
-You can only display unused messages:
-
-  `./bin/console debug:translation --only-unused en AcmeDemoBundle`
-
-You can display information about app translations in a specific locale:
-
-  `./bin/console debug:translation en`
-
-You can display information about translations in all registered bundles in a specific locale:
-
-  `./bin/console debug:translation --all en`
+  `./bin/console debug:router`
 
 ### Arguments:
 
-**locale:**
+**name:**
 
-* Name: locale
-* Is required: yes
-* Is array: no
-* Description: The locale
-* Default: `NULL`
-
-**bundle:**
-
-* Name: bundle
+* Name: name
 * Is required: no
 * Is array: no
-* Description: The bundle name or directory where to load the messages, defaults to app/Resources folder
+* Description: A route name
 * Default: `NULL`
 
 ### Options:
 
-**domain:**
+**show-controllers:**
 
-* Name: `--domain`
+* Name: `--show-controllers`
+* Shortcut: <none>
+* Accepts value: no
+* Is value required: no
+* Is multiple: no
+* Description: Show assigned controllers in overview
+* Default: `false`
+
+**format:**
+
+* Name: `--format`
 * Shortcut: <none>
 * Accepts value: yes
-* Is value required: no
+* Is value required: yes
 * Is multiple: no
-* Description: The messages domain
-* Default: `NULL`
+* Description: The output format (txt, xml, json, or md)
+* Default: `'txt'`
 
-**only-missing:**
+**raw:**
 
-* Name: `--only-missing`
+* Name: `--raw`
 * Shortcut: <none>
 * Accepts value: no
 * Is value required: no
 * Is multiple: no
-* Description: Displays only missing messages
-* Default: `false`
-
-**only-unused:**
-
-* Name: `--only-unused`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Displays only unused messages
-* Default: `false`
-
-**all:**
-
-* Name: `--all`
-* Shortcut: <none>
-* Accepts value: no
-* Is value required: no
-* Is multiple: no
-* Description: Load messages from all registered bundles
+* Description: To output raw route(s)
 * Default: `false`
 
 **help:**

@@ -92,7 +92,7 @@ class MotanaMultikernelBundleTest extends ApplicationTestCase
 	/**
 	 * @covers ::registerCommands()
 	 * @expectedException Symfony\Component\Console\Exception\CommandNotFoundException
-	 * @expectedExceptionMessage There are no commands defined in the "generate" namespace.
+	 * @expectedExceptionMessage The command "generate:app" does not exist.
 	 * @testdox registerCommands() does not register multikernel commands for AppKernel
 	 */
 	public function test_registerCommands_with_AppKernel()

@@ -39,6 +39,13 @@ use Symfony\Component\HttpKernel\Kernel;
 class MultikernelConvertCommand extends GeneratorCommand
 {
 	/**
+	 * Default command name.
+	 *
+	 * @var string
+	 */
+	protected static $defaultName = 'multikernel:convert';
+	
+	/**
 	 * Output class instance.
 	 *
 	 * @var OutputInterface
@@ -81,7 +88,7 @@ class MultikernelConvertCommand extends GeneratorCommand
 	 */
 	protected function configure()
 	{
-		$this->setName('multikernel:convert')
+		$this
 		->setDescription('Converts a project to a multikernel project')
 		->setHelp(<<<EOH
 The <info>multikernel:convert</info> command changes the filesystem
