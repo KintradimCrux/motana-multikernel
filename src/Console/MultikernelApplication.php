@@ -115,6 +115,7 @@ class MultikernelApplication extends Application
 		$ignore = array_flip($container->getParameter('motana.multikernel.commands.ignore'));
 		
 		// Process all found commands
+		$clonedApps = [];
 		foreach ($this->getApplicationCommands() as $commandName => $commandList)
 		{
 			// Skip ignored commands
@@ -130,14 +131,31 @@ class MultikernelApplication extends Application
 			// Add configured commands as global commands
 			elseif (isset($forceGlobal[$commandName]))
 			{
-				// Create a new instance of the command
-				$commandClass = get_class(current($commandList));
-				$command = new $commandClass();
+				// There is no cloned app with that name
+				$app = key($commandList);
+				if ( ! isset($clonedApps[$app]))
+				{
+					// Get the name of the kernel and application classes from the command
+					$appClass = get_class(current($commandList)->getApplication());
+					$kernelClass = get_class(current($commandList)->getApplication()->getKernel());
+					
+					// Create new kernel and application instances
+					$kernel = new $kernelClass($container->getParameter('kernel.environment'), $container->getParameter('kernel.debug'));
+					$clonedApps[$app] = new $appClass($kernel);
+				}
 				
-				// Add the new command instance
+				// Get the command from the application
+				$command = $clonedApps[$app]->get($commandName);
+				
+				// Set the container of container aware commands
+				if ($command instanceof ContainerAwareInterface) {
+					$command->setContainer($container);
+				}
+				
+				// Add the command
 				$this->add($command);
 				
-				// Hide the commands
+				// Hide the original commands
 				$this->hideCommands($commandList);
 			}
 			
