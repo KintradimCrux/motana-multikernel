@@ -9,6 +9,7 @@
 !/composer.lock
 !/src
 !/LICENSE
+!/phpunit.compat.php
 !/phpunit.xml.dist
 !/tests
 !/README.md

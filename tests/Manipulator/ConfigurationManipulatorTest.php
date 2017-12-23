@@ -273,7 +273,7 @@ class ConfigurationManipulatorTest extends TestCase
 		// Check the configuration modification is correct
 		switch ($file) {
 			// Check the return value is FALSE for non-existing files
-			case 'not-existing.yml':
+			case 'non-existing.yml':
 				$this->assertFalse($result);
 				break;
 			
