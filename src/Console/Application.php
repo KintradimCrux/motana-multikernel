@@ -224,9 +224,6 @@ class Application extends BaseApplication
 		$this->getKernel()->boot();
 		$container = $this->getKernel()->getContainer();
 
-		// Load the console.error_listener service
-		$container->get('console.error_listener');
-		
 		// Set the container on all container aware commands
 		foreach ($this->all() as $command) {
 			if ($command instanceof ContainerAwareInterface) {

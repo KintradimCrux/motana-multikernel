@@ -23,4 +23,7 @@ security:
 
             # https://symfony.com/doc/current/security/form_login_setup.html
             #form_login: ~
+            
+            # Set logout_on_user_change to true to remove deprecation warnings in Symfony 3.4
+            logout_on_user_change: true
 {% endblock security %}

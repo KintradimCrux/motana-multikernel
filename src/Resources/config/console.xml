@@ -9,6 +9,8 @@
 
 		<service id="console.command.generate_app" class="Motana\Bundle\MultikernelBundle\Command\GenerateAppCommand">
 			<tag name="console.command" command="generate:app"/>
+			<argument>null</argument>
+			<argument type="service" id="console.error_listener"/>
 		</service>
 
 		<!--
@@ -34,8 +36,8 @@
 		</service>
 
 		<service id="console.command.router_match" class="Motana\Bundle\MultikernelBundle\Command\RouterMatchCommand">
-			<argument type="service" id="router" on-invalid="null"/>
 			<tag name="console.command" command="router:match"/>
+			<argument type="service" id="router" on-invalid="null"/>
 		</service>
     </services>
 </container>
