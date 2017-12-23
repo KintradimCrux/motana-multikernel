@@ -18,6 +18,15 @@ use Motana\Bundle\MultikernelBundle\HttpKernel\BootKernel;
 use Motana\Bundle\MultikernelBundle\Manipulator\FilesystemManipulator;
 use Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\TestCase;
 
+use PHPUnit\Framework\BaseTestListener;
+use PHPUnit\Framework\DataProviderTestSuite;
+use PHPUnit\Framework\IncompleteTestCase;
+use PHPUnit\Framework\SkippedTestCase;
+use PHPUnit\Framework\Test;
+use PHPUnit\Framework\TestSuite;
+use PHPUnit\Framework\WarningTestCase;
+use PHPUnit\Util\Test as TestUtility;
+
 use Sensio\Bundle\GeneratorBundle\Generator\Generator;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -60,7 +69,7 @@ use Symfony\Component\Finder\SplFileInfo;
  *
  * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
-class TestListener extends \PHPUnit_Framework_BaseTestListener
+class TestListener extends BaseTestListener
 {
 	/**
 	 * Default annotation values.
@@ -217,9 +226,9 @@ class TestListener extends \PHPUnit_Framework_BaseTestListener
 
 	/**
 	 * {@inheritDoc}
-	 * @see \PHPUnit_Framework_BaseTestListener::startTestSuite()
+	 * @see PHPUnit\Framework\BaseTestListener::startTestSuite()
 	 */
-	public function startTestSuite(\PHPUnit_Framework_TestSuite $suite)
+	public function startTestSuite(TestSuite $suite)
 	{
 		// Create fixture directories only when the root test suite starts
 		if (0 === $this->depth++ && ! $this->isChild)
@@ -263,7 +272,7 @@ class TestListener extends \PHPUnit_Framework_BaseTestListener
 		}
 
 		// Do not process data provider test suites
-		if ($suite instanceof \PHPUnit_Framework_TestSuite_DataProvider) {
+		if ($suite instanceof DataProviderTestSuite) {
 			return;
 		}
 
@@ -276,7 +285,7 @@ class TestListener extends \PHPUnit_Framework_BaseTestListener
 		if (class_exists($suite->getName(), false))
 		{
 			// Read the required environment from annotations
-			$options = $this->parseAnnotations($annot = \PHPUnit_Util_Test::parseTestMethodAnnotations($suite->getName()));
+			$options = $this->parseAnnotations($annot = TestUtility::parseTestMethodAnnotations($suite->getName()));
 
 			// Boot the kernels for the detected environment
 			$this->bootKernels(
@@ -290,18 +299,18 @@ class TestListener extends \PHPUnit_Framework_BaseTestListener
 
 	/**
 	 * {@inheritDoc}
-	 * @see PHPUnit_Framework_BaseTestListener::startTest()
+	 * @see PHPUnit\Framework\BaseTestListener::startTest()
 	 */
-	public function startTest(\PHPUnit_Framework_Test $test)
+	public function startTest(Test $test)
 	{
 		// Force garbage collection
 		gc_collect_cycles();
 		
 		// Do not process incomplete, skipped or warning test cases
 		if (
-		   $test instanceof \PHPUnit_Framework_IncompleteTestCase
-		|| $test instanceof \PHPUnit_Framework_SkippedTestCase
-		|| $test instanceof \PHPUnit_Framework_WarningTestCase
+		   $test instanceof IncompleteTestCase
+		|| $test instanceof SkippedTestCase
+		|| $test instanceof WarningTestCase
 		) {
 			return;
 		}
@@ -312,7 +321,7 @@ class TestListener extends \PHPUnit_Framework_BaseTestListener
 		}
 
 		// Read the required environment from annotations
-		$options = $this->parseAnnotations($annot = \PHPUnit_Util_Test::parseTestMethodAnnotations(get_class($test), $test->getName(false)));
+		$options = $this->parseAnnotations($annot = TestUtility::parseTestMethodAnnotations(get_class($test), $test->getName(false)));
 
 		// Boot the kernels for the detected environment
 		$this->bootKernels(
@@ -325,9 +334,9 @@ class TestListener extends \PHPUnit_Framework_BaseTestListener
 
 	/**
 	 * {@inheritDoc}
-	 * @see \PHPUnit_Framework_BaseTestListener::endTestSuite()
+	 * @see PHPUnit\Framework\BaseTestListener::endTestSuite()
 	 */
-	public function endTestSuite(\PHPUnit_Framework_TestSuite $suite)
+	public function endTestSuite(TestSuite $suite)
 	{
 		// Remove fixture directories only when the root test suite finished
 		if (0 < --$this->depth || $this->isChild) {
