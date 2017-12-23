@@ -4,6 +4,8 @@ php:
     - '7.0'
     - '7.1'
     - '7.2'
+env:
+    - SYMFONY_DEPRECATIONS_HELPER=disabled
 install:
     - composer install --no-interaction
 script:
