@@ -14,6 +14,8 @@ use Composer\Autoload\ClassLoader;
 /** @var ClassLoader $loader */
 $loader = require __DIR__ . '/vendor/autoload.php';
 
+require_once __DIR__ . '/phpunit.compat.php';
+
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
 return $loader;
