@@ -18,6 +18,8 @@ use Motana\Bundle\MultikernelBundle\HttpKernel\BootKernel;
 use Motana\Bundle\MultikernelBundle\Manipulator\FilesystemManipulator;
 use Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\TestCase;
 
+use PHPUnit\Framework\BaseTestListener;
+
 use Sensio\Bundle\GeneratorBundle\Generator\Generator;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -60,7 +62,7 @@ use Symfony\Component\Finder\SplFileInfo;
  *
  * @author Wenzel Jonas <mail@ramihyn.sytes.net>
  */
-class TestListener extends \PHPUnit_Framework_BaseTestListener
+class TestListener extends BaseTestListener
 {
 	/**
 	 * Default annotation values.
