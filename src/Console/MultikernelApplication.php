@@ -200,6 +200,10 @@ class MultikernelApplication extends Application
 		} catch (\Exception $e) {
 		}
 		
+		// Register commands before running a command to properly hide
+		// global commands on the applications
+		$this->registerCommands();
+		
 		// A kernel name was specified, run a command for a single kernel
 		if (null !== $kernelName = $input->getArgument('kernel')) {
 			return $this->doRunSingleKernel($kernelName, $input, $output);
