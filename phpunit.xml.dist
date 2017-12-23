@@ -10,6 +10,7 @@
     <php>
     	<env name="COLUMNS" value="80"/>
     	<env name="LINES" value="50"/>
+    	<env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled"/>
         <ini name="error_reporting" value="-1" />
     </php>
 
