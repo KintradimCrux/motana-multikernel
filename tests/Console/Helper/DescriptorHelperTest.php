@@ -637,6 +637,13 @@ EOH
 					'kernel="{{ kernel_name }}"',
 					'kernel="{{ kernel_name }}"',
 				], $content);
+				$content = preg_replace([
+					'#/tmp/motana_multikernel_tests_[^/]+/#',
+					'#' . str_repeat('\=', strlen(\Symfony\Component\HttpKernel\Kernel::VERSION)) . '$#m',
+				], [
+					'{{ fixture_dir }}/',
+					'{{ header_line }}',
+				], $content);
 				self::getFs()->dumpFile(__DIR__ . '/../../../src/Resources/fixtures/descriptor/' . $format . '/' . $case . '.' . $format . '.twig', $content);
 			}
 		}
@@ -645,6 +652,7 @@ EOH
 		$generator = new FixtureGenerator();
 		return $generator->generateDescriptorOutput($case, $format, [
 			'kernel_name' => false !== strpos($case, 'multikernel') ? 'boot' : 'app',
+			'header_line' => str_repeat('=', strlen(\Symfony\Component\HttpKernel\Kernel::VERSION)),
 		]);
 	}
 }

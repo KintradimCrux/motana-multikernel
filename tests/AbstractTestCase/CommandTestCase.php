@@ -261,8 +261,10 @@ abstract class CommandTestCase extends ApplicationTestCase
 				], $content);
 				$content = preg_replace([
 					'#/tmp/motana_multikernel_tests_[^/]+/#',
+					'#' . str_repeat('\=', strlen(\Symfony\Component\HttpKernel\Kernel::VERSION)) . '$#m',
 				], [
 					'{{ fixture_dir }}/',
+					'{{ header_line }}',
 				], $content);
 				self::getFs()->dumpFile(__DIR__ . '/../../src/Resources/fixtures/commands/' . $commandName . '/' . $format . '/' . $case . '.' . $format . '.twig', $content);
 			}
@@ -274,6 +276,7 @@ abstract class CommandTestCase extends ApplicationTestCase
 			'kernel_name' => false !== strpos($case, 'multikernel') ? 'boot' : 'app',
 			'command_name' => $commandName,
 			'project_dir' => $projectDir,
+			'header_line' => str_repeat('=', strlen(\Symfony\Component\HttpKernel\Kernel::VERSION)),
 		]);
 	}
 }
