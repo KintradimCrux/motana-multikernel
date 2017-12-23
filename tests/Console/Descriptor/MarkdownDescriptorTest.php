@@ -376,8 +376,10 @@ EOD;
 				], $content);
 				$content = preg_replace([
 					'#/tmp/motana_multikernel_tests_[^/]+/#',
+					'#' . str_repeat('\=', strlen(\Symfony\Component\HttpKernel\Kernel::VERSION)) . '$#m',
 				], [
 					'{{ fixture_dir }}/',
+					'{{ header_line }}',
 				], $content);
 				self::getFs()->dumpFile(__DIR__ . '/../../../src/Resources/fixtures/descriptor/' . $format . '/' . $case . '.' . $format . '.twig', $content);
 			}
@@ -388,6 +390,7 @@ EOD;
 		return $generator->generateDescriptorOutput($case, $format, [
 			'kernel_name' => false !== strpos($case, 'multikernel') ? 'boot' : 'app',
 			'project_dir' => $projectDir,
+			'header_line' => str_repeat('=', strlen(\Symfony\Component\HttpKernel\Kernel::VERSION)),
 		]);
 	}
 }
