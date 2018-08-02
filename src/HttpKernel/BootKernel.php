@@ -153,8 +153,9 @@ abstract class BootKernel extends Kernel
 			$request = BootKernelRequest::createFromRequest($request, $kernel->getName());
 		}
 
-		// Set the kernel start time to make the time consumption of the boot kernel visible in profiler
+		// Boot the kernel and set the kernel start time to make the time consumption of the boot kernel visible in profiler
 		if ($this->debug) {
+			$kernel->boot();
 			$kernel->startTime = $this->startTime;
 		}
 		
