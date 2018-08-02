@@ -1,4 +1,4 @@
-Motana Multi-Kernel App Console - Symfony `{{ kernel_version }}` (kernel: app, env: test, debug: false)
+Motana Multi-Kernel App Console - Symfony `{{ kernel_version }}` (kernel: {{ kernel_name }}, env: test, debug: false)
 ==================================================================================={{ header_line }}
 
 Commands in namespace "debug"
@@ -130,7 +130,7 @@ For dumping a specific option, add its path as second argument:
 * Accepts value: yes
 * Is value required: yes
 * Is multiple: no
-* Description: The environment name
+* Description: The Environment name.
 * Default: `'test'`
 
 **no-debug:**
@@ -140,7 +140,7 @@ For dumping a specific option, add its path as second argument:
 * Accepts value: no
 * Is value required: no
 * Is multiple: no
-* Description: Switches off debug mode
+* Description: Switches off debug mode.
 * Default: `false`
 
 Command "debug:container"
@@ -363,7 +363,7 @@ Display a specific parameter by specifying its name with the `--parameter` optio
 * Accepts value: yes
 * Is value required: yes
 * Is multiple: no
-* Description: The environment name
+* Description: The Environment name.
 * Default: `'test'`
 
 **no-debug:**
@@ -373,7 +373,7 @@ Display a specific parameter by specifying its name with the `--parameter` optio
 * Accepts value: no
 * Is value required: no
 * Is multiple: no
-* Description: Switches off debug mode
+* Description: Switches off debug mode.
 * Default: `false`
 
 Command "debug:event-dispatcher"
@@ -501,7 +501,7 @@ To get specific listeners for an event, specify its name:
 * Accepts value: yes
 * Is value required: yes
 * Is multiple: no
-* Description: The environment name
+* Description: The Environment name.
 * Default: `'test'`
 
 **no-debug:**
@@ -511,7 +511,7 @@ To get specific listeners for an event, specify its name:
 * Accepts value: no
 * Is value required: no
 * Is multiple: no
-* Description: Switches off debug mode
+* Description: Switches off debug mode.
 * Default: `false`
 
 Command "debug:router"
@@ -645,7 +645,7 @@ The `debug:router` displays the configured routes:
 * Accepts value: yes
 * Is value required: yes
 * Is multiple: no
-* Description: The environment name
+* Description: The Environment name.
 * Default: `'test'`
 
 **no-debug:**
@@ -655,7 +655,7 @@ The `debug:router` displays the configured routes:
 * Accepts value: no
 * Is value required: no
 * Is multiple: no
-* Description: Switches off debug mode
+* Description: Switches off debug mode.
 * Default: `false`
 
 Command "debug:translation"
@@ -831,7 +831,7 @@ You can display information about translations in all registered bundles in a sp
 * Accepts value: yes
 * Is value required: yes
 * Is multiple: no
-* Description: The environment name
+* Description: The Environment name.
 * Default: `'test'`
 
 **no-debug:**
@@ -841,7 +841,7 @@ You can display information about translations in all registered bundles in a sp
 * Accepts value: no
 * Is value required: no
 * Is multiple: no
-* Description: Switches off debug mode
+* Description: Switches off debug mode.
 * Default: `false`
 
 Command "debug:twig"
@@ -966,7 +966,7 @@ The command lists everything in a machine readable json format.
 * Accepts value: yes
 * Is value required: yes
 * Is multiple: no
-* Description: The environment name
+* Description: The Environment name.
 * Default: `'test'`
 
 **no-debug:**
@@ -976,5 +976,5 @@ The command lists everything in a machine readable json format.
 * Accepts value: no
 * Is value required: no
 * Is multiple: no
-* Description: Switches off debug mode
+* Description: Switches off debug mode.
 * Default: `false`
