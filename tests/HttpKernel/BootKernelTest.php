@@ -586,6 +586,9 @@ class BootKernelTest extends KernelTestCase
 		// Check the instantiated kernel is the correct one
 		$this->assertTrue(isset($instances['app']));
 		$this->assertEquals('AppKernel', get_class($instances['app']));
+		
+		// Check the request factory has been reset to null
+		$this->assertNull($this->getStaticAttribute(Request::class, 'requestFactory'));
 	}
 	
 	/**
@@ -613,6 +616,9 @@ class BootKernelTest extends KernelTestCase
 		// Check the instantiated kernel is the correct one
 		$this->assertTrue(isset($instances['app']));
 		$this->assertEquals('AppKernel', get_class($instances['app']));
+		
+		// Check the request factory has been reset to null
+		$this->assertNull($this->getStaticAttribute(Request::class, 'requestFactory'));
 	}
 	
 	/**
@@ -649,6 +655,9 @@ class BootKernelTest extends KernelTestCase
 		
 		// Check the boot kernel has the same start time the app kernel has
 		$this->assertEquals($this->readAttribute(self::$kernel, 'startTime'), $this->readAttribute($instances['app'], 'startTime'));
+		
+		// Check the request factory has been reset to null
+		$this->assertNull($this->getStaticAttribute(Request::class, 'requestFactory'));
 	}
 	
 	/**
@@ -676,6 +685,9 @@ class BootKernelTest extends KernelTestCase
 		// Check the instantiated kernel is the correct one
 		$this->assertTrue(isset($instances['app']));
 		$this->assertEquals('AppKernel', get_class($instances['app']));
+		
+		// Check the request factory has been reset to null
+		$this->assertNull($this->getStaticAttribute(Request::class, 'requestFactory'));
 	}
 
 	/**
@@ -709,6 +721,9 @@ class BootKernelTest extends KernelTestCase
 		
 		// Check the boot kernel has the same start time the app kernel has
 		$this->assertEquals($this->readAttribute(self::$kernel, 'startTime'), $this->readAttribute($instances['app'], 'startTime'));
+		
+		// Check the request factory has been reset to null
+		$this->assertNull($this->getStaticAttribute(Request::class, 'requestFactory'));
 	}
 	
 	/**
@@ -739,6 +754,43 @@ class BootKernelTest extends KernelTestCase
 			'SCRIPT_NAME' => '/web/app.php',
 		]);
 		self::$kernel->handle(new Request($_GET, $_REQUEST, [], [], [], $_SERVER));
+	}
+
+	/**
+	 * @covers ::handle()
+	 * @testdox handle() does not override requestFactory when a non-existing default kernel is configured
+	 */
+	public function test_handle_does_not_override_requestFactory_with_no_default_kernel()
+	{
+		// Boot the kernel
+		self::$kernel->boot();
+		$container = self::$kernel->getContainer();
+		
+		// Change the motana.multikernel.default parameter to an invalid kernel name
+		$parameters = array_merge($this->getObjectAttribute($container, 'parameters'), [
+			'motana.multikernel.default' => 'invalid',
+		]);
+		$this->writeAttribute($container, 'parameters', $parameters);
+		
+		// Let the kernel throw an exception because no default kernel is available
+		$_SERVER = array_merge($_SERVER, [
+			'BASE' => '/web',
+			'PHP_SELF' => '/web/app.php',
+			'QUERY_STRING' => '',
+			'REQUEST_URI' => '/web/foobar/controller/action',
+			'SCRIPT_FILENAME' => '/home/user/public_html/web/app.php',
+			'SCRIPT_NAME' => '/web/app.php',
+		]);
+		try {
+			self::$kernel->handle(new Request($_GET, $_REQUEST, [], [], [], $_SERVER));
+		}
+		
+		// Silently catch the exception
+		catch (\Exception $e) {
+		}
+		
+		// Check the requestFactory has been reset to null
+		$this->assertNull($this->getStaticAttribute(Request::class, 'requestFactory'));
 	}
 	
 	/**

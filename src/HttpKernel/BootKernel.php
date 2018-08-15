@@ -132,9 +132,6 @@ abstract class BootKernel extends Kernel
 	 */
 	final public function handle(Request $request, $type = self::MASTER_REQUEST, $catch = true)
 	{
-		// Override the factory of the Request class
-		Request::setFactory([ $this, 'requestFactory' ]);
-		
 		// Kernel name detected in request
 		if ($kernel = $this->loadKernel($this->getKernelFromRequest($request))) {
 		}
@@ -158,6 +155,9 @@ abstract class BootKernel extends Kernel
 			$kernel->boot();
 			$kernel->startTime = $this->startTime;
 		}
+		
+		// Override the factory of the Request class
+		Request::setFactory([ $this, 'requestFactory' ]);
 		
 		// Let the kernel handle the request
 		try {
