@@ -138,11 +138,11 @@ motana_multikernel:
 
 To reflect the changes in the filesystem structure and routing, your ``phpunit.xml`` needs to be updated as follows:
 
-Change the ``KERNEL_DIR`` setting to ``apps/``
+Change the ``KERNEL_CLASS`` setting to ``BootKernel``
 
 ```xml
 
-        <server name="KERNEL_DIR" value="apps/" />
+        <server name="KERNEL_CLASS" value="BootKernel" />
 
 ```
 
