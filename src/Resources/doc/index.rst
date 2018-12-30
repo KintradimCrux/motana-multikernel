@@ -126,11 +126,11 @@ Testing your project
 
 To reflect the changes in the filesystem structure and routing, your ``phpunit.xml`` needs to be updated as follows:
 
-Change the ``KERNEL_DIR`` setting to ``apps/``
+Change the ``KERNEL_CLASS`` setting to ``BootKernel``
 
 .. code-block: xml
 
-        <server name="KERNEL_DIR" value="apps/" />
+        <server name="KERNEL_CLASS" value="BootKernel" />
 
 To select a kernel in your tests extending ``Symfony\Bundle\FrameworkBundle\Test\WebTestCase`` simply prefix the kernel
 name to any URL used in the test.
