@@ -31,6 +31,7 @@ use Sensio\Bundle\GeneratorBundle\Generator\Generator;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -426,6 +427,9 @@ class TestListener extends BaseTestListener
 
 		// Adjust the autoloader psr-4 fallback dirs
 		$loader = current(current(spl_autoload_functions()));
+		if ($loader instanceof DebugClassLoader) {
+			$loader = current($loader->getClassLoader());
+		}
 		/** @var ClassLoader $loader */
 		TestCase::writeAttribute($loader, 'fallbackDirsPsr4', array_merge(TestCase::readAttribute($loader, 'fallbackDirsPsr4'), [
 			$projectPath . '/src',
