@@ -12,6 +12,8 @@ namespace Motana\Bundle\MultikernelBundle\Tests\HttpKernel;
 
 use Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\KernelTestCase;
 
+use Symfony\Component\Debug\DebugClassLoader;
+
 /**
  * @coversDefaultClass Motana\Bundle\MultikernelBundle\HttpKernel\BootKernel
  * @kernelDir broken
@@ -38,6 +40,9 @@ use Motana\Bundle\MultikernelBundle\Tests\AbstractTestCase\KernelTestCase;
 		
 		// Adjust the autoloader psr-4 fallback dirs
 		$loader = current(current(spl_autoload_functions()));
+		if ($loader instanceof DebugClassLoader) {
+			$loader = current($loader->getClassLoader());
+		}
 		/** @var ClassLoader $loader */
 		self::writeAttribute($loader, 'fallbackDirsPsr4', array_merge(self::readAttribute($loader, 'fallbackDirsPsr4'), [
 			self::$fixturesDir . '/src',

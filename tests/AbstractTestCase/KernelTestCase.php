@@ -16,6 +16,7 @@ use Motana\Bundle\MultikernelBundle\Generator\Model\App;
 use Motana\Bundle\MultikernelBundle\HttpKernel\BootKernel;
 use Motana\Bundle\MultikernelBundle\HttpKernel\Kernel;
 
+use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -63,6 +64,9 @@ abstract class KernelTestCase extends TestCase
 		
 		// Adjust the autoloader psr-4 fallback dirs
 		$loader = current(current(spl_autoload_functions()));
+		if ($loader instanceof DebugClassLoader) {
+			$loader = current($loader->getClassLoader());
+		}
 		/** @var ClassLoader $loader */
 		self::writeAttribute($loader, 'fallbackDirsPsr4', array_merge(self::readAttribute($loader, 'fallbackDirsPsr4'), [
 			self::$fixturesDir . '/src',
@@ -96,7 +100,7 @@ abstract class KernelTestCase extends TestCase
 			$srcDir = self::$fixturesDir . '/src';
 
 			// Restore the autoloader psr-4 fallback dirs
-			$loader = current(current(spl_autoload_functions()));
+			global $loader;
 			/** @var ClassLoader $loader */
 			self::writeAttribute($loader, 'fallbackDirsPsr4', array_filter(self::readAttribute($loader, 'fallbackDirsPsr4'), function($dir) use ($srcDir) {
 				return $dir !== $srcDir;
