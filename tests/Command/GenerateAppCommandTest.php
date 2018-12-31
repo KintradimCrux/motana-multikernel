@@ -23,6 +23,7 @@ use Sensio\Bundle\GeneratorBundle\Generator\Generator;
 
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Debug\DebugClassLoader;
 
 /**
  * @coversDefaultClass Motana\Bundle\MultikernelBundle\Command\GenerateAppCommand
@@ -56,6 +57,9 @@ class GenerateAppCommandTest extends InteractiveCommandTestCase
 		
 		// Adjust the autoloader psr-4 fallback dirs
 		$loader = current(current(spl_autoload_functions()));
+		if ($loader instanceof DebugClassLoader) {
+			$loader = current($loader->getClassLoader());
+		}
 		/** @var ClassLoader $loader */
 		self::writeAttribute($loader, 'fallbackDirsPsr4', array_merge(self::readAttribute($loader, 'fallbackDirsPsr4'), [
 			self::$fixturesDir . '/src',

@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebServerBundle\WebServerBundle;
+use Symfony\Component\Debug\DebugClassLoader;
 
 /**
  * @coversDefaultClass Motana\Bundle\MultikernelBundle\HttpKernel\BootKernel
@@ -42,6 +43,9 @@ class DevBootKernelTest extends KernelTestCase
 		
 		// Adjust the autoloader psr-4 fallback dirs
 		$loader = current(current(spl_autoload_functions()));
+		if ($loader instanceof DebugClassLoader) {
+			$loader = current($loader->getClassLoader());
+		}
 		/** @var ClassLoader $loader */
 		self::writeAttribute($loader, 'fallbackDirsPsr4', array_merge(self::readAttribute($loader, 'fallbackDirsPsr4'), [
 			self::$fixturesDir . '/src',
